@@ -36,6 +36,7 @@ class AppNavigation extends StatelessWidget {
                   elevation: AppDimensions.elevation,
                 ),
         floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         body: body,
         bottomNavigationBar: bottomNavigationBar,
       ),

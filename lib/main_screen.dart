@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
@@ -16,7 +17,7 @@ class MainScreen extends StatelessWidget {
           onPressed: () {},
           icon: Icon(FontAwesomeIcons.userAstronaut),
         ),
-        title: 'Dashboard'.tr,
+        title: controller.title.tr,
         actions: [
           IconButton(
             onPressed: () {},
@@ -28,12 +29,19 @@ class MainScreen extends StatelessWidget {
             },
             icon: const Icon(FontAwesomeIcons.bell),
           ),
+          IconButton(
+            onPressed: () {
+              Get.toNamed(AppRoutes.transaction)?.then((value) {
+                Fluttertoast.showToast(
+                  msg: "The result has been received: $value",
+                );
+              });
+            },
+            icon: const Icon(FontAwesomeIcons.plus),
+          ),
         ],
         body: controller.children[controller.currentIndex],
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(FontAwesomeIcons.plus),
-        ),
+
         bottomNavigationBar: BottomNavigationBar(
           items: const [
             BottomNavigationBarItem(
@@ -54,7 +62,7 @@ class MainScreen extends StatelessWidget {
             ),
           ],
           currentIndex: controller.currentIndex,
-          onTap: (index) => controller.currentIndex = index,
+          onTap: (index) => controller.onTabSelected(index),
           selectedItemColor: AppColors.primary,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,

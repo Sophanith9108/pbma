@@ -17,7 +17,8 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.bold,
   );
-  static final TextStyle label = GoogleFonts.battambang(fontSize: 10);
+  static final TextStyle label = GoogleFonts.battambang(fontSize: 16);
+  static final TextStyle hint = GoogleFonts.battambang(fontSize: 14);
 
   static final TextStyle button = GoogleFonts.battambang(
     fontSize: 16,
