@@ -1,0 +1,15 @@
+class AppConstants {
+  static const String appName = 'PBMA';
+  static const String appVersion = '1.0.0';
+  static const String appDescription =
+      'PBMA is a mobile application that provides a platform for users to manage their tasks and projects efficiently.';
+  static const String appAuthor = 'Sophanit KONG';
+  static const String appAuthorEmail = 'sophanith.9108@gmail.com';
+  static const String appAuthorWebsite = 'https://sophanit.dev';
+  static const String appLicense = 'MIT License';
+  static const String appLicenseUrl =
+      'https://github.com/sophanith/pbma/blob/main/LICENSE';
+  static const String appPrivacyPolicyUrl = '';
+  static const String appTermsOfServiceUrl = '';
+  static const String appSupportUrl = 'https://sophanit.dev/contact';
+}
