@@ -24,15 +24,16 @@ class TransactionController extends MainController {
   Future createTransaction() async {
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
-    await Future.delayed(const Duration(milliseconds: 300));
+
     await showLoading();
-    await Future.delayed(const Duration(seconds: 3));
-    Get.back();
+    await Future.delayed(const Duration(seconds: 3), () {
+      Get.back();
+    });
+
     await showSuccessMessage();
-    await Future.delayed(const Duration(seconds: 1));
-    _onClear();
-    await Future.delayed(const Duration(seconds: 3));
-    Get.back(result: true);
+    await Future.delayed(const Duration(seconds: 3), () {
+      Get.back(result: true);
+    });
   }
 
   Future<void> showLoading() async {
@@ -53,7 +54,13 @@ class TransactionController extends MainController {
       'Transaction has been created'.tr,
       'You have been spent the money!',
       backgroundColor: Colors.green,
+      duration: Duration(seconds: 3),
       snackPosition: SnackPosition.TOP,
+      snackbarStatus: (status) {
+        if (status == SnackbarStatus.CLOSED) {
+          _onClear();
+        }
+      },
     );
   }
 

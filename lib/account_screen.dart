@@ -24,7 +24,7 @@ class AccountScreen extends StatelessWidget {
           child: ListView(
             padding: EdgeInsets.all(AppDimensions.padding),
             children: [
-              Text("Banks".tr, style: AppTextStyles.title),
+              Text("Banks".tr, style: AppTextStyles.header1),
               const SizedBox(height: 8),
               CarouselSlider(
                 items: controller.banks,
@@ -58,7 +58,7 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimensions.padding),
-              Text("Credit Cards".tr, style: AppTextStyles.title),
+              Text("Credit Cards".tr, style: AppTextStyles.header1),
               const SizedBox(height: 8),
               GridView.count(
                 shrinkWrap: true,
