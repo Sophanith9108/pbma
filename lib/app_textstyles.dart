@@ -6,9 +6,21 @@ class AppTextStyles {
     fontSize: 18,
     fontWeight: FontWeight.bold,
   );
+  static final TextStyle header1 = GoogleFonts.angkor(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+  static final TextStyle header2 = GoogleFonts.angkor(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+  );
 
   static final TextStyle title = GoogleFonts.battambang(
     fontSize: 16,
+    fontWeight: FontWeight.bold,
+  );
+  static final TextStyle title1 = GoogleFonts.battambang(
+    fontSize: 14,
     fontWeight: FontWeight.bold,
   );
   static final TextStyle subtitle = GoogleFonts.battambang(fontSize: 14);

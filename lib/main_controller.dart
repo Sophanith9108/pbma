@@ -16,6 +16,7 @@ class MainController extends GetxController {
     HistoryScreen(),
     CategoryScreen(),
     SettingScreen(),
+    AccountScreen(),
   ];
 
   @override
@@ -33,13 +34,16 @@ class MainController extends GetxController {
         title = 'Home'.tr;
         break;
       case 1:
-        title = 'History'.tr;
+        title = 'Transactions'.tr;
         break;
       case 2:
-        title = 'Category'.tr;
+        title = 'Subs'.tr;
         break;
       case 3:
-        title = 'Setting'.tr;
+        title = 'Budgets'.tr;
+        break;
+      case 4:
+        title = 'Accounts'.tr;
         break;
       default:
         title = 'Home'.tr;

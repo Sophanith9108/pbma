@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final controller = Get.put(() => HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,7 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.grey.withValues(alpha: .5),
                 ),
               ),
-              child: Container(
+              child: SizedBox(
                 height: 310,
                 child: GridView.count(
                   padding: EdgeInsets.all(10),

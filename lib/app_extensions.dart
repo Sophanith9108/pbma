@@ -14,3 +14,47 @@ extension TimeOfDayFormatExtension on TimeOfDay {
     return DateFormat(pattern).format(dateTime);
   }
 }
+
+extension ColorGradientExtension on Color {
+  Gradient get lightToDarkGradient => LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [withValues(alpha: .5), withValues(alpha: 1.0)],
+  );
+
+  Gradient get leftToRightGradient => LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [withValues(alpha: .5), withValues(alpha: 1.0)],
+  );
+
+  Gradient get radialGradient => RadialGradient(
+    center: Alignment.center,
+    radius: 0.7,
+    colors: [withValues(alpha: .5), withValues(alpha: 1.0)],
+  );
+
+  Gradient get sweepGradient => SweepGradient(
+    colors: [
+      withValues(alpha: 1.0),
+      withValues(alpha: 0.8),
+      withValues(alpha: .6),
+      withValues(alpha: .4),
+      withValues(alpha: .2),
+      withValues(alpha: .4),
+      withValues(alpha: .6),
+      withValues(alpha: .8),
+    ],
+    startAngle: 0.0,
+    endAngle: 2 * 3.1416, // full circle
+  );
+}
+
+extension NumberFormatExtension on num {
+  String formatCurrency({
+    String symbol = '',
+    String sign = '',
+    String pattern = '#,##0.###',
+    int decimalDigits = 2,
+  }) => '$sign${NumberFormat(pattern, 'en_US').format(this)} $symbol';
+}

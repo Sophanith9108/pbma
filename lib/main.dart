@@ -5,8 +5,6 @@ import 'package:pbma/core.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  setApplicationConfigs();
-  setControllers();
 
   runApp(const MainApp());
 }
@@ -19,6 +17,7 @@ void setControllers() {
   Get.put(CategoryController());
   Get.put(NotificationController());
   Get.put(TransactionController());
+  Get.put(AccountController());
 }
 
 void setApplicationConfigs() {
@@ -26,8 +25,8 @@ void setApplicationConfigs() {
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      systemNavigationBarColor: Colors.transparent,
+      statusBarColor: Colors.black,
+      systemNavigationBarColor: Colors.black,
       systemNavigationBarIconBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark,
     ),
@@ -56,6 +55,10 @@ class MainApp extends StatelessWidget {
         Locale('ja', 'JP'),
         Locale('zh', 'CN'),
       ],
+      initialBinding: BindingsBuilder(() {
+        setApplicationConfigs();
+        setControllers();
+      }),
       home: MainScreen(),
     );
   }

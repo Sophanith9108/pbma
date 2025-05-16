@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class HistoryScreen extends StatelessWidget {
-  const HistoryScreen({super.key});
+  HistoryScreen({super.key});
+
+  final HistoryController controller = Get.put(HistoryController());
 
   @override
   Widget build(BuildContext context) {

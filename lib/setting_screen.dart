@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class SettingScreen extends StatelessWidget {
-  const SettingScreen({super.key});
+  SettingScreen({super.key});
+
+  final SettingController controller = Get.put(SettingController());
 
   @override
   Widget build(BuildContext context) {

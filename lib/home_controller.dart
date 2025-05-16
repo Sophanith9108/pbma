@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
-class HomeController extends MainController {}
+class HomeController extends GetxController {}

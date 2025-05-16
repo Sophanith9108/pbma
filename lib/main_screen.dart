@@ -7,7 +7,7 @@ import 'package:pbma/core.dart';
 class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
-  final controller = Get.find<MainController>();
+  final MainController mainController = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class MainScreen extends StatelessWidget {
           onPressed: () {},
           icon: Icon(FontAwesomeIcons.userAstronaut),
         ),
-        title: controller.title.tr,
+        title: mainController.title.tr,
         actions: [
           IconButton(
             onPressed: () {},
@@ -40,33 +40,38 @@ class MainScreen extends StatelessWidget {
             icon: const Icon(FontAwesomeIcons.plus),
           ),
         ],
-        body: controller.children[controller.currentIndex],
-
+        body: mainController.children[mainController.currentIndex],
         bottomNavigationBar: BottomNavigationBar(
-          items: const [
+          items: [
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.houseChimney),
-              label: '',
+              label: 'Home'.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.businessTime),
-              label: '',
+              label: 'Transactions'.tr,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(FontAwesomeIcons.solidClock),
+              label: 'Subs',
             ),
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.calculator),
-              label: '',
+              label: 'Budgets',
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.gear),
-              label: '',
+              icon: Icon(FontAwesomeIcons.wallet),
+              label: 'Accounts'.tr,
             ),
           ],
-          currentIndex: controller.currentIndex,
-          onTap: (index) => controller.onTabSelected(index),
+          currentIndex: mainController.currentIndex,
+          onTap: (index) => mainController.onTabSelected(index),
           selectedItemColor: AppColors.primary,
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           showSelectedLabels: true,
+          selectedFontSize: 14,
+          unselectedFontSize: 14,
           type: BottomNavigationBarType.fixed,
           elevation: AppDimensions.elevation,
         ),
