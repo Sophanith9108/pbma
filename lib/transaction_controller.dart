@@ -26,12 +26,10 @@ class TransactionController extends MainController {
     FocusScope.of(Get.context!).unfocus();
 
     await showLoading();
-    await Future.delayed(const Duration(seconds: 3), () {
+    await Future.delayed(const Duration(seconds: 3), () async {
       Get.back();
-    });
-
-    await showSuccessMessage();
-    await Future.delayed(const Duration(seconds: 3), () {
+      _onClear();
+      await Future.delayed(Duration(seconds: 2));
       Get.back(result: true);
     });
   }
