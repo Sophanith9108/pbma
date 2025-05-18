@@ -14,6 +14,7 @@ class AppRoutes {
   static const String feedback = '/feedback';
   static const String notifications = '/notifications';
   static const String transaction = '/transaction';
+  static const String detailTransaction = '/detail_transaction';
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     settings: (context) => SettingScreen(),
@@ -21,6 +22,7 @@ class AppRoutes {
     history: (context) => HistoryScreen(),
     category: (context) => CategoryScreen(),
     notifications: (context) => NotificationScreen(),
-    transaction: (context) => TransactionScreen(),
+    transaction: (context) => CreateTransactionScreen(),
+    detailTransaction: (context) => DetailTransactionScreen(),
   };
 }

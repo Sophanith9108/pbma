@@ -11,6 +11,10 @@ class MainController extends GetxController {
   String get title => _title.value;
   set title(String title) => _title.value = title;
 
+  final _data = dynamic.obs;
+  dynamic get data => _data.value;
+  set data(dynamic data) => _data.value = data;
+
   final List<Widget> children = [
     HomeScreen(),
     HistoryScreen(),
@@ -48,5 +52,9 @@ class MainController extends GetxController {
       default:
         title = 'Home'.tr;
     }
+  }
+
+  void setData(dynamic data) {
+    this.data = data;
   }
 }

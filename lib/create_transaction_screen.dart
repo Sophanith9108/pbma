@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
-class TransactionScreen extends StatelessWidget {
-  TransactionScreen({super.key});
+class CreateTransactionScreen extends StatelessWidget {
+  CreateTransactionScreen({super.key});
 
-  final TransactionController controller = Get.find<TransactionController>();
+  final CreateTransactionController controller =
+      Get.find<CreateTransactionController>();
 
   @override
   Widget build(BuildContext context) {

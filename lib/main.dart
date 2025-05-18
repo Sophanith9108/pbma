@@ -16,8 +16,9 @@ void setControllers() {
   Get.put(SettingController());
   Get.put(CategoryController());
   Get.put(NotificationController());
-  Get.put(TransactionController());
+  Get.put(CreateTransactionController());
   Get.put(AccountController());
+  Get.put(DetailTransactionController());
 }
 
 void setApplicationConfigs() {

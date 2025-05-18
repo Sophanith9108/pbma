@@ -50,7 +50,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 300));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -73,7 +76,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 20,
@@ -120,7 +126,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 300));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -143,7 +152,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 20,
@@ -190,7 +202,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 300));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -213,7 +228,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 20,
@@ -260,7 +278,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 300));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -283,7 +304,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 20,
@@ -334,7 +358,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 250));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -367,7 +394,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 18,
@@ -415,7 +445,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 250));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -447,7 +480,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 18,
@@ -495,7 +531,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 250));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -527,7 +566,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 18,
@@ -575,7 +617,10 @@ class AccountController extends GetxController {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () async {
+            await Future.delayed(Duration(milliseconds: 250));
+            Get.toNamed(AppRoutes.detailTransaction);
+          },
           borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
           child: Container(
             decoration: BoxDecoration(
@@ -607,7 +652,10 @@ class AccountController extends GetxController {
                   right: 0,
                   top: 0,
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await Future.delayed(Duration(milliseconds: 300));
+                      _handleSettingOptions();
+                    },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
                       size: 18,
@@ -649,6 +697,45 @@ class AccountController extends GetxController {
         ),
       ),
     ];
+  }
+
+  void _handleSettingOptions() {
+    showModalBottomSheet(
+      context: Get.context!,
+      showDragHandle: true,
+      isDismissible: true,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      enableDrag: true,
+      elevation: AppDimensions.elevation,
+      builder: (_) {
+        return SafeArea(
+          child: ListView(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.all(AppDimensions.padding),
+            children: [
+              ListTile(
+                leading: Icon(FontAwesomeIcons.pen, color: Colors.blue),
+                title: Text('Edit'.tr),
+                onTap: () async {
+                  await Future.delayed(Duration(milliseconds: 300));
+                  Get.back();
+                },
+              ),
+              ListTile(
+                leading: Icon(FontAwesomeIcons.trash, color: Colors.red),
+                title: Text('Delete'.tr),
+                onTap: () async {
+                  await Future.delayed(Duration(milliseconds: 300));
+                  Get.back();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void onPageChanged(int index, CarouselPageChangedReason reason) {
