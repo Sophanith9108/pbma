@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionController extends MainController {
@@ -48,6 +51,18 @@ class CreateTransactionController extends MainController {
   set paymentMethodController(TextEditingController value) =>
       _paymentMethodController.value = value;
 
+  final Completer<GoogleMapController> maController =
+      Completer<GoogleMapController>();
+
+  final _initialCameraPosition =
+      CameraPosition(
+        target: LatLng(37.42796133580664, -122.085749655962),
+        zoom: 14.4746,
+      ).obs;
+  CameraPosition get initialCameraPosition => _initialCameraPosition.value;
+  set initialCameraPosition(CameraPosition value) =>
+      _initialCameraPosition.value = value;
+
   Future createTransaction() async {
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
@@ -60,6 +75,8 @@ class CreateTransactionController extends MainController {
       Get.back(result: true);
     });
   }
+
+  void onMapCreated(GoogleMapController controller) {}
 
   Future<void> showLoading() async {
     showDialog(

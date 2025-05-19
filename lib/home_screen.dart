@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
             return SliverStickyHeader(
               header: Container(
                 height: 50,
-                color: AppColors.primaryLight,
+                color: AppColors.primary,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -143,7 +143,7 @@ class HomeScreen extends StatelessWidget {
                     leading: Icon(FontAwesomeIcons.tractor),
                     title: Text('Item $index', style: AppTextStyles.title),
                     subtitle: Text(
-                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      'Pay for food $index',
                       style: AppTextStyles.subtitle,
                     ),
                     trailing: Icon(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionScreen extends StatelessWidget {
@@ -401,6 +403,77 @@ class CreateTransactionScreen extends StatelessWidget {
               ),
               SizedBox(height: AppDimensions.padding),
               TextFormField(
+                readOnly: true,
+                onTap: () {
+                  showModalBottomSheet(
+                    context: Get.context!,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    builder: (_) {
+                      return Column(
+                        children: [
+                          SizedBox(height: AppDimensions.padding),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(width: AppDimensions.padding),
+                              Expanded(
+                                child: Text(
+                                  "Selected Location".tr,
+                                  style: AppTextStyles.title,
+                                ),
+                              ),
+                              IconButton.outlined(
+                                onPressed: () {
+                                  Get.back();
+                                },
+                                icon: const Icon(FontAwesomeIcons.xmark),
+                              ),
+                              SizedBox(width: AppDimensions.padding),
+                            ],
+                          ),
+                          SizedBox(height: AppDimensions.padding),
+                          Expanded(
+                            child: Stack(
+                              children: [
+                                Positioned.fill(
+                                  child: GoogleMap(
+                                    initialCameraPosition:
+                                        controller.initialCameraPosition,
+                                    myLocationButtonEnabled: false,
+                                    myLocationEnabled: true,
+                                    zoomControlsEnabled: false,
+                                    mapType: MapType.hybrid,
+                                    onMapCreated: controller.onMapCreated,
+                                    onCameraMove: (position) {
+                                      controller.initialCameraPosition =
+                                          position;
+                                    },
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: AppDimensions.padding * 2,
+                                  left: AppDimensions.padding * 2,
+                                  right: AppDimensions.padding * 2,
+                                  child: FloatingActionButton.extended(
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    label: Text(
+                                      "Drop Here".tr,
+                                      style: AppTextStyles.button,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
