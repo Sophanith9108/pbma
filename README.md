@@ -1,20 +1,47 @@
-# PBMA
+# PBMA (Personal Budget Management App)
 
-## Project Description
-
-pbma is a cross-platform application built with Flutter, designed to manage personal budgets and expenses. The application provides a user-friendly interface for tracking expenses, categorizing spending, and analyzing financial habits. It is developed with a focus on delivering a seamless user experience across both Android and iOS platforms, utilizing Kotlin and Swift for platform-specific optimizations. The project includes a comprehensive set of features such as real-time data synchronization, secure data handling, and customizable themes to enhance user engagement and satisfaction.
-
-## Screenshots
-
-![Screenshot 1](https://github.com/Sophanit/pbma/blob/master/screenshots/1.png?raw=true)
-![Screenshot 2](https://github.com/Sophanit/pbma/blob/master/screenshots/2.png?raw=true)
+A simple personal budget management app built with Flutter.
 
 ## Features
 
-- User authentication and authorization
-- Real-time data synchronization
-- Customizable themes
-- Expense tracking and categorization
-- Budgeting and financial goal setting
-- Secure data handling
-- Multi-platform support (Android and iOS)
+- Record income and expenses
+- View transaction history
+- Set budget for categories
+- View budget remaining
+- View budget summary
+
+## Screenshots
+
+![Screenshot of home screen](https://raw.githubusercontent.com/bramantio/pbma/master/screenshots/home.png)
+![Screenshot of transaction history](https://raw.githubusercontent.com/bramantio/pbma/master/screenshots/history.png)
+![Screenshot of budget summary](https://raw.githubusercontent.com/bramantio/pbma/master/screenshots/summary.png)
+
+## How to use
+
+1. Clone this repository
+2. Open the project in your preferred IDE (e.g. Android Studio, Visual Studio Code)
+3. Run the app on an emulator or physical device
+4. Tap the "+" button to add a new transaction
+5. Fill in the transaction details and tap "Save"
+6. View your transaction history and budget summary
+
+## Roadmap
+
+- Add support for multiple accounts
+- Add support for recurring transactions
+- Add support for budget goals
+- Add support for budget categories
+- Add support for budget tags
+- Add support for budget filters
+- Add support for budget sorting
+- Add support for budget summaries
+- Add support for budget charts
+- Add support for budget notifications
+- Add support for budget reminders
+- Add support for budget sharing
+- Add support for budget exporting
+- Add support for budget importing
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details

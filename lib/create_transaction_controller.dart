@@ -16,10 +16,37 @@ class CreateTransactionController extends MainController {
   set dateController(TextEditingController value) =>
       _dateController.value = value;
 
+  final _dateToController = TextEditingController().obs;
+  TextEditingController get dateToController => _dateToController.value;
+  set dateToController(TextEditingController value) =>
+      _dateToController.value = value;
+
   final _timeController = TextEditingController().obs;
   TextEditingController get timeController => _timeController.value;
   set timeController(TextEditingController value) =>
       _timeController.value = value;
+
+  final _timeToController = TextEditingController().obs;
+  TextEditingController get timeToController => _timeToController.value;
+  set timeToController(TextEditingController value) =>
+      _timeToController.value = value;
+
+  final _currencyController = TextEditingController().obs;
+  TextEditingController get currencyController => _currencyController.value;
+  set currencyController(TextEditingController value) =>
+      _currencyController.value = value;
+
+  final _expenseTypeController = TextEditingController().obs;
+  TextEditingController get expenseTypeController =>
+      _expenseTypeController.value;
+  set expenseTypeController(TextEditingController value) =>
+      _expenseTypeController.value = value;
+
+  final _paymentMethodController = TextEditingController().obs;
+  TextEditingController get paymentMethodController =>
+      _paymentMethodController.value;
+  set paymentMethodController(TextEditingController value) =>
+      _paymentMethodController.value = value;
 
   Future createTransaction() async {
     if (!formKey.currentState!.validate()) return;

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -12,58 +14,147 @@ class HomeScreen extends StatelessWidget {
     return AppNavigation(
       body: RefreshIndicator(
         onRefresh: () => Future.delayed(const Duration(seconds: 2)),
-        child: ListView(
-          padding: EdgeInsets.all(AppDimensions.padding),
-          children: [
-            Card.outlined(
-              elevation: AppDimensions.elevation,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-                side: BorderSide(
-                  width: 1.5,
-                  color: Colors.grey.withValues(alpha: .5),
+        child: CustomScrollView(
+          slivers: List.generate(10, (index) {
+            return SliverStickyHeader(
+              header: Container(
+                height: 50,
+                color: AppColors.primaryLight,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(width: AppDimensions.padding),
+                    Text(
+                      DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day + index,
+                      ).format(pattern: "dd.MMM.yyyy"),
+                      style: AppTextStyles.title,
+                    ),
+                  ],
                 ),
               ),
-              child: SizedBox(
-                height: 310,
-                child: GridView.count(
-                  padding: EdgeInsets.all(10),
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 5,
-                  crossAxisSpacing: 5,
-                  childAspectRatio: 4 / 3,
-                  children: List.generate(4, (index) {
-                    return Card.outlined(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.borderRadius,
-                        ),
-                        side: BorderSide(
-                          width: 1.5,
-                          color: Colors.grey.withValues(alpha: .5),
-                        ),
-                      ),
-                      elevation: AppDimensions.elevation,
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.borderRadius,
-                        ),
-                        onTap: () {},
-                        child: Container(
-                          height: 50,
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Card $index",
-                            style: AppTextStyles.title,
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-                ),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  return ListTile(
+                    onTap: () async {
+                      await Future.delayed(const Duration(milliseconds: 300));
+                      showModalBottomSheet(
+                        context: Get.context!,
+                        isScrollControlled: true,
+                        useSafeArea: true,
+                        builder: (_) {
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  left: AppDimensions.spadding,
+                                  right: AppDimensions.spadding,
+                                  top: AppDimensions.spadding,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        'Title of the $index',
+                                        style: AppTextStyles.header1,
+                                      ),
+                                    ),
+                                    IconButton.outlined(
+                                      onPressed: () {
+                                        Get.back();
+                                      },
+                                      icon: Icon(FontAwesomeIcons.xmark),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: ListView(
+                                  shrinkWrap: true,
+                                  physics: const ScrollPhysics(),
+                                  padding: const EdgeInsets.all(
+                                    AppDimensions.padding,
+                                  ),
+                                  children: [
+                                    Text(
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
+                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                                      textAlign: TextAlign.justify,
+                                      style: AppTextStyles.value,
+                                      strutStyle: StrutStyle(height: 1.5),
+                                    ),
+                                    const SizedBox(
+                                      height: AppDimensions.padding,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    leading: Icon(FontAwesomeIcons.tractor),
+                    title: Text('Item $index', style: AppTextStyles.title),
+                    subtitle: Text(
+                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. ',
+                      style: AppTextStyles.subtitle,
+                    ),
+                    trailing: Icon(
+                      FontAwesomeIcons.chevronDown,
+                      size: AppDimensions.miconSize,
+                    ),
+                  );
+                }, childCount: 10),
               ),
-            ),
-          ],
+            );
+          }),
         ),
       ),
     );

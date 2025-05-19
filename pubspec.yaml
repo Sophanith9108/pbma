@@ -1,5 +1,5 @@
 name: pbma
-description: ""
+description: 'This app provides a comprehensive solution for managing tasks efficiently.'
 publish_to: 'none'
 version: 1.0.0
 
@@ -16,6 +16,8 @@ dependencies:
   fluttertoast: ^8.2.12
   carousel_slider: ^5.0.0
   smooth_page_indicator: ^1.2.1
+  material_symbols_icons: ^4.2815.0
+  flutter_sticky_header: ^0.7.0
 
 dev_dependencies:
   flutter_test:

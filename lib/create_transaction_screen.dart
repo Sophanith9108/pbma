@@ -28,121 +28,14 @@ class CreateTransactionScreen extends StatelessWidget {
                 textCapitalization: TextCapitalization.sentences,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Please tell me what do u pay for?".tr;
+                    return "What do u buy?".tr;
                   }
                   return null;
                 },
                 decoration: InputDecoration(
                   labelText: "What do u pay for?".tr,
                   labelStyle: AppTextStyles.label,
-                  hintText: "Tell me what is ur expense now?".tr,
-                  hintStyle: AppTextStyles.hint,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(AppDimensions.borderRadius),
-                    ),
-                    borderSide: BorderSide(
-                      color: AppColors.primary,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: AppDimensions.padding),
-              TextFormField(
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please tell me how much do u spend?".tr;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: "How much is it?".tr,
-                  labelStyle: AppTextStyles.label,
-                  hintText: "Please tell me how much do u spend?".tr,
-                  hintStyle: AppTextStyles.hint,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(AppDimensions.borderRadius),
-                    ),
-                    borderSide: BorderSide(
-                      color: AppColors.primary,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: AppDimensions.padding),
-              TextFormField(
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please tell me what type of expense?".tr;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: "What type of expense?".tr,
-                  labelStyle: AppTextStyles.label,
-                  hintText: "Please tell me the what do u spend on?".tr,
-                  hintStyle: AppTextStyles.hint,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(AppDimensions.borderRadius),
-                    ),
-                    borderSide: BorderSide(
-                      color: AppColors.primary,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: AppDimensions.padding),
-              TextFormField(
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please tell me why do u buy it?".tr;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: "Why do u buy it?".tr,
-                  labelStyle: AppTextStyles.label,
-                  hintText: "U need to tell me why is it important?".tr,
-                  hintStyle: AppTextStyles.hint,
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(AppDimensions.borderRadius),
-                    ),
-                    borderSide: BorderSide(
-                      color: AppColors.primary,
-                      width: 1.0,
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: AppDimensions.padding),
-              TextFormField(
-                textInputAction: TextInputAction.done,
-                keyboardType: TextInputType.text,
-                textCapitalization: TextCapitalization.sentences,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Please tell me how do u pay?".tr;
-                  }
-                  return null;
-                },
-                decoration: InputDecoration(
-                  labelText: "What is the payment method?".tr,
-                  labelStyle: AppTextStyles.label,
-                  hintText: "Please tell me how do u pay?".tr,
+                  hintText: "What do u buy?".tr,
                   hintStyle: AppTextStyles.hint,
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(
@@ -161,20 +54,278 @@ class CreateTransactionScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: TextFormField(
-                      controller: controller.dateController,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "How much?".tr;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: "How much is it?".tr,
+                        labelStyle: AppTextStyles.label,
+                        hintText: "How much?".tr,
+                        hintStyle: AppTextStyles.hint,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(AppDimensions.borderRadius),
+                          ),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: AppDimensions.padding),
+                  Expanded(
+                    flex: 1,
+                    child: TextFormField(
+                      controller: controller.currencyController,
+                      readOnly: true,
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: Get.context!,
+                          showDragHandle: true,
+                          useSafeArea: true,
+                          builder: (_) {
+                            return ListView(
+                              shrinkWrap: true,
+                              children:
+                                  CurrencyEnums.values.map((element) {
+                                    return ListTile(
+                                      leading: Icon(element.icon),
+                                      title: Text(
+                                        element.name,
+                                        style: AppTextStyles.title,
+                                      ),
+                                      subtitle: Text(
+                                        element.description,
+                                        style: AppTextStyles.subtitle,
+                                      ),
+                                      onTap: () async {
+                                        await Future.delayed(
+                                          const Duration(milliseconds: 300),
+                                        );
+                                        controller.currencyController.text =
+                                            element.name;
+                                        Get.back();
+                                      },
+                                    );
+                                  }).toList(),
+                            );
+                          },
+                        );
+                      },
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
+                      textCapitalization: TextCapitalization.sentences,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Currency?".tr;
+                        }
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                        labelText: "Currency?".tr,
+                        labelStyle: AppTextStyles.label,
+                        hintText: "USD".tr,
+                        hintStyle: AppTextStyles.hint,
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(AppDimensions.borderRadius),
+                          ),
+                          borderSide: BorderSide(
+                            color: AppColors.primary,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: AppDimensions.padding),
+              TextFormField(
+                controller: controller.expenseTypeController,
+                readOnly: true,
+                onTap: () {
+                  showModalBottomSheet(
+                    context: Get.context!,
+                    showDragHandle: true,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    builder: (_) {
+                      return ListView(
+                        shrinkWrap: true,
+                        children:
+                            ExpenseTypeEnums.values.map((element) {
+                              return ListTile(
+                                leading: Icon(element.icon),
+                                title: Text(
+                                  element.name,
+                                  style: AppTextStyles.title,
+                                ),
+                                subtitle: Text(
+                                  element.description,
+                                  style: AppTextStyles.subtitle,
+                                ),
+                                onTap: () async {
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 300),
+                                  );
+                                  controller.expenseTypeController.text =
+                                      element.name;
+                                  Get.back();
+                                },
+                              );
+                            }).toList(),
+                      );
+                    },
+                  );
+                },
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Type of expense?".tr;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: "What type of expense?".tr,
+                  labelStyle: AppTextStyles.label,
+                  hintText: "What do u spend on?".tr,
+                  hintStyle: AppTextStyles.hint,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(
+                      color: AppColors.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: AppDimensions.padding),
+              TextFormField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Why do u buy it?".tr;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: "Why do u buy it?".tr,
+                  labelStyle: AppTextStyles.label,
+                  hintText: "Why is it important?".tr,
+                  hintStyle: AppTextStyles.hint,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(
+                      color: AppColors.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: AppDimensions.padding),
+              TextFormField(
+                controller: controller.paymentMethodController,
+                readOnly: true,
+                onTap: () {
+                  showModalBottomSheet(
+                    context: Get.context!,
+                    showDragHandle: true,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    builder: (_) {
+                      return ListView(
+                        shrinkWrap: true,
+                        children:
+                            PaymentMethodEnums.values.map((element) {
+                              return ListTile(
+                                leading: Icon(element.icon),
+                                title: Text(
+                                  element.name,
+                                  style: AppTextStyles.title,
+                                ),
+                                subtitle: Text(
+                                  element.description,
+                                  style: AppTextStyles.subtitle,
+                                ),
+                                onTap: () async {
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 300),
+                                  );
+                                  controller.paymentMethodController.text =
+                                      element.name;
+                                  Get.back();
+                                },
+                              );
+                            }).toList(),
+                      );
+                    },
+                  );
+                },
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "How do u pay?".tr;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: "Payment method?".tr,
+                  labelStyle: AppTextStyles.label,
+                  hintText: "How do u pay?".tr,
+                  hintStyle: AppTextStyles.hint,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(
+                      color: AppColors.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: AppDimensions.padding),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 2,
+                    child: TextFormField(
+                      controller: controller.dateToController,
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.datetime,
                       textCapitalization: TextCapitalization.sentences,
                       readOnly: true,
                       onTap: () {
                         showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(2000),
-                          lastDate: DateTime(2100),
+                          firstDate: DateTime(2022),
+                          lastDate: DateTime.now(),
                         ).then((value) {
                           if (value != null) {
-                            controller.dateController.text = value.format(
+                            controller.dateToController.text = value.format(
                               pattern: "dd.MMM.yyyy",
                             );
                           }
@@ -207,7 +358,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: TextFormField(
-                      controller: controller.timeController,
+                      controller: controller.timeToController,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
@@ -218,7 +369,7 @@ class CreateTransactionScreen extends StatelessWidget {
                           initialTime: TimeOfDay.now(),
                         ).then((value) {
                           if (value != null) {
-                            controller.timeController.text =
+                            controller.timeToController.text =
                                 value.toTimeOfDay();
                           }
                         });
