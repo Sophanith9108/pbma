@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
@@ -10,29 +12,15 @@ class CreateTransactionController extends MainController {
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
 
-  final _isOthersInvolved = false.obs;
-  bool get isOthersInvolved => _isOthersInvolved.value;
-  set isOthersInvolved(bool value) => _isOthersInvolved.value = value;
+  final _purposeController = TextEditingController().obs;
+  TextEditingController get purposeController => _purposeController.value;
+  set purposeController(TextEditingController value) =>
+      _purposeController.value = value;
 
-  final _dateController = TextEditingController().obs;
-  TextEditingController get dateController => _dateController.value;
-  set dateController(TextEditingController value) =>
-      _dateController.value = value;
-
-  final _dateToController = TextEditingController().obs;
-  TextEditingController get dateToController => _dateToController.value;
-  set dateToController(TextEditingController value) =>
-      _dateToController.value = value;
-
-  final _timeController = TextEditingController().obs;
-  TextEditingController get timeController => _timeController.value;
-  set timeController(TextEditingController value) =>
-      _timeController.value = value;
-
-  final _timeToController = TextEditingController().obs;
-  TextEditingController get timeToController => _timeToController.value;
-  set timeToController(TextEditingController value) =>
-      _timeToController.value = value;
+  final _amountController = TextEditingController().obs;
+  TextEditingController get amountController => _amountController.value;
+  set amountController(TextEditingController value) =>
+      _amountController.value = value;
 
   final _currencyController = TextEditingController().obs;
   TextEditingController get currencyController => _currencyController.value;
@@ -45,25 +33,124 @@ class CreateTransactionController extends MainController {
   set expenseTypeController(TextEditingController value) =>
       _expenseTypeController.value = value;
 
+  final _reasonController = TextEditingController().obs;
+  TextEditingController get reasonController => _reasonController.value;
+  set reasonController(TextEditingController value) =>
+      _reasonController.value = value;
+
   final _paymentMethodController = TextEditingController().obs;
   TextEditingController get paymentMethodController =>
       _paymentMethodController.value;
   set paymentMethodController(TextEditingController value) =>
       _paymentMethodController.value = value;
 
-  final Completer<GoogleMapController> maController =
-      Completer<GoogleMapController>();
+  final _isOthersInvolved = false.obs;
+  bool get isOthersInvolved => _isOthersInvolved.value;
+  set isOthersInvolved(bool value) => _isOthersInvolved.value = value;
+
+  final _dateController = TextEditingController().obs;
+  TextEditingController get dateController => _dateController.value;
+  set dateController(TextEditingController value) =>
+      _dateController.value = value;
+
+  final _timeController = TextEditingController().obs;
+  TextEditingController get timeController => _timeController.value;
+  set timeController(TextEditingController value) =>
+      _timeController.value = value;
+
+  final _locationController = TextEditingController().obs;
+  TextEditingController get locationController => _locationController.value;
+  set locationController(TextEditingController value) =>
+      _locationController.value = value;
+
+  final _othersInvolvedController = TextEditingController().obs;
+  TextEditingController get othersInvolvedController =>
+      _othersInvolvedController.value;
+  set othersInvolvedController(TextEditingController value) =>
+      _othersInvolvedController.value = value;
+
+  final _currentLocation = LatLng(0, 0).obs;
+  LatLng get currentLocation => _currentLocation.value;
+  set currentLocation(LatLng value) => _currentLocation.value = value;
 
   final _initialCameraPosition =
-      CameraPosition(
-        target: LatLng(37.42796133580664, -122.085749655962),
-        zoom: 14.4746,
-      ).obs;
+      CameraPosition(target: LatLng(0, 0), zoom: 12).obs;
   CameraPosition get initialCameraPosition => _initialCameraPosition.value;
   set initialCameraPosition(CameraPosition value) =>
       _initialCameraPosition.value = value;
 
-  Future createTransaction() async {
+  final _address = ''.obs;
+  String get address => _address.value;
+  set address(String value) => _address.value = value;
+
+  late GoogleMapController mapController;
+
+  static const double zoomLevel = 12;
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+        timeLimit: Duration(seconds: 5),
+      ),
+    );
+
+    currentLocation = LatLng(position.latitude, position.longitude);
+    initialCameraPosition = CameraPosition(
+      target: currentLocation,
+      zoom: zoomLevel,
+    );
+    mapController.animateCamera(
+      CameraUpdate.newCameraPosition(initialCameraPosition),
+    );
+    _getAddressFromLatLong(position.latitude, position.longitude);
+  }
+
+  Future<void> _getAddressFromLatLong(double lat, double long) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
+      Placemark place = placemarks[0];
+
+      String formattedAddress =
+          "${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      address = formattedAddress;
+    } catch (e) {
+      debugPrint("Error getting address: $e");
+    }
+  }
+
+  Future onCreateTransaction() async {
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
 
@@ -71,12 +158,19 @@ class CreateTransactionController extends MainController {
     await Future.delayed(const Duration(seconds: 3), () async {
       Get.back();
       _onClear();
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(Duration(seconds: 1));
       Get.back(result: true);
     });
   }
 
-  void onMapCreated(GoogleMapController controller) {}
+  Future<void> onMapCreated(GoogleMapController controller) async {
+    showLoading();
+    await Future.delayed(const Duration(seconds: 3), () {
+      Get.back();
+      mapController = controller;
+      _getCurrentLocation();
+    });
+  }
 
   Future<void> showLoading() async {
     showDialog(
@@ -91,25 +185,22 @@ class CreateTransactionController extends MainController {
     );
   }
 
-  Future<void> showSuccessMessage() async {
-    Get.snackbar(
-      'Transaction has been created'.tr,
-      'You have been spent the money!',
-      backgroundColor: Colors.green,
-      duration: Duration(seconds: 3),
-      snackPosition: SnackPosition.TOP,
-      snackbarStatus: (status) {
-        if (status == SnackbarStatus.CLOSED) {
-          _onClear();
-        }
-      },
-    );
-  }
-
   void _onClear() {
     formKey.currentState!.reset();
+    purposeController.clear();
+    amountController.clear();
+    currencyController.clear();
+    expenseTypeController.clear();
+    reasonController.clear();
+    paymentMethodController.clear();
     dateController.clear();
     timeController.clear();
+    locationController.clear();
+    othersInvolvedController.clear();
     isOthersInvolved = false;
+  }
+
+  void onDropLocation() {
+    locationController.text = address;
   }
 }

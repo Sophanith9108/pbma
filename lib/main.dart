@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pbma/core.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('transaction_box_development');
+  await Hive.openBox('transaction_box_production');
+  await Hive.openBox('transaction_box_staging');
 
   runApp(const MainApp());
 }

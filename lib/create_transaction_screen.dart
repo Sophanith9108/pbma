@@ -16,7 +16,7 @@ class CreateTransactionScreen extends StatelessWidget {
       () => AppNavigation(
         title: "Create Transaction".tr,
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => controller.createTransaction(),
+          onPressed: () => controller.onCreateTransaction(),
           label: Text("Create".tr, style: AppTextStyles.button),
         ),
         body: Form(
@@ -25,6 +25,7 @@ class CreateTransactionScreen extends StatelessWidget {
             padding: EdgeInsets.all(AppDimensions.padding),
             children: [
               TextFormField(
+                controller: controller.purposeController,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
@@ -56,6 +57,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: TextFormField(
+                      controller: controller.amountController,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.numberWithOptions(
                         decimal: true,
@@ -218,6 +220,7 @@ class CreateTransactionScreen extends StatelessWidget {
               ),
               SizedBox(height: AppDimensions.padding),
               TextFormField(
+                controller: controller.reasonController,
                 textInputAction: TextInputAction.done,
                 keyboardType: TextInputType.text,
                 textCapitalization: TextCapitalization.sentences,
@@ -314,7 +317,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: TextFormField(
-                      controller: controller.dateToController,
+                      controller: controller.dateController,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.datetime,
                       textCapitalization: TextCapitalization.sentences,
@@ -327,7 +330,7 @@ class CreateTransactionScreen extends StatelessWidget {
                           lastDate: DateTime.now(),
                         ).then((value) {
                           if (value != null) {
-                            controller.dateToController.text = value.format(
+                            controller.dateController.text = value.format(
                               pattern: "dd.MMM.yyyy",
                             );
                           }
@@ -360,7 +363,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: TextFormField(
-                      controller: controller.timeToController,
+                      controller: controller.timeController,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
@@ -371,7 +374,7 @@ class CreateTransactionScreen extends StatelessWidget {
                           initialTime: TimeOfDay.now(),
                         ).then((value) {
                           if (value != null) {
-                            controller.timeToController.text =
+                            controller.timeController.text =
                                 value.toTimeOfDay();
                           }
                         });
@@ -404,6 +407,7 @@ class CreateTransactionScreen extends StatelessWidget {
               SizedBox(height: AppDimensions.padding),
               TextFormField(
                 readOnly: true,
+                controller: controller.locationController,
                 onTap: () {
                   showModalBottomSheet(
                     context: Get.context!,
@@ -446,10 +450,6 @@ class CreateTransactionScreen extends StatelessWidget {
                                     zoomControlsEnabled: false,
                                     mapType: MapType.hybrid,
                                     onMapCreated: controller.onMapCreated,
-                                    onCameraMove: (position) {
-                                      controller.initialCameraPosition =
-                                          position;
-                                    },
                                   ),
                                 ),
                                 Positioned(
@@ -458,6 +458,7 @@ class CreateTransactionScreen extends StatelessWidget {
                                   right: AppDimensions.padding * 2,
                                   child: FloatingActionButton.extended(
                                     onPressed: () {
+                                      controller.onDropLocation();
                                       Get.back();
                                     },
                                     label: Text(
@@ -522,6 +523,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   children: [
                     SizedBox(height: AppDimensions.padding),
                     TextFormField(
+                      controller: controller.othersInvolvedController,
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,

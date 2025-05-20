@@ -34,3 +34,4 @@ export 'currency_enums.dart';
 export 'expense_type_enums.dart';
 export 'payment_method_enums.dart';
 export 'transaction_model.dart';
+export 'transaction_entity.dart';

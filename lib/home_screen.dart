@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () => Future.delayed(const Duration(seconds: 2)),
         child: CustomScrollView(
-          slivers: List.generate(10, (index) {
+          slivers: List.generate(5, (index) {
             return SliverStickyHeader(
               header: Container(
                 height: 50,
@@ -151,7 +151,7 @@ class HomeScreen extends StatelessWidget {
                       size: AppDimensions.miconSize,
                     ),
                   );
-                }, childCount: 10),
+                }, childCount: 5),
               ),
             );
           }),
