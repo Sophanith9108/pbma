@@ -1,1 +1,120 @@
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:pbma/core.dart';
+import 'package:uuid/uuid.dart';
 
+@HiveType(typeId: 0)
+class TransactionEntity extends HiveObject {
+  @HiveField(0)
+  String? id;
+
+  @HiveField(1)
+  String? purpose;
+
+  @HiveField(2)
+  double? amount;
+
+  @HiveField(3)
+  CurrencyEnums? currency;
+
+  @HiveField(4)
+  ExpenseTypeEnums? expenseType;
+
+  @HiveField(5)
+  String? reason;
+
+  @HiveField(6)
+  PaymentMethodEnums? paymentMethod;
+
+  @HiveField(7)
+  bool? isOthersInvolved;
+
+  @HiveField(8)
+  int? date;
+
+  @HiveField(9)
+  int? time;
+
+  @HiveField(10)
+  String? location;
+
+  @HiveField(11)
+  String? othersInvolved;
+
+  @HiveField(12)
+  int? createdAt;
+
+  @HiveField(13)
+  int? updatedAt;
+
+  @HiveField(14)
+  String? createdBy;
+
+  @HiveField(15)
+  String? updatedBy;
+
+  @HiveField(16)
+  bool? status;
+
+  TransactionEntity();
+
+  factory TransactionEntity.create({
+    String? purpose,
+    double? amount,
+    CurrencyEnums? currency,
+    ExpenseTypeEnums? expenseType,
+    String? reason,
+    PaymentMethodEnums? paymentMethod,
+    bool? isOthersInvolved,
+    int? date,
+    int? time,
+    String? location,
+    String? othersInvolved,
+    int? updatedAt,
+    String? updatedBy,
+    bool? status,
+    String? createdBy,
+  }) {
+    var transaction = TransactionEntity();
+    transaction.id = Uuid().v8();
+    transaction.purpose = purpose;
+    transaction.amount = amount;
+    transaction.currency = currency;
+    transaction.expenseType = expenseType;
+    transaction.reason = reason;
+    transaction.paymentMethod = paymentMethod;
+    transaction.isOthersInvolved = isOthersInvolved;
+    transaction.date = date;
+    transaction.time = time;
+    transaction.location = location;
+    transaction.othersInvolved = othersInvolved;
+    transaction.updatedAt = updatedAt;
+    transaction.updatedBy = updatedBy;
+    transaction.status = status;
+    transaction.createdAt = DateTime.now().millisecondsSinceEpoch;
+    transaction.createdBy = createdBy;
+    return transaction;
+  }
+
+  static TransactionModel toModel(TransactionEntity entity) {
+    var model = TransactionModel();
+    model.id = entity.id;
+    model.purpose = entity.purpose;
+    model.amount = entity.amount;
+    model.currency = entity.currency;
+    model.expenseType = entity.expenseType;
+    model.reason = entity.reason;
+    model.paymentMethod = entity.paymentMethod;
+    model.isOthersInvolved = entity.isOthersInvolved;
+    model.date = entity.date;
+    model.time = entity.time;
+    model.location = entity.location;
+    model.othersInvolved = entity.othersInvolved;
+    model.createdAt = entity.createdAt;
+    model.updatedAt = entity.updatedAt;
+    model.createdBy = entity.createdBy;
+    model.updatedBy = entity.updatedBy;
+    model.status = entity.status;
+
+    return model;
+  }
+}
