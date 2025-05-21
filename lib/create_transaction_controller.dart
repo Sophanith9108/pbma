@@ -160,6 +160,24 @@ class CreateTransactionController extends MainController {
 
     await showLoading();
 
+    var user = UserModel.create();
+
+    var transaction = TransactionModel.create(
+      purpose: purposeController.text,
+      amount: double.tryParse(amountController.text),
+      currency: CurrencyEnums.values.first,
+      expenseType: ExpenseTypeEnums.values.first,
+      reason: reasonController.text,
+      paymentMethod: PaymentMethodEnums.values.first,
+      isOthersInvolved: isOthersInvolved,
+      date: DateTime.now(),
+      time: TimeOfDay.now().minute,
+      location: address,
+      othersInvolved: isOthersInvolved ? othersInvolvedController.text : "",
+      createdBy: user,
+    );
+    _transactionRepository.save(transaction);
+
     await Future.delayed(const Duration(seconds: 3), () async {
       Get.back();
       _onClear();

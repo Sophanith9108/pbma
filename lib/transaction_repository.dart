@@ -5,7 +5,7 @@ class TransactionRepository extends AppStorageRepository<TransactionModel> {
   final TransactionService _service = Get.put(TransactionService());
 
   @override
-  Future<void> save(String key, TransactionModel value) async {
+  Future<void> save(TransactionModel value) async {
     return _service.create(TransactionModel.toEntity(value));
   }
 
@@ -16,13 +16,13 @@ class TransactionRepository extends AppStorageRepository<TransactionModel> {
   }
 
   @override
-  Future<List<TransactionModel>?> gets(String key) async {
+  Future<List<TransactionModel>?> gets() async {
     final List<TransactionEntity>? entities = await _service.reads();
     return entities?.map((e) => TransactionEntity.toModel(e)).toList();
   }
 
   @override
-  Future<void> update(String key, TransactionModel value) async {
+  Future<void> update(TransactionModel value) async {
     return _service.update(TransactionModel.toEntity(value));
   }
 
