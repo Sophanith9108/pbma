@@ -11,14 +11,14 @@ class TransactionModel extends Equatable {
   late String? reason;
   late PaymentMethodEnums? paymentMethod;
   late bool? isOthersInvolved;
-  late int? date;
+  late DateTime? date;
   late int? time;
   late String? location;
   late String? othersInvolved;
-  late int? createdAt;
-  late int? updatedAt;
-  late String? createdBy;
-  late String? updatedBy;
+  late DateTime? createdAt;
+  late DateTime? updatedAt;
+  late UserModel? createdBy;
+  late UserModel? updatedBy;
   late bool? status;
 
   TransactionModel();
@@ -31,14 +31,14 @@ class TransactionModel extends Equatable {
     String? reason,
     PaymentMethodEnums? paymentMethod,
     bool? isOthersInvolved,
-    int? date,
+    DateTime? date,
     int? time,
     String? location,
     String? othersInvolved,
-    int? updatedAt,
-    String? updatedBy,
+    UserModel? createdBy,
+    UserModel? updatedBy,
+    DateTime? updatedAt,
     bool? status,
-    String? createdBy,
   }) {
     var transaction = TransactionModel();
     transaction.id = Uuid().v8();
@@ -53,11 +53,11 @@ class TransactionModel extends Equatable {
     transaction.time = time;
     transaction.location = location;
     transaction.othersInvolved = othersInvolved;
-    transaction.updatedAt = updatedAt;
+    transaction.createdAt = DateTime.now();
+    transaction.createdBy = createdBy;
+    transaction.updatedAt = updatedAt ?? DateTime.now();
     transaction.updatedBy = updatedBy;
     transaction.status = status;
-    transaction.createdAt = DateTime.now().millisecondsSinceEpoch;
-    transaction.createdBy = createdBy;
     return transaction;
   }
 
@@ -75,10 +75,10 @@ class TransactionModel extends Equatable {
     entity.time = model.time;
     entity.location = model.location;
     entity.othersInvolved = model.othersInvolved;
+    entity.createdBy = UserModel.toEntity(model.createdBy!);
+    entity.updatedBy = UserModel.toEntity(model.updatedBy!);
     entity.createdAt = model.createdAt;
-    entity.createdBy = model.createdBy;
     entity.updatedAt = model.updatedAt;
-    entity.updatedBy = model.updatedBy;
     entity.status = model.status;
     return entity;
   }

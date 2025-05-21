@@ -7,9 +7,11 @@ import 'package:pbma/core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('transaction_box_development');
-  await Hive.openBox('transaction_box_production');
-  await Hive.openBox('transaction_box_staging');
+
+  Hive.registerAdapter(TransactionEntityAdapter());
+  Hive.registerAdapter(UserEntityAdapter());
+
+  await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
 
   runApp(const MainApp());
 }

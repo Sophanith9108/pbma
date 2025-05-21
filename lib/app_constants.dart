@@ -13,3 +13,11 @@ class AppConstants {
   static const String appTermsOfServiceUrl = '';
   static const String appSupportUrl = 'https://sophanit.dev/contact';
 }
+
+class AppStorageBox {
+  static const String transactionBox = 'transaction_box';
+  static const String userBox = 'user_box';
+  static const String categoryBox = 'category_box';
+  static const String settingBox = 'setting_box';
+  static const String notificationBox = 'notification_box';
+}

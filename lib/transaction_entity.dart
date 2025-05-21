@@ -2,6 +2,8 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pbma/core.dart';
 import 'package:uuid/uuid.dart';
 
+part 'transaction_entity.g.dart';
+
 @HiveType(typeId: 0)
 class TransactionEntity extends HiveObject {
   @HiveField(0)
@@ -29,10 +31,10 @@ class TransactionEntity extends HiveObject {
   bool? isOthersInvolved;
 
   @HiveField(8)
-  int? date;
+  DateTime? date;
 
   @HiveField(9)
-  int? time;
+  int? time; //Store time of day as minutes since midnight
 
   @HiveField(10)
   String? location;
@@ -41,16 +43,16 @@ class TransactionEntity extends HiveObject {
   String? othersInvolved;
 
   @HiveField(12)
-  int? createdAt;
+  DateTime? createdAt;
 
   @HiveField(13)
-  int? updatedAt;
+  DateTime? updatedAt;
 
   @HiveField(14)
-  String? createdBy;
+  UserEntity? createdBy;
 
   @HiveField(15)
-  String? updatedBy;
+  UserEntity? updatedBy;
 
   @HiveField(16)
   bool? status;
@@ -65,14 +67,14 @@ class TransactionEntity extends HiveObject {
     String? reason,
     PaymentMethodEnums? paymentMethod,
     bool? isOthersInvolved,
-    int? date,
+    DateTime? date,
     int? time,
     String? location,
     String? othersInvolved,
-    int? updatedAt,
-    String? updatedBy,
+    DateTime? updatedAt,
+    UserEntity? createdBy,
+    UserEntity? updatedBy,
     bool? status,
-    String? createdBy,
   }) {
     var transaction = TransactionEntity();
     transaction.id = Uuid().v8();
@@ -87,11 +89,11 @@ class TransactionEntity extends HiveObject {
     transaction.time = time;
     transaction.location = location;
     transaction.othersInvolved = othersInvolved;
-    transaction.updatedAt = updatedAt;
+    transaction.createdAt = DateTime.now();
+    transaction.createdBy = createdBy;
+    transaction.updatedAt = updatedAt ?? DateTime.now();
     transaction.updatedBy = updatedBy;
     transaction.status = status;
-    transaction.createdAt = DateTime.now().millisecondsSinceEpoch;
-    transaction.createdBy = createdBy;
     return transaction;
   }
 
@@ -111,10 +113,9 @@ class TransactionEntity extends HiveObject {
     model.othersInvolved = entity.othersInvolved;
     model.createdAt = entity.createdAt;
     model.updatedAt = entity.updatedAt;
-    model.createdBy = entity.createdBy;
-    model.updatedBy = entity.updatedBy;
+    model.createdBy = UserEntity.toModel(entity.createdBy!);
+    model.updatedBy = UserEntity.toModel(entity.updatedBy!);
     model.status = entity.status;
-
     return model;
   }
 }

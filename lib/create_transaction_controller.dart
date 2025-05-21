@@ -8,6 +8,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionController extends MainController {
+  final TransactionRepository _transactionRepository = Get.put(
+    TransactionRepository(),
+  );
+
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -155,6 +159,7 @@ class CreateTransactionController extends MainController {
     FocusScope.of(Get.context!).unfocus();
 
     await showLoading();
+
     await Future.delayed(const Duration(seconds: 3), () async {
       Get.back();
       _onClear();
