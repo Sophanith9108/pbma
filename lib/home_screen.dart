@@ -490,7 +490,7 @@ class HomeScreen extends StatelessWidget {
                                                             ),
                                                             icon: BitmapDescriptor.defaultMarkerWithHue(
                                                               BitmapDescriptor
-                                                                  .hueGreen,
+                                                                  .hueBlue,
                                                             ),
                                                           ),
                                                         },
