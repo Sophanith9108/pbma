@@ -25,15 +25,15 @@ class TransactionEntityAdapter extends TypeAdapter<TransactionEntity> {
       ..reason = fields[5] as String?
       ..paymentMethod = fields[6] as PaymentMethodEnums?
       ..isOthersInvolved = fields[7] as bool?
-      ..date = fields[8] as DateTime?
-      ..time = fields[9] as int?
+      ..date = fields[8] as String?
+      ..time = fields[9] as String?
       ..location = fields[10] as String?
       ..othersInvolved = fields[11] as String?
       ..createdAt = fields[12] as DateTime?
       ..updatedAt = fields[13] as DateTime?
       ..createdBy = fields[14] as UserEntity?
       ..updatedBy = fields[15] as UserEntity?
-      ..status = fields[16] as bool?;
+      ..status = fields[16] as TransactionStatusEnums?;
   }
 
   @override

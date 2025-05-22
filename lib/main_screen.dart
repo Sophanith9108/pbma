@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
@@ -8,6 +7,7 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
   final MainController mainController = Get.put(MainController());
+  final HomeController homeController = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +32,9 @@ class MainScreen extends StatelessWidget {
           IconButton(
             onPressed: () {
               Get.toNamed(AppRoutes.transaction)?.then((value) {
-                Fluttertoast.showToast(
-                  msg: "The result has been received: $value",
-                );
+                if (value != null && value) {
+                  homeController.setData();
+                }
               });
             },
             icon: const Icon(FontAwesomeIcons.plus),

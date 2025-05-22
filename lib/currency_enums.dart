@@ -1,7 +1,17 @@
 import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-enum CurrencyEnums { USD, KHR }
+part 'currency_enums.g.dart';
+
+@HiveType(typeId: 2)
+enum CurrencyEnums {
+  @HiveField(0)
+  USD,
+
+  @HiveField(1)
+  KHR,
+}
 
 extension CurrencyEnumsExtension on CurrencyEnums {
   String get name {

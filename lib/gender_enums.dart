@@ -1,4 +1,15 @@
-enum GenderEnums { male, female }
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'gender_enums.g.dart';
+
+@HiveType(typeId: 3)
+enum GenderEnums {
+  @HiveField(0)
+  male,
+
+  @HiveField(1)
+  female,
+}
 
 extension GenderExtension on GenderEnums {
   String get value {

@@ -10,6 +10,11 @@ void main() async {
 
   Hive.registerAdapter(TransactionEntityAdapter());
   Hive.registerAdapter(UserEntityAdapter());
+  Hive.registerAdapter(GenderEnumsAdapter());
+  Hive.registerAdapter(CurrencyEnumsAdapter());
+  Hive.registerAdapter(ExpenseTypeEnumsAdapter());
+  Hive.registerAdapter(PaymentMethodEnumsAdapter());
+  Hive.registerAdapter(TransactionStatusEnumsAdapter());
 
   await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
 

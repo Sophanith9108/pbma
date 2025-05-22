@@ -25,11 +25,12 @@ class AppTextStyles {
   );
   static final TextStyle subtitle = GoogleFonts.battambang(fontSize: 14);
 
+  static final TextStyle label = GoogleFonts.battambang(fontSize: 16);
   static final TextStyle value = GoogleFonts.battambang(
-    fontSize: 14,
+    fontSize: 16,
     fontWeight: FontWeight.bold,
   );
-  static final TextStyle label = GoogleFonts.battambang(fontSize: 16);
+
   static final TextStyle hint = GoogleFonts.battambang(fontSize: 14);
 
   static final TextStyle button = GoogleFonts.battambang(

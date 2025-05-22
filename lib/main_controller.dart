@@ -3,6 +3,10 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class MainController extends GetxController {
+  final TransactionRepository transactionRepository = Get.put(
+    TransactionRepository(),
+  );
+
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
   set currentIndex(int index) => _currentIndex.value = index;
@@ -25,11 +29,8 @@ class MainController extends GetxController {
 
   @override
   void onInit() {
-    _initialized();
     super.onInit();
   }
-
-  void _initialized() {}
 
   Future onTabSelected(int index) async {
     currentIndex = index;
@@ -52,9 +53,5 @@ class MainController extends GetxController {
       default:
         title = 'Home'.tr;
     }
-  }
-
-  void setData(dynamic data) {
-    this.data = data;
   }
 }

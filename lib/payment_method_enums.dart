@@ -1,20 +1,53 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+part 'payment_method_enums.g.dart';
+
+@HiveType(typeId: 5)
 enum PaymentMethodEnums {
+  @HiveField(0)
   cash,
+
+  @HiveField(1)
   creditCard,
+
+  @HiveField(2)
   debitCard,
+
+  @HiveField(3)
   bankTransfer,
+
+  @HiveField(4)
   mobilePayment,
+
+  @HiveField(5)
   cryptocurrency,
+
+  @HiveField(6)
   check,
+
+  @HiveField(7)
   giftCard,
+
+  @HiveField(8)
   invoice,
+
+  @HiveField(9)
   contactlessPayment,
+
+  @HiveField(10)
   digitalWallet,
+
+  @HiveField(11)
   buyNowPayLater,
+
+  @HiveField(12)
   prepaidCard,
+
+  @HiveField(13)
   loyaltyPoints,
+
+  @HiveField(14)
   bartering,
 }
 

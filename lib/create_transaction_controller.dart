@@ -8,10 +8,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionController extends MainController {
-  final TransactionRepository _transactionRepository = Get.put(
-    TransactionRepository(),
-  );
-
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -158,9 +154,18 @@ class CreateTransactionController extends MainController {
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
 
-    await showLoading();
+    AppUtils.showLoading();
 
-    var user = UserModel.create();
+    var user = UserModel.create(
+      name: "John Doe",
+      email: "bK2l0@example.com",
+      phone: "1234567890",
+      password: "password",
+      profilePicture: "https://example.com/profile.jpg",
+      address: "123 Main St, City, Country",
+      dateOfBirth: "1990-01-01",
+      gender: GenderEnums.values.first,
+    );
 
     var transaction = TransactionModel.create(
       purpose: purposeController.text,
@@ -170,16 +175,18 @@ class CreateTransactionController extends MainController {
       reason: reasonController.text,
       paymentMethod: PaymentMethodEnums.values.first,
       isOthersInvolved: isOthersInvolved,
-      date: DateTime.now(),
-      time: TimeOfDay.now().minute,
+      date: dateController.text,
+      time: timeController.text,
       location: address,
       othersInvolved: isOthersInvolved ? othersInvolvedController.text : "",
       createdBy: user,
     );
-    _transactionRepository.save(transaction);
 
     await Future.delayed(const Duration(seconds: 3), () async {
-      Get.back();
+      AppUtils.hideLoading();
+
+      await transactionRepository.save(transaction);
+
       _onClear();
       await Future.delayed(Duration(seconds: 1));
       Get.back(result: true);
@@ -187,25 +194,13 @@ class CreateTransactionController extends MainController {
   }
 
   Future<void> onMapCreated(GoogleMapController controller) async {
-    showLoading();
-    await Future.delayed(const Duration(seconds: 3), () {
-      Get.back();
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3), () async {
+      AppUtils.hideLoading();
+
       mapController = controller;
       _getCurrentLocation();
     });
-  }
-
-  Future<void> showLoading() async {
-    showDialog(
-      context: Get.context!,
-      barrierDismissible: false,
-      builder: (_) {
-        return Dialog.fullscreen(
-          backgroundColor: Colors.transparent,
-          child: Center(child: CircularProgressIndicator()),
-        );
-      },
-    );
   }
 
   void _onClear() {

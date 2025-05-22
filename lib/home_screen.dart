@@ -7,154 +7,274 @@ import 'package:pbma/core.dart';
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
 
-  final controller = Get.put(() => HomeController());
+  final HomeController controller = Get.put(HomeController());
 
   @override
   Widget build(BuildContext context) {
-    return AppNavigation(
-      body: RefreshIndicator(
-        onRefresh: () => Future.delayed(const Duration(seconds: 2)),
-        child: CustomScrollView(
-          slivers: List.generate(5, (index) {
-            return SliverStickyHeader(
-              header: Container(
-                height: 50,
-                color: AppColors.primary,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(width: AppDimensions.padding),
-                    Text(
-                      DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        DateTime.now().day + index,
-                      ).format(pattern: "dd.MMM.yyyy"),
-                      style: AppTextStyles.title,
-                    ),
-                  ],
-                ),
-              ),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate((context, index) {
-                  return ListTile(
-                    onTap: () async {
-                      await Future.delayed(const Duration(milliseconds: 300));
-                      showModalBottomSheet(
-                        context: Get.context!,
-                        isScrollControlled: true,
-                        useSafeArea: true,
-                        builder: (_) {
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  left: AppDimensions.spadding,
-                                  right: AppDimensions.spadding,
-                                  top: AppDimensions.spadding,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Text(
-                                        'Title of the $index',
-                                        style: AppTextStyles.header1,
-                                      ),
-                                    ),
-                                    IconButton.outlined(
-                                      onPressed: () {
-                                        Get.back();
-                                      },
-                                      icon: Icon(FontAwesomeIcons.xmark),
-                                    ),
-                                  ],
-                                ),
+    return Obx(
+      () => AppNavigation(
+        body: RefreshIndicator(
+          onRefresh: () => controller.onRefreshing(),
+          child:
+              controller.transactions.isEmpty
+                  ? ListView(
+                    children: [
+                      SizedBox(height: Get.width * 0.3),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("No Data".tr, style: AppTextStyles.title),
+                          Text(
+                            "You can pull to refresh".tr,
+                            style: AppTextStyles.subtitle,
+                          ),
+                        ],
+                      ),
+                    ],
+                  )
+                  : CustomScrollView(
+                    slivers:
+                        controller.transactions.entries.map((element) {
+                          String date = element.key;
+                          List<TransactionModel> transactions = element.value;
+
+                          return SliverStickyHeader(
+                            header: Container(
+                              height: 50,
+                              color: AppColors.primary,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  SizedBox(width: AppDimensions.padding),
+                                  Text(date, style: AppTextStyles.title),
+                                ],
                               ),
-                              Expanded(
-                                child: ListView(
-                                  shrinkWrap: true,
-                                  physics: const ScrollPhysics(),
-                                  padding: const EdgeInsets.all(
-                                    AppDimensions.padding,
-                                  ),
-                                  children: [
-                                    Text(
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
-                                      'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                                      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-                                      'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-                                      'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.'
-                                      'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                                      textAlign: TextAlign.justify,
-                                      style: AppTextStyles.value,
-                                      strutStyle: StrutStyle(height: 1.5),
+                            ),
+                            sliver: SliverList(
+                              delegate: SliverChildBuilderDelegate(
+                                childCount: transactions.length,
+                                (context, index) {
+                                  TransactionModel transaction =
+                                      transactions[index];
+
+                                  return ListTile(
+                                    onTap: () async {
+                                      await Future.delayed(
+                                        const Duration(milliseconds: 300),
+                                      );
+                                      showModalBottomSheet(
+                                        context: Get.context!,
+                                        isScrollControlled: true,
+                                        useSafeArea: true,
+                                        builder: (_) {
+                                          return Column(
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  left: AppDimensions.spadding,
+                                                  right: AppDimensions.spadding,
+                                                  top: AppDimensions.spadding,
+                                                ),
+                                                child: Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: Text(
+                                                        transaction.purpose ??
+                                                            "",
+                                                        style:
+                                                            AppTextStyles
+                                                                .header1,
+                                                      ),
+                                                    ),
+                                                    IconButton.outlined(
+                                                      onPressed: () {
+                                                        Get.back();
+                                                      },
+                                                      icon: Icon(
+                                                        FontAwesomeIcons.xmark,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: ListView(
+                                                  shrinkWrap: true,
+                                                  padding: const EdgeInsets.all(
+                                                    AppDimensions.padding,
+                                                  ),
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Text(
+                                                            "Reason".tr,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .label,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 3,
+                                                          child: Text(
+                                                            transaction
+                                                                    .reason ??
+                                                                "",
+                                                            textAlign:
+                                                                TextAlign
+                                                                    .justify,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .value,
+                                                            strutStyle:
+                                                                StrutStyle(
+                                                                  height: 1.5,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height:
+                                                          AppDimensions.padding,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Text(
+                                                            "Amount".tr,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .label,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 3,
+                                                          child: Text(
+                                                            transaction.amount!
+                                                                .formatCurrency(
+                                                                  symbol:
+                                                                      transaction
+                                                                          .currency!
+                                                                          .name,
+                                                                ),
+                                                            textAlign:
+                                                                TextAlign
+                                                                    .justify,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .value,
+                                                            strutStyle:
+                                                                StrutStyle(
+                                                                  height: 1.5,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height:
+                                                          AppDimensions.padding,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Text(
+                                                            "Type".tr,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .label,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 3,
+                                                          child: Text(
+                                                            transaction
+                                                                .paymentMethod!
+                                                                .name,
+                                                            textAlign:
+                                                                TextAlign
+                                                                    .justify,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .value,
+                                                            strutStyle:
+                                                                StrutStyle(
+                                                                  height: 1.5,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height:
+                                                          AppDimensions.padding,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          flex: 1,
+                                                          child: Text(
+                                                            "Date".tr,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .label,
+                                                          ),
+                                                        ),
+                                                        Expanded(
+                                                          flex: 3,
+                                                          child: Text(
+                                                            "${transaction.date} ${transaction.time}",
+                                                            textAlign:
+                                                                TextAlign
+                                                                    .justify,
+                                                            style:
+                                                                AppTextStyles
+                                                                    .value,
+                                                            strutStyle:
+                                                                StrutStyle(
+                                                                  height: 1.5,
+                                                                ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      height:
+                                                          AppDimensions.padding,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    leading: Icon(FontAwesomeIcons.tractor),
+                                    title: Text(
+                                      transaction.purpose ?? "",
+                                      style: AppTextStyles.title,
                                     ),
-                                    const SizedBox(
-                                      height: AppDimensions.padding,
+                                    subtitle: Text(
+                                      transaction.location ?? "",
+                                      style: AppTextStyles.subtitle,
                                     ),
-                                  ],
-                                ),
+                                    trailing: Icon(
+                                      FontAwesomeIcons.chevronDown,
+                                      size: AppDimensions.miconSize,
+                                    ),
+                                  );
+                                },
                               ),
-                            ],
+                            ),
                           );
-                        },
-                      );
-                    },
-                    leading: Icon(FontAwesomeIcons.tractor),
-                    title: Text('Item $index', style: AppTextStyles.title),
-                    subtitle: Text(
-                      'Pay for food $index',
-                      style: AppTextStyles.subtitle,
-                    ),
-                    trailing: Icon(
-                      FontAwesomeIcons.chevronDown,
-                      size: AppDimensions.miconSize,
-                    ),
-                  );
-                }, childCount: 5),
-              ),
-            );
-          }),
+                        }).toList(),
+                  ),
         ),
       ),
     );

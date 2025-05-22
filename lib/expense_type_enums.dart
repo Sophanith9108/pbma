@@ -1,14 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 
+part 'expense_type_enums.g.dart';
+
+@HiveType(typeId: 4)
 enum ExpenseTypeEnums {
+  @HiveField(0)
   food,
+
+  @HiveField(1)
   transport,
+
+  @HiveField(2)
   entertainment,
+
+  @HiveField(3)
   shopping,
+
+  @HiveField(4)
   health,
+
+  @HiveField(5)
   education,
+
+  @HiveField(6)
   travel,
+
+  @HiveField(7)
   bills,
+
+  @HiveField(8)
   other,
 }
 

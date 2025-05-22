@@ -42,3 +42,4 @@ export 'transaction_service.dart';
 export 'user_model.dart';
 export 'gender_enums.dart';
 export 'user_entity.dart';
+export 'transaction_status_enums.dart';

@@ -31,10 +31,10 @@ class TransactionEntity extends HiveObject {
   bool? isOthersInvolved;
 
   @HiveField(8)
-  DateTime? date;
+  String? date;
 
   @HiveField(9)
-  int? time; //Store time of day as minutes since midnight
+  String? time;
 
   @HiveField(10)
   String? location;
@@ -55,7 +55,7 @@ class TransactionEntity extends HiveObject {
   UserEntity? updatedBy;
 
   @HiveField(16)
-  bool? status;
+  TransactionStatusEnums? status;
 
   TransactionEntity();
 
@@ -67,14 +67,14 @@ class TransactionEntity extends HiveObject {
     String? reason,
     PaymentMethodEnums? paymentMethod,
     bool? isOthersInvolved,
-    DateTime? date,
-    int? time,
+    String? date,
+    String? time,
     String? location,
     String? othersInvolved,
     DateTime? updatedAt,
     UserEntity? createdBy,
     UserEntity? updatedBy,
-    bool? status,
+    TransactionStatusEnums? status,
   }) {
     var transaction = TransactionEntity();
     transaction.id = Uuid().v8();
