@@ -178,6 +178,8 @@ class CreateTransactionController extends MainController {
       date: dateController.text,
       time: timeController.text,
       location: address,
+      latitude: currentLocation.latitude,
+      longitude: currentLocation.longitude,
       othersInvolved: isOthersInvolved ? othersInvolvedController.text : "",
       createdBy: user,
     );

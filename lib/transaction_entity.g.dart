@@ -33,13 +33,15 @@ class TransactionEntityAdapter extends TypeAdapter<TransactionEntity> {
       ..updatedAt = fields[13] as DateTime?
       ..createdBy = fields[14] as UserEntity?
       ..updatedBy = fields[15] as UserEntity?
-      ..status = fields[16] as TransactionStatusEnums?;
+      ..status = fields[16] as TransactionStatusEnums?
+      ..latitude = fields[17] as double?
+      ..longitude = fields[18] as double?;
   }
 
   @override
   void write(BinaryWriter writer, TransactionEntity obj) {
     writer
-      ..writeByte(17)
+      ..writeByte(19)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -73,7 +75,11 @@ class TransactionEntityAdapter extends TypeAdapter<TransactionEntity> {
       ..writeByte(15)
       ..write(obj.updatedBy)
       ..writeByte(16)
-      ..write(obj.status);
+      ..write(obj.status)
+      ..writeByte(17)
+      ..write(obj.latitude)
+      ..writeByte(18)
+      ..write(obj.longitude);
   }
 
   @override

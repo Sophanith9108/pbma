@@ -21,6 +21,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    setData();
   }
 
   @override

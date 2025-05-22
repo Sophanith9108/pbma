@@ -14,6 +14,8 @@ class TransactionModel extends Equatable {
   late String? date;
   late String? time;
   late String? location;
+  late double latitude;
+  late double longitude;
   late String? othersInvolved;
   late DateTime? createdAt;
   late DateTime? updatedAt;
@@ -34,6 +36,8 @@ class TransactionModel extends Equatable {
     String? date,
     String? time,
     String? location,
+    double? latitude,
+    double? longitude,
     String? othersInvolved,
     UserModel? createdBy,
     UserModel? updatedBy,
@@ -52,6 +56,8 @@ class TransactionModel extends Equatable {
     transaction.date = date;
     transaction.time = time;
     transaction.location = location;
+    transaction.latitude = latitude ?? 0.0;
+    transaction.longitude = longitude ?? 0.0;
     transaction.othersInvolved = othersInvolved;
     transaction.createdAt = DateTime.now();
     transaction.createdBy = createdBy;
@@ -80,6 +86,8 @@ class TransactionModel extends Equatable {
     entity.date = model.date;
     entity.time = model.time;
     entity.location = model.location;
+    entity.latitude = model.latitude;
+    entity.longitude = model.longitude;
     entity.othersInvolved = model.othersInvolved;
     entity.createdBy = createdBy;
     entity.updatedBy = updatedBy;
@@ -102,6 +110,8 @@ class TransactionModel extends Equatable {
     date,
     time,
     location,
+    latitude,
+    longitude,
     othersInvolved,
     createdAt,
     updatedAt,

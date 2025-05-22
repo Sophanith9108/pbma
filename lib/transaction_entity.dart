@@ -57,6 +57,12 @@ class TransactionEntity extends HiveObject {
   @HiveField(16)
   TransactionStatusEnums? status;
 
+  @HiveField(17)
+  double? latitude;
+
+  @HiveField(18)
+  double? longitude;
+
   TransactionEntity();
 
   factory TransactionEntity.create({
@@ -70,6 +76,8 @@ class TransactionEntity extends HiveObject {
     String? date,
     String? time,
     String? location,
+    double? latitude,
+    double? longitude,
     String? othersInvolved,
     DateTime? updatedAt,
     UserEntity? createdBy,
@@ -88,6 +96,8 @@ class TransactionEntity extends HiveObject {
     transaction.date = date;
     transaction.time = time;
     transaction.location = location;
+    transaction.latitude = latitude;
+    transaction.longitude = longitude;
     transaction.othersInvolved = othersInvolved;
     transaction.createdAt = DateTime.now();
     transaction.createdBy = createdBy;
@@ -110,6 +120,8 @@ class TransactionEntity extends HiveObject {
     model.date = entity.date;
     model.time = entity.time;
     model.location = entity.location;
+    model.latitude = entity.latitude ?? 0.0;
+    model.longitude = entity.longitude ?? 0.0;
     model.othersInvolved = entity.othersInvolved;
     model.createdAt = entity.createdAt;
     model.updatedAt = entity.updatedAt;
