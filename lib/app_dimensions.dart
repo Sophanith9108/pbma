@@ -5,6 +5,7 @@ class AppDimensions {
   static const double lpadding = 20.0;
   static const double xlpadding = 24.0;
   static const double xxlpadding = 32.0;
+  static const double xxxlpadding = 40.0;
 
   static const double margin = 16.0;
   static const double elevation = 16.0;

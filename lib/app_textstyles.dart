@@ -42,4 +42,20 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.bold,
   );
+
+  static final TextStyle error = GoogleFonts.battambang(
+    fontSize: 12,
+    color: Colors.red,
+  );
+  static final TextStyle link = GoogleFonts.battambang(
+    fontSize: 14,
+    color: Colors.blue,
+    fontWeight: FontWeight.bold,
+  );
+  static final TextStyle disabled = GoogleFonts.battambang(
+    fontSize: 14,
+    color: Colors.grey,
+  );
+
+  static final TextStyle text = GoogleFonts.battambang(fontSize: 16);
 }

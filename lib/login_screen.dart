@@ -36,7 +36,7 @@ class LoginScreen extends StatelessWidget {
                 hintText: '89267375'.tr,
                 labelText: 'Phone'.tr,
                 prefixIcon: const Icon(Icons.phone),
-                prefixText: '+855',
+                prefixText: '+855 ',
                 prefixStyle: AppTextStyles.label,
 
                 suffixIcon: IconButton(

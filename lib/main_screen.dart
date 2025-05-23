@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: () async {
             await Future.delayed(const Duration(milliseconds: 300));
-            Get.toNamed(AppRoutes.login);
+            Get.toNamed(AppRoutes.register);
           },
           icon: Icon(FontAwesomeIcons.userAstronaut),
         ),

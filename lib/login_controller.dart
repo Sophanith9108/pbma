@@ -24,7 +24,7 @@ class LoginController extends MainController {
       AppUtils.showLoading();
       await Future.delayed(const Duration(seconds: 3), () async {
         AppUtils.hideLoading();
-        Get.toNamed(AppRoutes.main);
+        Get.offAllNamed(AppRoutes.main);
       });
     }
   }
