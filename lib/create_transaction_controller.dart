@@ -83,6 +83,24 @@ class CreateTransactionController extends MainController {
   String get address => _address.value;
   set address(String value) => _address.value = value;
 
+  final _selectedGender = GenderEnums.values.first.obs;
+  GenderEnums get selectedGender => _selectedGender.value;
+  set selectedGender(GenderEnums value) => _selectedGender.value = value;
+
+  final _selectedCurrency = CurrencyEnums.values.first.obs;
+  CurrencyEnums get selectedCurrency => _selectedCurrency.value;
+  set selectedCurrency(CurrencyEnums value) => _selectedCurrency.value = value;
+
+  final _selectedExpenseType = ExpenseTypeEnums.values.first.obs;
+  ExpenseTypeEnums get selectedExpenseType => _selectedExpenseType.value;
+  set selectedExpenseType(ExpenseTypeEnums value) =>
+      _selectedExpenseType.value = value;
+
+  final _selectedPaymentMethod = PaymentMethodEnums.values.first.obs;
+  PaymentMethodEnums get selectedPaymentMethod => _selectedPaymentMethod.value;
+  set selectedPaymentMethod(PaymentMethodEnums value) =>
+      _selectedPaymentMethod.value = value;
+
   late GoogleMapController mapController;
 
   static const double zoomLevel = 12;
@@ -164,16 +182,16 @@ class CreateTransactionController extends MainController {
       profilePicture: "https://example.com/profile.jpg",
       address: "123 Main St, City, Country",
       dateOfBirth: "1990-01-01",
-      gender: GenderEnums.values.first,
+      gender: selectedGender,
     );
 
     var transaction = TransactionModel.create(
       purpose: purposeController.text,
       amount: double.tryParse(amountController.text),
-      currency: CurrencyEnums.values.first,
-      expenseType: ExpenseTypeEnums.values.first,
+      currency: selectedCurrency,
+      expenseType: selectedExpenseType,
       reason: reasonController.text,
-      paymentMethod: PaymentMethodEnums.values.first,
+      paymentMethod: selectedPaymentMethod,
       isOthersInvolved: isOthersInvolved,
       date: dateController.text,
       time: timeController.text,

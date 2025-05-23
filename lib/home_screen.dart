@@ -61,6 +61,10 @@ class HomeScreen extends StatelessWidget {
                                     transactions[index];
 
                                 return ListTile(
+                                  onLongPress:
+                                      () => controller.onDeleteTransaction(
+                                        transaction,
+                                      ),
                                   onTap: () async {
                                     await Future.delayed(
                                       const Duration(milliseconds: 300),
@@ -74,9 +78,9 @@ class HomeScreen extends StatelessWidget {
                                           children: [
                                             Padding(
                                               padding: const EdgeInsets.only(
-                                                left: AppDimensions.spadding,
-                                                right: AppDimensions.spadding,
-                                                top: AppDimensions.spadding,
+                                                left: AppDimensions.mpadding,
+                                                right: AppDimensions.mpadding,
+                                                top: AppDimensions.mpadding,
                                               ),
                                               child: Row(
                                                 children: [
@@ -465,7 +469,12 @@ class HomeScreen extends StatelessWidget {
                                                             false,
                                                         myLocationButtonEnabled:
                                                             false,
-
+                                                        zoomControlsEnabled:
+                                                            false,
+                                                        mapToolbarEnabled:
+                                                            false,
+                                                        zoomGesturesEnabled:
+                                                            false,
                                                         markers: {
                                                           Marker(
                                                             markerId: MarkerId(
@@ -507,17 +516,6 @@ class HomeScreen extends StatelessWidget {
                                                       ),
                                                     ),
                                                   ),
-                                                  // GoogleMap(
-                                                  //     initialCameraPosition:
-                                                  //         CameraPosition(
-                                                  //           target: LatLng(
-                                                  //             transaction
-                                                  //                 .latitude,
-                                                  //             transaction
-                                                  //                 .longitude,
-                                                  //           ),
-                                                  //         ),
-                                                  //   ),
                                                 ],
                                               ),
                                             ),
@@ -526,17 +524,23 @@ class HomeScreen extends StatelessWidget {
                                       },
                                     );
                                   },
-                                  leading: Icon(FontAwesomeIcons.tractor),
+                                  leading: Icon(
+                                    FontAwesomeIcons.tentArrowLeftRight,
+                                  ),
                                   title: Text(
                                     transaction.purpose ?? "",
                                     style: AppTextStyles.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   subtitle: Text(
                                     transaction.location ?? "",
                                     style: AppTextStyles.subtitle,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   trailing: Icon(
-                                    FontAwesomeIcons.chevronDown,
+                                    FontAwesomeIcons.circleChevronDown,
                                     size: AppDimensions.miconSize,
                                   ),
                                 );

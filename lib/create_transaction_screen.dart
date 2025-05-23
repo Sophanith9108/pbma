@@ -117,6 +117,7 @@ class CreateTransactionScreen extends StatelessWidget {
                                         );
                                         controller.currencyController.text =
                                             element.name;
+                                        controller.selectedCurrency = element;
                                         Get.back();
                                       },
                                     );
@@ -185,6 +186,7 @@ class CreateTransactionScreen extends StatelessWidget {
                                   );
                                   controller.expenseTypeController.text =
                                       element.name;
+                                  controller.selectedExpenseType = element;
                                   Get.back();
                                 },
                               );
@@ -278,6 +280,7 @@ class CreateTransactionScreen extends StatelessWidget {
                                   );
                                   controller.paymentMethodController.text =
                                       element.name;
+                                  controller.selectedPaymentMethod = element;
                                   Get.back();
                                 },
                               );

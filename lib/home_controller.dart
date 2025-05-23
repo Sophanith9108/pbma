@@ -1,4 +1,6 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
@@ -54,5 +56,42 @@ class HomeController extends GetxController {
       await _initialized();
       return true;
     });
+  }
+
+  Future<void> onDeleteTransaction(TransactionModel transaction) async {
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Delete Transaction".tr, style: AppTextStyles.title),
+          content: Text(
+            "Are you sure you want to delete this transaction?",
+            style: AppTextStyles.value,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("Cancel".tr, style: AppTextStyles.button),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+
+                AppUtils.showLoading();
+                await Future.delayed(const Duration(seconds: 3), () async {
+                  AppUtils.hideLoading();
+
+                  await transactionRepository.delete(transaction.id!);
+                  await _initialized();
+                });
+              },
+              child: Text("Delete".tr, style: AppTextStyles.title),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

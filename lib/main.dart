@@ -6,6 +6,12 @@ import 'package:pbma/core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeStorage();
+
+  runApp(const MainApp());
+}
+
+Future<void> initializeStorage() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(TransactionEntityAdapter());
@@ -17,8 +23,6 @@ void main() async {
   Hive.registerAdapter(TransactionStatusEnumsAdapter());
 
   await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
-
-  runApp(const MainApp());
 }
 
 void setControllers() {
@@ -31,6 +35,9 @@ void setControllers() {
   Get.put(CreateTransactionController());
   Get.put(AccountController());
   Get.put(DetailTransactionController());
+  Get.put(ProfileController());
+  Get.put(LoginController());
+  Get.put(RegisterController());
 }
 
 void setApplicationConfigs() {
