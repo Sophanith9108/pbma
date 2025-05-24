@@ -418,62 +418,96 @@ class CreateTransactionScreen extends StatelessWidget {
                     isScrollControlled: true,
                     isDismissible: true,
                     builder: (_) {
-                      return Column(
-                        children: [
-                          SizedBox(height: AppDimensions.padding),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(width: AppDimensions.padding),
-                              Expanded(
-                                child: Text(
-                                  "Selected Location".tr,
-                                  style: AppTextStyles.title,
-                                ),
-                              ),
-                              IconButton.outlined(
-                                onPressed: () {
-                                  Get.back();
-                                },
-                                icon: const Icon(FontAwesomeIcons.xmark),
-                              ),
-                              SizedBox(width: AppDimensions.padding),
-                            ],
-                          ),
-                          SizedBox(height: AppDimensions.padding),
-                          Expanded(
-                            child: Stack(
+                      return Obx(
+                        () => Column(
+                          children: [
+                            SizedBox(height: AppDimensions.padding),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Positioned.fill(
-                                  child: GoogleMap(
-                                    initialCameraPosition:
-                                        controller.initialCameraPosition,
-                                    myLocationButtonEnabled: false,
-                                    myLocationEnabled: true,
-                                    zoomControlsEnabled: false,
-                                    mapType: MapType.hybrid,
-                                    onMapCreated: controller.onMapCreated,
+                                SizedBox(width: AppDimensions.padding),
+                                Expanded(
+                                  child: Text(
+                                    "Selected Location".tr,
+                                    style: AppTextStyles.title,
                                   ),
                                 ),
-                                Positioned(
-                                  bottom: AppDimensions.padding * 2,
-                                  left: AppDimensions.padding * 2,
-                                  right: AppDimensions.padding * 2,
-                                  child: FloatingActionButton.extended(
-                                    onPressed: () {
-                                      controller.onDropLocation();
-                                      Get.back();
-                                    },
-                                    label: Text(
-                                      "Drop Here".tr,
-                                      style: AppTextStyles.button,
-                                    ),
-                                  ),
+                                IconButton.outlined(
+                                  onPressed: () {
+                                    Get.back();
+                                  },
+                                  icon: const Icon(FontAwesomeIcons.xmark),
                                 ),
+                                SizedBox(width: AppDimensions.padding),
                               ],
                             ),
-                          ),
-                        ],
+                            SizedBox(height: AppDimensions.padding),
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: GoogleMap(
+                                      initialCameraPosition:
+                                          controller.initialCameraPosition,
+                                      myLocationButtonEnabled: true,
+                                      myLocationEnabled: true,
+                                      zoomControlsEnabled: false,
+                                      mapType: MapType.hybrid,
+                                      markers: <Marker>{
+                                        Marker(
+                                          markerId: const MarkerId("markerId"),
+                                          position: controller.currentLocation,
+                                          infoWindow: InfoWindow(
+                                            title: controller.address,
+                                          ),
+                                          icon:
+                                              BitmapDescriptor.defaultMarkerWithHue(
+                                                BitmapDescriptor.hueBlue,
+                                              ),
+                                        ),
+                                      },
+                                      onMapCreated: controller.onMapCreated,
+                                      onTap: (LatLng latLng) {
+                                        controller.mapController.animateCamera(
+                                          CameraUpdate.newCameraPosition(
+                                            CameraPosition(
+                                              target: latLng,
+                                              zoom: 12,
+                                            ),
+                                          ),
+                                        );
+                                        controller.currentLocation = latLng;
+                                        controller
+                                            .getAddressFromLatLong(
+                                              latLng.latitude,
+                                              latLng.longitude,
+                                            )
+                                            .then((value) {
+                                              controller.address = value;
+                                            });
+                                      },
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: AppDimensions.padding * 2,
+                                    left: AppDimensions.padding * 2,
+                                    right: AppDimensions.padding * 2,
+                                    child: FloatingActionButton.extended(
+                                      onPressed: () {
+                                        controller.onDropLocation();
+                                        Get.back();
+                                      },
+                                      label: Text(
+                                        "Drop Here".tr,
+                                        style: AppTextStyles.button,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       );
                     },
                   );

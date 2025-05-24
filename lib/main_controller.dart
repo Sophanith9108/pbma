@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class MainController extends GetxController {
+  static final String TAG = "tMain";
+
   final TransactionRepository transactionRepository = Get.put(
     TransactionRepository(),
   );
@@ -52,6 +57,53 @@ class MainController extends GetxController {
         break;
       default:
         title = 'Home'.tr;
+    }
+  }
+
+  Future<LatLng> getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error('Location permissions are permanently denied.');
+    }
+
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.high,
+        distanceFilter: 10,
+        timeLimit: Duration(seconds: 5),
+      ),
+    );
+
+    var currentLocation = LatLng(position.latitude, position.longitude);
+    return currentLocation;
+  }
+
+  Future<String> getAddressFromLatLong(double lat, double long) async {
+    try {
+      List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
+      Placemark place = placemarks[0];
+
+      String formattedAddress =
+          "${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
+      return formattedAddress;
+    } catch (e) {
+      debugPrint("$TAG: Error getting address: $e");
+      return "";
     }
   }
 }

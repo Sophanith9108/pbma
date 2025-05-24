@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pbma/core.dart';
 
 class RegisterController extends MainController {
@@ -37,6 +40,36 @@ class RegisterController extends MainController {
   final _isAgreedWithTerms = false.obs;
   bool get isAgreedWithTerms => _isAgreedWithTerms.value;
   set isAgreedWithTerms(bool value) => _isAgreedWithTerms.value = value;
+
+  final _profile = XFile('').obs;
+  XFile get profile => _profile.value;
+  set profile(XFile value) => _profile.value = value;
+
+  final _addressController = TextEditingController().obs;
+  TextEditingController get addressController => _addressController.value;
+  set addressController(TextEditingController value) =>
+      _addressController.value = value;
+
+  final _currentLocation = LatLng(0, 0).obs;
+  LatLng get currentLocation => _currentLocation.value;
+  set currentLocation(LatLng value) => _currentLocation.value = value;
+
+  late GoogleMapController mapController;
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
 
   Future<void> onRegister() async {
     if (formKey.currentState!.validate()) {
@@ -80,11 +113,47 @@ class RegisterController extends MainController {
             Expanded(
               child: ListView(
                 shrinkWrap: true,
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppDimensions.padding,
+                padding: EdgeInsets.only(
+                  left: AppDimensions.padding,
+                  right: AppDimensions.padding,
+                  bottom: AppDimensions.padding,
                 ),
-                children: [Text(
-                  "", style: AppTextStyles.text)],
+                children: [
+                  Text(
+                    'By agreeing to the terms of service, you agree to our terms and conditions.'
+                    'Please read them carefully before proceeding.'
+                    'If you do not agree with the terms, please do not use our services.'
+                    'We reserve the right to modify these terms at any time, and it is your responsibility to review them periodically.'
+                    'Your continued use of our services after any changes to the terms constitutes your acceptance of the new terms.'
+                    'If you have any questions or concerns about the terms, please contact us.'
+                    'Thank you for using our services.'
+                    'We appreciate your understanding and cooperation.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.',
+                    strutStyle: StrutStyle(height: 1.5),
+                    style: AppTextStyles.text,
+                    textAlign: TextAlign.justify,
+                  ),
+                  SizedBox(height: Get.width * 0.1),
+                ],
               ),
             ),
           ],
@@ -96,6 +165,8 @@ class RegisterController extends MainController {
   Future<void> onAgreeWithPolicy() async {
     showModalBottomSheet(
       context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
       builder: (_) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -126,13 +197,203 @@ class RegisterController extends MainController {
                 ),
                 children: [
                   Text(
-                    'By agreeing to the privacy policy, you agree to our terms and conditions.',
+                    'By agreeing to the privacy policy, you agree to our terms and conditions.'
+                    'Please read them carefully before proceeding.'
+                    'If you do not agree with the terms, please do not use our services.'
+                    'We reserve the right to modify these terms at any time, and it is your responsibility to review them periodically.'
+                    'Your continued use of our services after any changes to the terms constitutes your acceptance of the new terms.'
+                    'If you have any questions or concerns about the terms, please contact us.'
+                    'Thank you for using our services.'
+                    'We appreciate your understanding and cooperation.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We are here to help you and ensure that you have a positive experience with our services.'
+                    'Thank you for your cooperation and understanding.'
+                    'We look forward to serving you and providing you with the best possible experience.'
+                    'If you have any questions or concerns, please feel free to reach out to us.'
+                    'We reserve the right to modify these terms at any time, and it is your responsibility to review them periodically.',
                     style: AppTextStyles.text,
+                    strutStyle: StrutStyle(height: 1.5),
+                    textAlign: TextAlign.justify,
                   ),
+                  SizedBox(height: Get.width * 0.1),
                 ],
               ),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  Future<void> onSelectImage() async {
+    showModalBottomSheet(
+      context: Get.context!,
+      useSafeArea: true,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          children:
+              ImageSource.values.map((source) {
+                return ListTile(
+                  leading: Icon(
+                    source == ImageSource.camera ? Icons.camera : Icons.photo,
+                  ),
+                  title: Text(
+                    source == ImageSource.camera ? 'Camera'.tr : 'Gallery'.tr,
+                  ),
+                  onTap: () async {
+                    await Future.delayed(Duration(milliseconds: 300));
+                    var image = await ImagePicker().pickImage(source: source);
+                    if (image != null) {
+                      profile = image;
+                    }
+                    Get.back();
+                  },
+                );
+              }).toList(),
+        );
+      },
+    );
+  }
+
+  Future<void> onSelectAddress() async {
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) {
+        return Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Select Address'.tr,
+                        style: AppTextStyles.title,
+                      ),
+                    ),
+                    IconButton.outlined(
+                      icon: Icon(Icons.close),
+                      onPressed: () => Get.back(),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      zoomControlsEnabled: false,
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      mapType: MapType.hybrid,
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController = controller;
+
+                        AppUtils.showLoading();
+                        Future.delayed(Duration(seconds: 3), () async {
+                          await AppUtils.hideLoading();
+
+                          await getCurrentLocation().then((value) {
+                            mapController.animateCamera(
+                              CameraUpdate.newCameraPosition(
+                                CameraPosition(
+                                  target: LatLng(
+                                    value.latitude,
+                                    value.longitude,
+                                  ),
+                                  zoom: 12,
+                                ),
+                              ),
+                            );
+                            currentLocation = LatLng(
+                              value.latitude,
+                              value.longitude,
+                            );
+                            getAddressFromLatLong(
+                              value.latitude,
+                              value.longitude,
+                            ).then((value) {
+                              addressController.text = value;
+                            });
+                          });
+                        });
+                      },
+                      onTap: (LatLng latLng) async {
+                        currentLocation = latLng;
+
+                        await getAddressFromLatLong(
+                          currentLocation.latitude,
+                          currentLocation.longitude,
+                        );
+
+                        mapController.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(target: latLng, zoom: 12),
+                          ),
+                        );
+                      },
+                      markers: Set<Marker>.of(<Marker>{
+                        Marker(
+                          markerId: MarkerId('marker'),
+                          position: currentLocation,
+                          infoWindow: InfoWindow(title: ''),
+                          icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueBlue,
+                          ),
+                        ),
+                      }),
+                      initialCameraPosition: CameraPosition(
+                        target: currentLocation,
+                        zoom: 12,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 32,
+                      left: 32,
+                      right: 32,
+                      child: FloatingActionButton(
+                        onPressed: () async {
+                          Get.back();
+                          addressController.text = await getAddressFromLatLong(
+                            currentLocation.latitude,
+                            currentLocation.longitude,
+                          );
+                        },
+                        child: Text(
+                          "Pick Location".tr,
+                          style: AppTextStyles.button,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

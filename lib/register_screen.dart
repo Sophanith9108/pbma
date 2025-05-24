@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,6 +30,30 @@ class RegisterScreen extends StatelessWidget {
               Text(
                 'Please fill in the form below to create an account'.tr,
                 style: AppTextStyles.subtitle,
+              ),
+              const SizedBox(height: AppDimensions.padding),
+              CircleAvatar(
+                radius: Get.width * 0.15,
+                backgroundColor: AppColors.primary,
+                child:
+                    controller.profile.path.isEmpty
+                        ? IconButton(
+                          icon: const Icon(Icons.camera_alt),
+                          color: Colors.white,
+                          onPressed: () {
+                            controller.onSelectImage();
+                          },
+                        )
+                        : ClipRRect(
+                          borderRadius: BorderRadius.circular(Get.width),
+                          child: Image.file(
+                            File(controller.profile.path),
+                            filterQuality: FilterQuality.high,
+                            fit: BoxFit.cover,
+                            width: Get.width * 0.3,
+                            height: Get.width * 0.3,
+                          ),
+                        ),
               ),
               const SizedBox(height: AppDimensions.padding),
               TextFormField(
@@ -223,8 +249,42 @@ class RegisterScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimensions.padding),
+              TextFormField(
+                controller: controller.addressController,
+                readOnly: true,
+                onTap: () {
+                  controller.onSelectAddress();
+                },
+                textInputAction: TextInputAction.done,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your address'.tr;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelStyle: AppTextStyles.label,
+                  hintStyle: AppTextStyles.hint,
+                  hintText: '123 Street, City, Country'.tr,
+                  labelText: 'Address'.tr,
+                  prefixIcon: const Icon(Icons.home),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      controller.addressController.clear();
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(color: AppColors.primary, width: 1),
+                  ),
+                ),
+                maxLines: 1,
+              ),
+              const SizedBox(height: AppDimensions.padding),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Checkbox(
                     value: controller.isAgreedWithTerms,
