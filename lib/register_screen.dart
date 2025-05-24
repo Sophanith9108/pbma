@@ -221,10 +221,13 @@ class RegisterScreen extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please confirm your password'.tr;
+                    return 'Please enter your confirm password'.tr;
+                  }
+                  if (value.length < 8) {
+                    return 'Confirm password must be at least 8 characters'.tr;
                   }
                   if (value != controller.passwordController.text) {
-                    return 'Password does not match'.tr;
+                    return 'Passwords do not match'.tr;
                   }
                   return null;
                 },
@@ -247,6 +250,8 @@ class RegisterScreen extends StatelessWidget {
                     borderSide: BorderSide(color: AppColors.primary, width: 1),
                   ),
                 ),
+                obscureText: true,
+                inputFormatters: [LengthLimitingTextInputFormatter(20)],
               ),
               const SizedBox(height: AppDimensions.padding),
               TextFormField(

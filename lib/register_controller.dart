@@ -309,6 +309,7 @@ class RegisterController extends MainController {
                       zoomControlsEnabled: false,
                       myLocationEnabled: true,
                       myLocationButtonEnabled: true,
+                      zoomGesturesEnabled: false,
                       mapType: MapType.hybrid,
                       onMapCreated: (GoogleMapController controller) {
                         mapController = controller;
@@ -360,7 +361,10 @@ class RegisterController extends MainController {
                         Marker(
                           markerId: MarkerId('marker'),
                           position: currentLocation,
-                          infoWindow: InfoWindow(title: ''),
+                          infoWindow: InfoWindow(
+                            title: addressController.text,
+                            snippet: addressController.text,
+                          ),
                           icon: BitmapDescriptor.defaultMarkerWithHue(
                             BitmapDescriptor.hueBlue,
                           ),
