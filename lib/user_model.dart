@@ -32,7 +32,7 @@ class UserModel extends Equatable {
     user.name = name;
     user.email = email;
     user.phone = phone;
-    user.password = password;
+    user.password = password!.hashPassword();
     user.profilePicture = profilePicture;
     user.address = address;
     user.dateOfBirth = dateOfBirth;
@@ -48,7 +48,7 @@ class UserModel extends Equatable {
       ..name = model.name
       ..email = model.email
       ..phone = model.phone
-      ..password = model.password
+      ..password = model.password!.hashPassword()
       ..profilePicture = model.profilePicture
       ..address = model.address
       ..dateOfBirth = model.dateOfBirth

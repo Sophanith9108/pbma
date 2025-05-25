@@ -8,6 +8,8 @@ import 'package:pbma/core.dart';
 class MainController extends GetxController {
   static final String TAG = "tMain";
 
+  final UserRepository userRepository = Get.put(UserRepository());
+
   final TransactionRepository transactionRepository = Get.put(
     TransactionRepository(),
   );
@@ -19,10 +21,6 @@ class MainController extends GetxController {
   final _title = 'Home'.obs;
   String get title => _title.value;
   set title(String title) => _title.value = title;
-
-  final _data = dynamic.obs;
-  dynamic get data => _data.value;
-  set data(dynamic data) => _data.value = data;
 
   final List<Widget> children = [
     HomeScreen(),

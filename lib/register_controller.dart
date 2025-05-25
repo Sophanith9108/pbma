@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -75,11 +76,54 @@ class RegisterController extends MainController {
     if (formKey.currentState!.validate()) {
       FocusScope.of(Get.context!).unfocus();
 
+      if (!isAgreedWithTerms) {
+        Fluttertoast.showToast(
+          msg: 'Please agree with terms and conditions'.tr,
+        );
+        return;
+      }
+
+      var userExist = await userRepository.gets();
+      if (userExist != null) {
+        Fluttertoast.showToast(
+          msg: 'User with this phone number already exists'.tr,
+        );
+        await Future.delayed(const Duration(seconds: 2), () {
+          Get.offAllNamed(AppRoutes.login);
+        });
+        return;
+      }
+
       var user = UserModel.create(
         name: nameController.text,
         email: emailController.text,
         phone: phoneController.text,
+        password: passwordController.text,
+        profilePicture:
+            profile.path.isNotEmpty
+                ? profile.path
+                : 'https://example.com/default-profile.png',
+        address: addressController.text,
+        dateOfBirth: DateTime.now().format(pattern: 'dd.MMM.yyyy'),
+        gender: GenderEnums.male,
       );
+
+      AppUtils.showLoading();
+      await Future.delayed(const Duration(seconds: 3), () async {
+        AppUtils.hideLoading();
+
+        await userRepository
+            .save(user)
+            .then((response) {
+              Fluttertoast.showToast(msg: 'Registration successful'.tr);
+              Get.offAllNamed(AppRoutes.main);
+            })
+            .catchError((error) {
+              Fluttertoast.showToast(
+                msg: 'Registration failed: ${error.toString()}',
+              );
+            });
+      });
     }
   }
 

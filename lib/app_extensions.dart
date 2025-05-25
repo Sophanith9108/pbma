@@ -1,5 +1,10 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:uuid/data.dart';
+import 'package:uuid/uuid.dart';
 
 extension DateTimeFormatExtension on DateTime {
   String format({String pattern = 'dd.MMM.yyyy hh:mm:ss a'}) {
@@ -57,4 +62,12 @@ extension NumberFormatExtension on num {
     String pattern = '#,##0.###',
     int decimalDigits = 2,
   }) => '$sign${NumberFormat(pattern, 'en_US').format(this)} $symbol';
+}
+
+extension StringExtension on String {
+  String hashPassword() {
+    var bytes = utf8.encode(this);
+    var digest = sha256.convert(bytes);
+    return digest.toString();
+  }
 }

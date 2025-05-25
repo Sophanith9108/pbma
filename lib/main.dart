@@ -8,7 +8,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeStorage();
 
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 Future<void> initializeStorage() async {
@@ -23,6 +23,7 @@ Future<void> initializeStorage() async {
   Hive.registerAdapter(TransactionStatusEnumsAdapter());
 
   await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
+  await Hive.openBox<UserEntity>(AppStorageBox.userBox);
 }
 
 void setControllers() {
@@ -54,7 +55,9 @@ void setApplicationConfigs() {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final MainController mainController = Get.find<MainController>();
 
   @override
   Widget build(BuildContext context) {

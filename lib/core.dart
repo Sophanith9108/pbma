@@ -49,3 +49,5 @@ export 'login_screen.dart';
 export 'login_controller.dart';
 export 'register_screen.dart';
 export 'register_controller.dart';
+export 'user_repository.dart';
+export 'user_service.dart';
