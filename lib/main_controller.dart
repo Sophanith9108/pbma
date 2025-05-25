@@ -22,6 +22,14 @@ class MainController extends GetxController {
   String get title => _title.value;
   set title(String title) => _title.value = title;
 
+  final _isLogin = false.obs;
+  bool get isLogin => _isLogin.value;
+  set isLogin(bool isLogin) => _isLogin.value = isLogin;
+
+  final _isRegistered = false.obs;
+  bool get isRegistered => _isRegistered.value;
+  set isRegistered(bool isRegistered) => _isRegistered.value = isRegistered;
+
   final List<Widget> children = [
     HomeScreen(),
     HistoryScreen(),
@@ -103,5 +111,22 @@ class MainController extends GetxController {
       debugPrint("$TAG: Error getting address: $e");
       return "";
     }
+  }
+
+  Future<void> gotoProfile() async {
+    List<UserModel>? user = await userRepository.gets();
+    if (user == null || user.isEmpty) {
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
+    var currentUser = await userRepository.get(user.last.id!);
+    if (currentUser == null) {
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
+
+    await Future.delayed(const Duration(milliseconds: 300), () {
+      Get.toNamed(AppRoutes.profile);
+    });
   }
 }

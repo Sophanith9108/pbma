@@ -55,9 +55,7 @@ void setApplicationConfigs() {
 }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
-
-  final MainController mainController = Get.find<MainController>();
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {

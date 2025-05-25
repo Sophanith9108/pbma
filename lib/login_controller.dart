@@ -24,8 +24,28 @@ class LoginController extends MainController {
       AppUtils.showLoading();
       await Future.delayed(const Duration(seconds: 3), () async {
         AppUtils.hideLoading();
-        Get.offAllNamed(AppRoutes.main);
+
+        var user = UserModel.create(
+          phone: phoneController.text,
+          password: passwordController.text,
+          updatedAt: DateTime.now(),
+        );
+        userRepository.update(user).then((response) async {
+          await _onClear();
+          Get.offAllNamed(AppRoutes.main);
+        });
+      }).catchError((error) {
+        AppUtils.showError(error.toString());
       });
     }
+  }
+
+  Future<void> _onClear() async {
+    phoneController.clear();
+    passwordController.clear();
+    formKey.currentState!.reset();
+
+    phoneController.text = "";
+    passwordController.text = "";
   }
 }

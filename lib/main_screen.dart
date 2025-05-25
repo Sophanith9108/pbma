@@ -14,10 +14,7 @@ class MainScreen extends StatelessWidget {
     return Obx(
       () => AppNavigation(
         leading: IconButton(
-          onPressed: () async {
-            await Future.delayed(const Duration(milliseconds: 300));
-            Get.toNamed(AppRoutes.register);
-          },
+          onPressed: ()  => mainController.gotoProfile(),
           icon: Icon(FontAwesomeIcons.userAstronaut),
         ),
         title: mainController.title.tr,

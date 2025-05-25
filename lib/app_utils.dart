@@ -18,4 +18,13 @@ class AppUtils {
   static Future<void> hideLoading() async {
     Get.back();
   }
+
+  static void showError(String msg) {
+    Get.snackbar(
+      "Error".tr,
+      msg,
+      backgroundColor: Colors.red,
+      colorText: Colors.white,
+    );
+  }
 }
