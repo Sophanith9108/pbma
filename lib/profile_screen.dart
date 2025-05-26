@@ -37,10 +37,31 @@ class ProfileScreen extends StatelessWidget {
                           width: 190,
                           height: 190,
                           child:
-                              controller.user.profilePicture != null
+                              controller.profile.path.isNotEmpty
                                   ? Image.file(
-                                    File(controller.user.profilePicture!),
+                                    controller.profile,
                                     fit: BoxFit.cover,
+                                    filterQuality: FilterQuality.high,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            const Icon(Icons.error, size: 90),
+                                    frameBuilder: (
+                                      context,
+                                      child,
+                                      frame,
+                                      wasSynchronouslyLoaded,
+                                    ) {
+                                      if (wasSynchronouslyLoaded) {
+                                        return child;
+                                      }
+                                      return AnimatedOpacity(
+                                        duration: const Duration(
+                                          milliseconds: 500,
+                                        ),
+                                        opacity: frame != null ? 1.0 : 0.0,
+                                        child: child,
+                                      );
+                                    },
                                   )
                                   : CachedNetworkImage(
                                     imageUrl:

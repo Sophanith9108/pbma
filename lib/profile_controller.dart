@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -5,6 +7,10 @@ class ProfileController extends MainController {
   final _user = UserModel.create().obs;
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
+
+  final _profile = File("").obs;
+  File get profile => _profile.value;
+  set profile(File value) => _profile.value = value;
 
   @override
   void onInit() {
@@ -35,6 +41,7 @@ class ProfileController extends MainController {
     await Future.delayed(const Duration(milliseconds: 300));
     await showImagePicker((value) {
       user.profilePicture = value?.path ?? "";
+      profile = File(value?.path ?? "");
     });
   }
 }
