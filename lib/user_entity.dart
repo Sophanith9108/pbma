@@ -68,16 +68,16 @@ class UserEntity extends HiveObject {
 
   static UserModel toModel(UserEntity entity) {
     return UserModel()
-      ..id = entity.id
-      ..name = entity.name
-      ..email = entity.email
-      ..phone = entity.phone
-      ..password = entity.password
-      ..profilePicture = entity.profilePicture
-      ..address = entity.address
-      ..dateOfBirth = entity.dateOfBirth
-      ..gender = entity.gender
-      ..createdAt = entity.createdAt
-      ..updatedAt = entity.updatedAt;
+      ..id = entity.id ?? ""
+      ..name = entity.name ?? ""
+      ..email = entity.email ?? ""
+      ..phone = entity.phone ?? ""
+      ..password = entity.password ?? ""
+      ..profilePicture = entity.profilePicture ?? ''
+      ..address = entity.address ?? ""
+      ..dateOfBirth = entity.dateOfBirth ?? ''
+      ..gender = entity.gender ?? GenderEnums.values.first
+      ..createdAt = entity.createdAt ?? DateTime.now()
+      ..updatedAt = entity.updatedAt ?? DateTime.now();
   }
 }

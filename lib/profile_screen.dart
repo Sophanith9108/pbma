@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
@@ -17,33 +18,68 @@ class ProfileScreen extends StatelessWidget {
         body: ListView(
           padding: EdgeInsets.all(AppDimensions.padding),
           children: [
-            SizedBox(
-              height: 150,
+            Center(
               child: Stack(
                 children: [
-                  Positioned.fill(
-                    child: CircleAvatar(
-                      child: Image.file(
-                        File(controller.user.profilePicture ?? ""),
-                        filterQuality: FilterQuality.high,
-                        fit: BoxFit.cover,
-                        errorBuilder:
-                            (context, error, stackTrace) =>
-                                Center(child: Icon(Icons.person, size: 90)),
+                  Positioned(
+                    child: Card.outlined(
+                      elevation: AppDimensions.elevation,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(Get.width),
+                        side: BorderSide(
+                          width: 2,
+                          color: Colors.grey.withValues(alpha: .8),
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(Get.width),
+                        child: SizedBox(
+                          width: 190,
+                          height: 190,
+                          child:
+                              controller.user.profilePicture != null
+                                  ? Image.file(
+                                    File(controller.user.profilePicture!),
+                                    fit: BoxFit.cover,
+                                  )
+                                  : CachedNetworkImage(
+                                    imageUrl:
+                                        "https://picsum.photos/500?random=${DateTime.now().millisecondsSinceEpoch}",
+                                    placeholder:
+                                        (context, url) => Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                    errorWidget:
+                                        (context, url, error) =>
+                                            const Icon(Icons.error, size: 90),
+                                  ),
+                        ),
                       ),
                     ),
                   ),
                   Positioned(
-                    bottom: 0,
-                    right: 0,
+                    bottom: 10,
+                    right: 10,
                     child: IconButton.outlined(
-                      icon: Icon(Icons.camera_alt, size: 30),
-                      onPressed: () {
-                        
-                      },
+                      icon: const Icon(Icons.camera_alt),
+                      color: Colors.white,
+                      onPressed: () => controller.onProfileUploaded(),
                     ),
                   ),
                 ],
+              ),
+            ),
+            SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              initialValue: controller.user.name,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Name'.tr,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadius,
+                  ),
+                ),
               ),
             ),
           ],

@@ -40,9 +40,7 @@ class RegisterScreen extends StatelessWidget {
                         ? IconButton(
                           icon: const Icon(Icons.camera_alt),
                           color: Colors.white,
-                          onPressed: () {
-                            controller.onSelectImage();
-                          },
+                          onPressed: () => controller.onProfileUploaded(),
                         )
                         : ClipRRect(
                           borderRadius: BorderRadius.circular(Get.width),

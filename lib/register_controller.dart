@@ -285,39 +285,6 @@ class RegisterController extends MainController {
     );
   }
 
-  Future<void> onSelectImage() async {
-    showModalBottomSheet(
-      context: Get.context!,
-      useSafeArea: true,
-      isScrollControlled: true,
-      showDragHandle: true,
-      builder: (_) {
-        return ListView(
-          shrinkWrap: true,
-          children:
-              ImageSource.values.map((source) {
-                return ListTile(
-                  leading: Icon(
-                    source == ImageSource.camera ? Icons.camera : Icons.photo,
-                  ),
-                  title: Text(
-                    source == ImageSource.camera ? 'Camera'.tr : 'Gallery'.tr,
-                  ),
-                  onTap: () async {
-                    await Future.delayed(Duration(milliseconds: 300));
-                    var image = await ImagePicker().pickImage(source: source);
-                    if (image != null) {
-                      profile = image;
-                    }
-                    Get.back();
-                  },
-                );
-              }).toList(),
-        );
-      },
-    );
-  }
-
   Future<void> onSelectAddress() async {
     showModalBottomSheet(
       context: Get.context!,
@@ -445,5 +412,12 @@ class RegisterController extends MainController {
         );
       },
     );
+  }
+
+  Future<void> onProfileUploaded() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    await showImagePicker((value) {
+      profile = value ?? XFile('');
+    });
   }
 }

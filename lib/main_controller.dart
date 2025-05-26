@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pbma/core.dart';
 
 class MainController extends GetxController {
@@ -116,10 +119,10 @@ class MainController extends GetxController {
   Future<void> gotoProfile() async {
     List<UserModel>? user = await userRepository.gets();
     if (user == null || user.isEmpty) {
-      Get.offAllNamed(AppRoutes.login);
+      Get.offAllNamed(AppRoutes.register);
       return;
     }
-    var currentUser = await userRepository.get(user.last.id!);
+    var currentUser = await userRepository.get(user.last.id);
     if (currentUser == null) {
       Get.offAllNamed(AppRoutes.login);
       return;
@@ -128,5 +131,38 @@ class MainController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 300), () {
       Get.toNamed(AppRoutes.profile);
     });
+  }
+
+  Future<void> showImagePicker(Function(XFile? file) handler) async {
+    showModalBottomSheet(
+      context: Get.context!,
+      useSafeArea: true,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          children:
+              ImageSource.values.map((source) {
+                return ListTile(
+                  leading: Icon(
+                    source == ImageSource.camera ? Icons.camera : Icons.photo,
+                  ),
+                  title: Text(
+                    source == ImageSource.camera ? 'Camera'.tr : 'Gallery'.tr,
+                    style: AppTextStyles.title,
+                  ),
+                  onTap: () async {
+                    Get.back();
+
+                    await Future.delayed(Duration(milliseconds: 300));
+                    var image = await ImagePicker().pickImage(source: source);
+                    handler(image);
+                  },
+                );
+              }).toList(),
+        );
+      },
+    );
   }
 }

@@ -30,4 +30,11 @@ class ProfileController extends MainController {
       this.user = UserModel.create();
     }
   }
+
+  Future<void> onProfileUploaded() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    await showImagePicker((value) {
+      user.profilePicture = value?.path ?? "";
+    });
+  }
 }
