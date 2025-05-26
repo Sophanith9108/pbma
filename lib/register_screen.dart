@@ -93,6 +93,7 @@ class RegisterScreen extends StatelessWidget {
               TextFormField(
                 controller: controller.emailController,
                 textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.none,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your email'.tr;
