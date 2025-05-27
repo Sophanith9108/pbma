@@ -25,6 +25,13 @@ class LoginController extends MainController {
       await Future.delayed(const Duration(seconds: 3), () async {
         AppUtils.hideLoading();
 
+        List<UserModel> users = await userRepository.gets() ?? [];
+        String phone = phoneController.text.trim();
+        if (users.firstWhereOrNull((user) => user.phone == phone) == null) {
+          AppUtils.showError('User not found with this phone number'.tr);
+          return;
+        }
+
         var user = UserModel.create(
           phone: phoneController.text,
           password: passwordController.text,

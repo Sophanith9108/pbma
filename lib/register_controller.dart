@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:pbma/core.dart';
 
@@ -289,7 +288,7 @@ class RegisterController extends MainController {
   }
 
   Future<void> onAddressSelected() async {
-    await Future.delayed(const Duration(seconds: 300));
+    await Future.delayed(const Duration(milliseconds: 300));
     await showMapSelectAddress((value) {
       addressController.text = value;
     });

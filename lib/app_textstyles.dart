@@ -58,4 +58,20 @@ class AppTextStyles {
   );
 
   static final TextStyle text = GoogleFonts.battambang(fontSize: 16);
+
+  static final TextStyle amount = GoogleFonts.battambang(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.green,
+  );
+  static final TextStyle amountNegative = GoogleFonts.battambang(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.red,
+  );
+  static final TextStyle amountNeutral = GoogleFonts.battambang(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    color: Colors.grey,
+  );
 }

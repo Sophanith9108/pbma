@@ -43,7 +43,7 @@ class MainController extends GetxController {
     HomeScreen(),
     HistoryScreen(),
     CategoryScreen(),
-    SettingScreen(),
+    BudgetScreen(),
     AccountScreen(),
   ];
 

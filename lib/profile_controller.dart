@@ -40,9 +40,9 @@ class ProfileController extends MainController {
   }
 
   Future<void> setData() async {
-    var _user = await userRepository.gets() ?? [];
-    if (_user.isNotEmpty) {
-      user = _user.first;
+    List<UserModel> users = await userRepository.gets() ?? [];
+    if (users.isNotEmpty) {
+      user = users.first;
       genderController.text = user.gender.value;
       addressController.text = user.address;
     } else {

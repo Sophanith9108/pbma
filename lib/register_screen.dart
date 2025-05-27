@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -19,6 +20,7 @@ class RegisterScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => controller.onRegister(),
           label: Text('Register'.tr, style: AppTextStyles.button),
+          icon: const Icon(FontAwesomeIcons.arrowRightFromBracket),
         ),
         body: Form(
           key: controller.formKey,
