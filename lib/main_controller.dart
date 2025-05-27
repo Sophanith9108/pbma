@@ -33,6 +33,12 @@ class MainController extends GetxController {
   bool get isRegistered => _isRegistered.value;
   set isRegistered(bool isRegistered) => _isRegistered.value = isRegistered;
 
+  final _currentLocation = LatLng(0, 0).obs;
+  LatLng get currentLocation => _currentLocation.value;
+  set currentLocation(LatLng value) => _currentLocation.value = value;
+
+  late GoogleMapController mapController;
+
   final List<Widget> children = [
     HomeScreen(),
     HistoryScreen(),
@@ -67,6 +73,121 @@ class MainController extends GetxController {
       default:
         title = 'Home'.tr;
     }
+  }
+
+  Future<void> showMapSelectAddress(Function(String address) handler) async {
+    showModalBottomSheet(
+      context: Get.context!,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (_) {
+        return Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        'Select Address'.tr,
+                        style: AppTextStyles.title,
+                      ),
+                    ),
+                    IconButton.outlined(
+                      icon: Icon(Icons.close),
+                      onPressed: () => Get.back(),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Stack(
+                  children: [
+                    GoogleMap(
+                      zoomControlsEnabled: false,
+                      myLocationEnabled: true,
+                      myLocationButtonEnabled: true,
+                      zoomGesturesEnabled: false,
+                      mapType: MapType.hybrid,
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController = controller;
+
+                        AppUtils.showLoading();
+                        Future.delayed(Duration(seconds: 3), () async {
+                          await AppUtils.hideLoading();
+
+                          await _handleRetrieveCurrentLocation();
+                        });
+                      },
+                      onTap: (LatLng latLng) async {
+                        currentLocation = latLng;
+
+                        mapController.animateCamera(
+                          CameraUpdate.newCameraPosition(
+                            CameraPosition(target: latLng, zoom: 12),
+                          ),
+                        );
+                      },
+                      markers: Set<Marker>.of(<Marker>{
+                        Marker(
+                          markerId: MarkerId('marker'),
+                          position: currentLocation,
+                          icon: BitmapDescriptor.defaultMarkerWithHue(
+                            BitmapDescriptor.hueBlue,
+                          ),
+                        ),
+                      }),
+                      initialCameraPosition: CameraPosition(
+                        target: currentLocation,
+                        zoom: 12,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 32,
+                      left: 32,
+                      right: 32,
+                      child: FloatingActionButton(
+                        onPressed: () async {
+                          await Future.delayed(Duration(milliseconds: 300));
+                          await getAddressFromLatLong(
+                            currentLocation.latitude,
+                            currentLocation.longitude,
+                          ).then((value) {
+                            handler(value);
+                          });
+                          Get.back();
+                        },
+                        child: Text(
+                          "Pick Location".tr,
+                          style: AppTextStyles.button,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleRetrieveCurrentLocation() async {
+    await getCurrentLocation().then((value) {
+      mapController.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(value.latitude, value.longitude),
+            zoom: 12,
+          ),
+        ),
+      );
+      currentLocation = LatLng(value.latitude, value.longitude);
+    });
   }
 
   Future<LatLng> getCurrentLocation() async {

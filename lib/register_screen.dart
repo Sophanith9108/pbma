@@ -256,9 +256,7 @@ class RegisterScreen extends StatelessWidget {
               TextFormField(
                 controller: controller.addressController,
                 readOnly: true,
-                onTap: () {
-                  controller.onSelectAddress();
-                },
+                onTap: () => controller.onAddressSelected(),
                 textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value == null || value.isEmpty) {

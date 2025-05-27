@@ -27,4 +27,31 @@ class AppUtils {
       colorText: Colors.white,
     );
   }
+
+  static void showSuccess(String msg) {
+    Get.snackbar(
+      "Success".tr,
+      msg,
+      backgroundColor: Colors.green,
+      colorText: Colors.white,
+    );
+  }
+
+  static void showInfo(String msg) {
+    Get.snackbar(
+      "Info".tr,
+      msg,
+      backgroundColor: Colors.blue,
+      colorText: Colors.white,
+    );
+  }
+
+  static void showWarning(String msg) {
+    Get.snackbar(
+      "Warning".tr,
+      msg,
+      backgroundColor: Colors.orange,
+      colorText: Colors.white,
+    );
+  }
 }

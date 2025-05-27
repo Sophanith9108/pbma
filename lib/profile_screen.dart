@@ -15,6 +15,11 @@ class ProfileScreen extends StatelessWidget {
     return Obx(
       () => AppNavigation(
         title: 'Profile'.tr,
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => controller.onUserInfoUpdated(),
+          label: Text('Edit Profile'.tr, style: AppTextStyles.label),
+          icon: const Icon(Icons.edit),
+        ),
         body: ListView(
           padding: EdgeInsets.all(AppDimensions.padding),
           children: [
@@ -65,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
                                   )
                                   : CachedNetworkImage(
                                     imageUrl:
-                                        "https://picsum.photos/500?random=${DateTime.now().millisecondsSinceEpoch}",
+                                        "https://picsum.photos/500?random=${DateTime.now().minute}",
                                     placeholder:
                                         (context, url) => Center(
                                           child: CircularProgressIndicator(),
@@ -96,6 +101,63 @@ class ProfileScreen extends StatelessWidget {
               readOnly: true,
               decoration: InputDecoration(
                 labelText: 'Name'.tr,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadius,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              readOnly: true,
+              controller: controller.genderController,
+              onTap: () {
+                controller.onGenderSelected();
+              },
+              decoration: InputDecoration(
+                labelText: 'Gender'.tr,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadius,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              initialValue: controller.user.email,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Email'.tr,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadius,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              initialValue: controller.user.phone,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Phone'.tr,
+                prefixText: "855 ",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.borderRadius,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              controller: controller.addressController,
+              readOnly: true,
+              onTap: () => controller.onAddressSelected(),
+              decoration: InputDecoration(
+                labelText: 'Address'.tr,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(
                     AppDimensions.borderRadius,

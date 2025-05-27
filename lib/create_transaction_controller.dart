@@ -199,7 +199,16 @@ class CreateTransactionController extends MainController {
     isOthersInvolved = false;
   }
 
+
   void onDropLocation() {
     locationController.text = address;
+  }
+
+  Future<void> onAddressSelected() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    await showMapSelectAddress((value) {
+      address = value;
+      locationController.text = value;
+    });
   }
 }
