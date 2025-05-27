@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -17,8 +18,8 @@ class ProfileScreen extends StatelessWidget {
         title: 'Profile'.tr,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => controller.onUserInfoUpdated(),
-          label: Text('Edit Profile'.tr, style: AppTextStyles.label),
-          icon: const Icon(Icons.edit),
+          label: Text('Edit Profile'.tr, style: AppTextStyles.button),
+          icon: Icon(FontAwesomeIcons.penToSquare),
         ),
         body: ListView(
           padding: EdgeInsets.all(AppDimensions.padding),

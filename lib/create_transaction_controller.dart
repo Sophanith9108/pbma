@@ -121,16 +121,8 @@ class CreateTransactionController extends MainController {
 
     AppUtils.showLoading();
 
-    var user = UserModel.create(
-      name: "John Doe",
-      email: "bK2l0@example.com",
-      phone: "1234567890",
-      password: "password",
-      profilePicture: "https://example.com/profile.jpg",
-      address: "123 Main St, City, Country",
-      dateOfBirth: "1990-01-01",
-      gender: selectedGender,
-    );
+    var currentUsers = await userRepository.gets() ?? [];
+    var createdBy = currentUsers.first;
 
     var transaction = TransactionModel.create(
       purpose: purposeController.text,
@@ -146,7 +138,7 @@ class CreateTransactionController extends MainController {
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
       othersInvolved: isOthersInvolved ? othersInvolvedController.text : "",
-      createdBy: user,
+      createdBy: createdBy,
     );
 
     await Future.delayed(const Duration(seconds: 3), () async {
@@ -198,7 +190,6 @@ class CreateTransactionController extends MainController {
     othersInvolvedController.clear();
     isOthersInvolved = false;
   }
-
 
   void onDropLocation() {
     locationController.text = address;

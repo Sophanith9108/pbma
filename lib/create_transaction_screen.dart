@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionScreen extends StatelessWidget {
@@ -18,6 +17,7 @@ class CreateTransactionScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => controller.onCreateTransaction(),
           label: Text("Create".tr, style: AppTextStyles.button),
+          icon: Icon(FontAwesomeIcons.plus),
         ),
         body: Form(
           key: controller.formKey,

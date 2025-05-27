@@ -286,4 +286,8 @@ class MainController extends GetxController {
       },
     );
   }
+
+  Future<void> gotoLogin() async {
+    Get.toNamed(AppRoutes.login);
+  }
 }
