@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -116,12 +117,18 @@ class CreateTransactionController extends MainController {
   }
 
   Future onCreateTransaction() async {
+    var currentUsers = await userRepository.gets() ?? [];
+
+    if (currentUsers.isEmpty) {
+      Fluttertoast.showToast(msg: 'Please register first'.tr);
+      await Future.delayed(const Duration(seconds: 1));
+      Get.offAllNamed(AppRoutes.register);
+      return;
+    }
+
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
 
-    AppUtils.showLoading();
-
-    var currentUsers = await userRepository.gets() ?? [];
     var createdBy = currentUsers.first;
 
     var transaction = TransactionModel.create(
@@ -141,6 +148,7 @@ class CreateTransactionController extends MainController {
       createdBy: createdBy,
     );
 
+    AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3), () async {
       AppUtils.hideLoading();
 
