@@ -290,4 +290,14 @@ class MainController extends GetxController {
   Future<void> gotoLogin() async {
     Get.toNamed(AppRoutes.login);
   }
+
+  Future<void> onResetTab() async {
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3), () async {
+      AppUtils.hideLoading();
+
+      currentIndex = 0;
+      onTabSelected(currentIndex);
+    });
+  }
 }

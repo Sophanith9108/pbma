@@ -74,4 +74,18 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: Colors.grey,
   );
+
+  static final amountPositive = GoogleFonts.battambang(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: Colors.green,
+  );
+
+  static final amountLeft = GoogleFonts.battambang(
+    fontSize: 26,
+    fontWeight: FontWeight.bold,
+    color: Colors.redAccent,
+  );
+
+  static final note = GoogleFonts.battambang(fontSize: 14, color: Colors.grey);
 }

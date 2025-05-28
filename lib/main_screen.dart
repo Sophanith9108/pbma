@@ -31,10 +31,9 @@ class MainScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.toNamed(AppRoutes.transaction)?.then((value) {
-                if (value != null && value) {
-                  homeController.setData();
-                }
+              Get.toNamed(AppRoutes.transaction)?.then((value)  {
+                mainController.onResetTab();
+                homeController.onRefreshing();
               });
             },
             icon: const Icon(FontAwesomeIcons.plus),
