@@ -339,6 +339,43 @@ class HistoryScreen extends StatelessWidget {
                                                       Expanded(
                                                         flex: 1,
                                                         child: Text(
+                                                          "Payment Method".tr,
+                                                          style:
+                                                              AppTextStyles
+                                                                  .label,
+                                                        ),
+                                                      ),
+                                                      Expanded(
+                                                        flex: 3,
+                                                        child: Text(
+                                                          transaction
+                                                              .paymentMethod
+                                                              .name,
+                                                          textAlign:
+                                                              TextAlign.justify,
+                                                          style:
+                                                              AppTextStyles
+                                                                  .value,
+                                                          strutStyle:
+                                                              StrutStyle(
+                                                                height: 1.5,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    height:
+                                                        AppDimensions.padding,
+                                                  ),
+                                                  Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: Text(
                                                           "Located At".tr,
                                                           style:
                                                               AppTextStyles
