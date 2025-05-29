@@ -44,15 +44,21 @@ class HomeScreen extends StatelessWidget {
                       Positioned(
                         top: 10,
                         left: 10,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text("Target".tr, style: AppTextStyles.label),
-                            Text(
-                              "${controller.targetAmount} ${controller.currency.name}",
-                              style: AppTextStyles.amountPositive,
-                            ),
-                          ],
+                        child: InkWell(
+                          onTap: () => controller.onTargetUpdated(),
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.borderRadius,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text("Target".tr, style: AppTextStyles.label),
+                              Text(
+                                "${controller.targetAmount} ${controller.currency.name}",
+                                style: AppTextStyles.amountPositive,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Positioned(

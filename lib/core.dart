@@ -53,3 +53,5 @@ export 'user_repository.dart';
 export 'user_service.dart';
 export 'budget_screen.dart';
 export 'budget_controller.dart';
+export 'transaction_type_enums.dart';
+export 'user_role_enums.dart';

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class ProfileController extends MainController {
-  final _user = UserModel.create().obs;
+  final _user = UserModel().obs;
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
 
@@ -46,7 +46,7 @@ class ProfileController extends MainController {
       genderController.text = user.gender.value;
       addressController.text = user.address;
     } else {
-      user = UserModel.create();
+      user = UserModel();
     }
   }
 

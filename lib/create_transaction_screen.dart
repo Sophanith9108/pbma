@@ -333,6 +333,7 @@ class CreateTransactionScreen extends StatelessWidget {
                           lastDate: DateTime.now(),
                         ).then((value) {
                           if (value != null) {
+                            controller.selectedDate = value;
                             controller.dateController.text = value.format(
                               pattern: "dd.MMM.yyyy",
                             );

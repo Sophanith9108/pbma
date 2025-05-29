@@ -39,18 +39,24 @@ class UserEntity extends HiveObject {
   @HiveField(10)
   late DateTime? updatedAt;
 
+  @HiveField(11)
+  late UserRoleEnums role;
+
   UserEntity();
 
   factory UserEntity.create({
-    String? name,
-    String? email,
-    String? phone,
-    String? password,
+    String? id,
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
     String? profilePicture,
-    String? address,
+    required String address,
     String? dateOfBirth,
     GenderEnums? gender,
+    DateTime? createdAt,
     DateTime? updatedAt,
+    UserRoleEnums? role,
   }) {
     return UserEntity()
       ..id = Uuid().v8()
@@ -63,7 +69,8 @@ class UserEntity extends HiveObject {
       ..dateOfBirth = dateOfBirth
       ..gender = gender
       ..createdAt = DateTime.now()
-      ..updatedAt = updatedAt ?? DateTime.now();
+      ..updatedAt = updatedAt ?? DateTime.now()
+      ..role = role ?? UserRoleEnums.user;
   }
 
   static UserModel toModel(UserEntity entity) {
@@ -78,6 +85,7 @@ class UserEntity extends HiveObject {
       ..dateOfBirth = entity.dateOfBirth ?? ''
       ..gender = entity.gender ?? GenderEnums.values.first
       ..createdAt = entity.createdAt ?? DateTime.now()
-      ..updatedAt = entity.updatedAt ?? DateTime.now();
+      ..updatedAt = entity.updatedAt ?? DateTime.now()
+      ..role = entity.role;
   }
 }

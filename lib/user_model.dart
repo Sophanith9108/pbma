@@ -48,30 +48,38 @@ class UserModel extends Equatable {
   DateTime get updatedAt => _updatedAt.value;
   set updatedAt(DateTime value) => _updatedAt.value = value;
 
+  final _role = UserRoleEnums.user.obs;
+  UserRoleEnums get role => _role.value;
+  set role(UserRoleEnums value) => _role.value = value;
+
   UserModel();
+  
   factory UserModel.create({
-    String? name,
-    String? email,
-    String? phone,
-    String? password,
+    String? id,
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
     String? profilePicture,
-    String? address,
+    required String address,
     String? dateOfBirth,
     GenderEnums? gender,
     DateTime? updatedAt,
+    UserRoleEnums? role,
   }) {
     var user = UserModel();
-    user.id = Uuid().v4();
-    user.name = name ?? "";
-    user.email = email ?? "";
-    user.phone = phone ?? "";
-    user.password = password?.hashPassword() ?? "";
+    user.id = id ?? Uuid().v8();
+    user.name = name;
+    user.email = email;
+    user.phone = phone;
+    user.password = password.hashPassword();
     user.profilePicture = profilePicture ?? "";
-    user.address = address ?? "";
+    user.address = address;
     user.dateOfBirth = dateOfBirth ?? "";
-    user.gender = gender ?? GenderEnums.values.first;
+    user.gender = gender ?? GenderEnums.other;
     user.createdAt = DateTime.now();
     user.updatedAt = updatedAt ?? DateTime.now();
+    user.role = role ?? UserRoleEnums.user;
     return user;
   }
 
@@ -81,13 +89,14 @@ class UserModel extends Equatable {
       ..name = model.name
       ..email = model.email
       ..phone = model.phone
-      ..password = model.password!.hashPassword()
+      ..password = model.password.hashPassword()
       ..profilePicture = model.profilePicture
       ..address = model.address
       ..dateOfBirth = model.dateOfBirth
       ..gender = model.gender
       ..createdAt = model.createdAt
-      ..updatedAt = model.updatedAt;
+      ..updatedAt = model.updatedAt
+      ..role = model.role;
   }
 
   @override
@@ -103,5 +112,6 @@ class UserModel extends Equatable {
     gender,
     createdAt,
     updatedAt,
+    role,
   ];
 }

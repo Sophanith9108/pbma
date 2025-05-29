@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -35,6 +36,12 @@ class HomeController extends GetxController {
   MaterialColor get messageColor => _messageColor.value;
   set messageColor(MaterialColor value) => _messageColor.value = value;
 
+  final _targetAmountController = TextEditingController().obs;
+  TextEditingController get targetAmountController =>
+      _targetAmountController.value;
+  set targetAmountController(TextEditingController value) =>
+      _targetAmountController.value = value;
+
   @override
   void onInit() async {
     setData();
@@ -54,9 +61,9 @@ class HomeController extends GetxController {
   Future<void> onRefreshing() async {
     await Future.delayed(const Duration(seconds: 3), () async {
       AppUtils.showSuccess('Successfully refresing...');
-      
+
       calculateTotalAmount();
-      
+
       return true;
     });
   }
@@ -74,11 +81,10 @@ class HomeController extends GetxController {
 
     if (transactions != null) {
       for (var transaction in transactions) {
-        DateTime transactionDate =
-            DateTime.tryParse(transaction.date!) ?? DateTime.now();
+        DateTime transactionDate = transaction.date;
         if (transactionDate.isAfter(startDate) &&
             transactionDate.isBefore(endDate)) {
-          totalAmount += transaction.amount ?? 0;
+          totalAmount += transaction.amount;
         }
       }
     }
@@ -103,5 +109,72 @@ class HomeController extends GetxController {
       message = 'You are doing great! 😄';
       messageColor = Colors.green;
     }
+  }
+
+  Future<void> onTargetUpdated() async {
+    String updateTarget = "";
+
+    await Future.delayed(Duration(milliseconds: 300));
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Update Target Amount".tr, style: AppTextStyles.title),
+          content: TextFormField(
+            controller: targetAmountController,
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(
+                RegExp(r'^(?!0\d)\d*(\.\d{0,2})?$'),
+              ),
+              LengthLimitingTextInputFormatter(10),
+            ],
+            onChanged: (value) => updateTarget = value,
+            textInputAction: TextInputAction.done,
+            decoration: InputDecoration(
+              labelStyle: AppTextStyles.label,
+              hintStyle: AppTextStyles.hint,
+              labelText: "Target Amount".tr,
+              hintText: "Target Amount".tr,
+              prefixIcon: const Icon(Icons.attach_money),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                color: Colors.grey,
+                onPressed: () => targetAmountController.clear(),
+              ),
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(AppDimensions.borderRadius),
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text("Cancel".tr, style: AppTextStyles.button),
+            ),
+            TextButton(
+              onPressed: () async {
+                double value = double.tryParse(updateTarget) ?? 0;
+                if (value == 0 || targetAmountController.text.isEmpty) {
+                  AppUtils.showError(
+                    "Target is with $updateTarget is not allow, please input the valid amount!",
+                  );
+                  return;
+                }
+
+                targetAmount = double.tryParse(updateTarget) ?? 1;
+
+                await calculateTotalAmount();
+
+                Get.back();
+              },
+              child: Text("Update".tr, style: AppTextStyles.title),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

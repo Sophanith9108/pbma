@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
@@ -54,6 +52,10 @@ class CreateTransactionController extends MainController {
   set dateController(TextEditingController value) =>
       _dateController.value = value;
 
+  final _selectedDate = DateTime.now().obs;
+  DateTime get selectedDate => _selectedDate.value;
+  set selectedDate(DateTime value) => _selectedDate.value = value;
+
   final _timeController = TextEditingController().obs;
   TextEditingController get timeController => _timeController.value;
   set timeController(TextEditingController value) =>
@@ -69,10 +71,6 @@ class CreateTransactionController extends MainController {
       _othersInvolvedController.value;
   set othersInvolvedController(TextEditingController value) =>
       _othersInvolvedController.value = value;
-
-  final _currentLocation = LatLng(0, 0).obs;
-  LatLng get currentLocation => _currentLocation.value;
-  set currentLocation(LatLng value) => _currentLocation.value = value;
 
   final _initialCameraPosition =
       CameraPosition(target: LatLng(0, 0), zoom: 12).obs;
@@ -133,19 +131,23 @@ class CreateTransactionController extends MainController {
 
     var transaction = TransactionModel.create(
       purpose: purposeController.text,
-      amount: double.tryParse(amountController.text),
+      amount: double.tryParse(amountController.text) ?? 0.0,
       currency: selectedCurrency,
       expenseType: selectedExpenseType,
       reason: reasonController.text,
       paymentMethod: selectedPaymentMethod,
       isOthersInvolved: isOthersInvolved,
-      date: dateController.text,
+      date: selectedDate,
       time: timeController.text,
       location: address,
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
-      othersInvolved: isOthersInvolved ? othersInvolvedController.text : "",
+      othersInvolved: isOthersInvolved ? [] : [],
       createdBy: createdBy,
+      updatedBy: createdBy,
+      updatedAt: DateTime.now(),
+      status: TransactionStatusEnums.success,
+      transactionType: TransactionTypeEnums.expense,
     );
 
     AppUtils.showLoading();

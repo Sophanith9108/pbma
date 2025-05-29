@@ -86,7 +86,7 @@ class HistoryScreen extends StatelessWidget {
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      transaction.purpose ?? "",
+                                                      transaction.purpose,
                                                       style:
                                                           AppTextStyles.header1,
                                                     ),
@@ -126,8 +126,7 @@ class HistoryScreen extends StatelessWidget {
                                                       Expanded(
                                                         flex: 3,
                                                         child: Text(
-                                                          transaction.reason ??
-                                                              "",
+                                                          transaction.reason,
                                                           textAlign:
                                                               TextAlign.justify,
                                                           style:
@@ -162,11 +161,11 @@ class HistoryScreen extends StatelessWidget {
                                                       Expanded(
                                                         flex: 3,
                                                         child: Text(
-                                                          transaction.amount!
+                                                          transaction.amount
                                                               .formatCurrency(
                                                                 symbol:
                                                                     transaction
-                                                                        .currency!
+                                                                        .currency
                                                                         .name,
                                                               ),
                                                           textAlign:
@@ -204,7 +203,7 @@ class HistoryScreen extends StatelessWidget {
                                                         flex: 3,
                                                         child: Text(
                                                           transaction
-                                                              .paymentMethod!
+                                                              .paymentMethod
                                                               .name,
                                                           textAlign:
                                                               TextAlign.justify,
@@ -240,7 +239,7 @@ class HistoryScreen extends StatelessWidget {
                                                       Expanded(
                                                         flex: 3,
                                                         child: Text(
-                                                          "${transaction.date} ${transaction.time}",
+                                                          "${transaction.date.format(pattern: AppConstants.dateFormat)} ${transaction.time}",
                                                           textAlign:
                                                               TextAlign.justify,
                                                           style:
@@ -276,9 +275,8 @@ class HistoryScreen extends StatelessWidget {
                                                         flex: 3,
                                                         child: Text(
                                                           transaction
-                                                                  .createdBy
-                                                                  ?.name ??
-                                                              "",
+                                                              .createdBy
+                                                              .name,
                                                           textAlign:
                                                               TextAlign.justify,
                                                           style:
@@ -314,9 +312,8 @@ class HistoryScreen extends StatelessWidget {
                                                         flex: 3,
                                                         child: Text(
                                                           transaction
-                                                                  .expenseType
-                                                                  ?.name ??
-                                                              "",
+                                                              .expenseType
+                                                              .name,
                                                           textAlign:
                                                               TextAlign.justify,
                                                           style:
@@ -351,9 +348,7 @@ class HistoryScreen extends StatelessWidget {
                                                       Expanded(
                                                         flex: 3,
                                                         child: Text(
-                                                          transaction
-                                                                  .location ??
-                                                              "",
+                                                          transaction.location,
                                                           textAlign:
                                                               TextAlign.justify,
                                                           style:
@@ -389,11 +384,11 @@ class HistoryScreen extends StatelessWidget {
                                                         flex: 3,
                                                         child: Text(
                                                           transaction
-                                                                  .isOthersInvolved!
-                                                              ? transaction
-                                                                      .othersInvolved ??
-                                                                  ""
-                                                              : "No one getting involved, try again later!"
+                                                                  .isOthersInvolved
+                                                              ? "There are others joint you!"
+                                                                  .tr
+                                                              : "No one getting involved!"
+                                                                  .tr
                                                                   .tr,
                                                           textAlign:
                                                               TextAlign.justify,
@@ -429,7 +424,7 @@ class HistoryScreen extends StatelessWidget {
                                                       Expanded(
                                                         flex: 3,
                                                         child: Text(
-                                                          transaction.id ?? "",
+                                                          transaction.id,
                                                           textAlign:
                                                               TextAlign.justify,
                                                           style:
@@ -478,8 +473,7 @@ class HistoryScreen extends StatelessWidget {
                                                         markers: {
                                                           Marker(
                                                             markerId: MarkerId(
-                                                              transaction.id ??
-                                                                  "",
+                                                              transaction.id,
                                                             ),
                                                             position: LatLng(
                                                               transaction
@@ -490,12 +484,10 @@ class HistoryScreen extends StatelessWidget {
                                                             infoWindow: InfoWindow(
                                                               title:
                                                                   transaction
-                                                                      .location ??
-                                                                  "",
+                                                                      .location,
                                                               snippet:
                                                                   transaction
-                                                                      .purpose ??
-                                                                  "",
+                                                                      .purpose,
                                                             ),
                                                             icon: BitmapDescriptor.defaultMarkerWithHue(
                                                               BitmapDescriptor
@@ -532,20 +524,20 @@ class HistoryScreen extends StatelessWidget {
                                     FontAwesomeIcons.tentArrowLeftRight,
                                   ),
                                   title: Text(
-                                    transaction.purpose ?? "",
+                                    transaction.purpose,
                                     style: AppTextStyles.title,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   subtitle: Text(
-                                    transaction.location ?? "",
+                                    transaction.location,
                                     style: AppTextStyles.subtitle,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   trailing: Text(
-                                    "${transaction.amount} ${transaction.currency?.name ?? ""}",
-                                    style: AppTextStyles.amount,
+                                    "${transaction.amount} ${transaction.currency.name}",
+                                    style: AppTextStyles.amountNegative,
                                   ),
                                 );
                               }),

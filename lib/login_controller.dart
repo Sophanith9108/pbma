@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -21,6 +22,14 @@ class LoginController extends MainController {
     if (formKey.currentState!.validate()) {
       FocusScope.of(Get.context!).unfocus();
 
+      var users = await userRepository.gets() ?? [];
+      if (users.isEmpty) {
+        Fluttertoast.showToast(msg: 'Please register first'.tr);
+        await Future.delayed(const Duration(seconds: 1));
+        Get.offAllNamed(AppRoutes.register);
+        return;
+      }
+
       AppUtils.showLoading();
       await Future.delayed(const Duration(seconds: 3), () async {
         AppUtils.hideLoading();
@@ -36,6 +45,9 @@ class LoginController extends MainController {
           phone: phoneController.text,
           password: passwordController.text,
           updatedAt: DateTime.now(),
+          name: users.first.name,
+          email: users.first.email,
+          address: users.first.email,
         );
         userRepository.update(user).then((response) async {
           await _onClear();

@@ -31,7 +31,7 @@ class TransactionEntity extends HiveObject {
   bool? isOthersInvolved;
 
   @HiveField(8)
-  String? date;
+  DateTime? date;
 
   @HiveField(9)
   String? time;
@@ -40,7 +40,7 @@ class TransactionEntity extends HiveObject {
   String? location;
 
   @HiveField(11)
-  String? othersInvolved;
+  List<UserEntity>? othersInvolved;
 
   @HiveField(12)
   DateTime? createdAt;
@@ -63,6 +63,9 @@ class TransactionEntity extends HiveObject {
   @HiveField(18)
   double? longitude;
 
+  @HiveField(19)
+  TransactionTypeEnums? transactionType;
+
   TransactionEntity();
 
   factory TransactionEntity.create({
@@ -73,16 +76,17 @@ class TransactionEntity extends HiveObject {
     String? reason,
     PaymentMethodEnums? paymentMethod,
     bool? isOthersInvolved,
-    String? date,
+    DateTime? date,
     String? time,
     String? location,
     double? latitude,
     double? longitude,
-    String? othersInvolved,
+    List<UserEntity>? othersInvolved,
     DateTime? updatedAt,
     UserEntity? createdBy,
     UserEntity? updatedBy,
     TransactionStatusEnums? status,
+    TransactionTypeEnums? transactionType,
   }) {
     var transaction = TransactionEntity();
     transaction.id = Uuid().v8();
@@ -101,33 +105,47 @@ class TransactionEntity extends HiveObject {
     transaction.othersInvolved = othersInvolved;
     transaction.createdAt = DateTime.now();
     transaction.createdBy = createdBy;
-    transaction.updatedAt = updatedAt ?? DateTime.now();
+    transaction.updatedAt = updatedAt;
     transaction.updatedBy = updatedBy;
     transaction.status = status;
+    transaction.transactionType = transactionType;
     return transaction;
   }
 
   static TransactionModel toModel(TransactionEntity entity) {
     var model = TransactionModel();
-    model.id = entity.id;
-    model.purpose = entity.purpose;
-    model.amount = entity.amount;
-    model.currency = entity.currency;
-    model.expenseType = entity.expenseType;
-    model.reason = entity.reason;
-    model.paymentMethod = entity.paymentMethod;
-    model.isOthersInvolved = entity.isOthersInvolved;
-    model.date = entity.date;
-    model.time = entity.time;
-    model.location = entity.location;
-    model.latitude = entity.latitude ?? 0.0;
-    model.longitude = entity.longitude ?? 0.0;
-    model.othersInvolved = entity.othersInvolved;
-    model.createdAt = entity.createdAt;
-    model.updatedAt = entity.updatedAt;
+    model.id = entity.id!;
+    model.purpose = entity.purpose!;
+    model.amount = entity.amount!;
+    model.currency = entity.currency!;
+    model.expenseType = entity.expenseType!;
+    model.reason = entity.reason!;
+    model.paymentMethod = entity.paymentMethod!;
+    model.date = entity.date!;
+    model.time = entity.time!;
+    model.location = entity.location!;
+    model.latitude = entity.latitude!;
+    model.longitude = entity.longitude!;
+    model.createdAt = entity.createdAt!;
+    model.updatedAt = entity.updatedAt!;
     model.createdBy = UserEntity.toModel(entity.createdBy!);
     model.updatedBy = UserEntity.toModel(entity.updatedBy!);
-    model.status = entity.status;
+    model.status = entity.status!;
+    model.transactionType = entity.transactionType!;
+    model.isOthersInvolved = entity.isOthersInvolved ?? false;
+    model.othersInvolved =
+        entity.othersInvolved
+            ?.map(
+              (entity) => UserModel.create(
+                name: '',
+                email: '',
+                phone: '',
+                password: '',
+                address: '',
+              ),
+            )
+            .toList() ??
+        [];
     return model;
   }
 }

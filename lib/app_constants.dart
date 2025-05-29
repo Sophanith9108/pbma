@@ -12,6 +12,7 @@ class AppConstants {
   static const String appPrivacyPolicyUrl = '';
   static const String appTermsOfServiceUrl = '';
   static const String appSupportUrl = 'https://sophanit.dev/contact';
+  static const String dateFormat = 'dd.MMM.yyyy';
 }
 
 class AppStorageBox {

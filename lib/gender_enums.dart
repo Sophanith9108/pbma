@@ -9,6 +9,9 @@ enum GenderEnums {
 
   @HiveField(1)
   female,
+
+  @HiveField(2)
+  other,
 }
 
 extension GenderExtension on GenderEnums {
@@ -18,6 +21,8 @@ extension GenderExtension on GenderEnums {
         return "Male";
       case GenderEnums.female:
         return "Female";
+      case GenderEnums.other:
+        return "Prefer not to say";
     }
   }
 }

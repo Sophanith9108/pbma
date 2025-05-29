@@ -1,39 +1,39 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'gender_enums.dart';
+part of 'user_role_enums.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class GenderEnumsAdapter extends TypeAdapter<GenderEnums> {
+class UserRoleEnumsAdapter extends TypeAdapter<UserRoleEnums> {
   @override
-  final int typeId = 3;
+  final int typeId = 8;
 
   @override
-  GenderEnums read(BinaryReader reader) {
+  UserRoleEnums read(BinaryReader reader) {
     switch (reader.readByte()) {
       case 0:
-        return GenderEnums.male;
+        return UserRoleEnums.super_admin;
       case 1:
-        return GenderEnums.female;
+        return UserRoleEnums.admin;
       case 2:
-        return GenderEnums.other;
+        return UserRoleEnums.user;
       default:
-        return GenderEnums.male;
+        return UserRoleEnums.super_admin;
     }
   }
 
   @override
-  void write(BinaryWriter writer, GenderEnums obj) {
+  void write(BinaryWriter writer, UserRoleEnums obj) {
     switch (obj) {
-      case GenderEnums.male:
+      case UserRoleEnums.super_admin:
         writer.writeByte(0);
         break;
-      case GenderEnums.female:
+      case UserRoleEnums.admin:
         writer.writeByte(1);
         break;
-      case GenderEnums.other:
+      case UserRoleEnums.user:
         writer.writeByte(2);
         break;
     }
@@ -45,7 +45,7 @@ class GenderEnumsAdapter extends TypeAdapter<GenderEnums> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is GenderEnumsAdapter &&
+      other is UserRoleEnumsAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

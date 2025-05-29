@@ -27,13 +27,14 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
       ..dateOfBirth = fields[7] as String?
       ..gender = fields[8] as GenderEnums?
       ..createdAt = fields[9] as DateTime?
-      ..updatedAt = fields[10] as DateTime?;
+      ..updatedAt = fields[10] as DateTime?
+      ..role = fields[11] as UserRoleEnums;
   }
 
   @override
   void write(BinaryWriter writer, UserEntity obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -55,7 +56,9 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
       ..writeByte(9)
       ..write(obj.createdAt)
       ..writeByte(10)
-      ..write(obj.updatedAt);
+      ..write(obj.updatedAt)
+      ..writeByte(11)
+      ..write(obj.role);
   }
 
   @override

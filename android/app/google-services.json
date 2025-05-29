@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "531713784727",
+    "project_id": "pbma-app",
+    "storage_bucket": "pbma-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:531713784727:android:76b86da5f23b1fc287e2d2",
+        "android_client_info": {
+          "package_name": "com.sophanit.pbma.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYy1xuRacLr4AkElGS52CS7e02dCyhUr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
