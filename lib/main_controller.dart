@@ -12,7 +12,7 @@ class MainController extends GetxController {
   static final String TAG = "tMain";
 
   final UserRepository userRepository = Get.put(UserRepository());
-
+  final TargetRepository targetRepository = Get.put(TargetRepository());
   final TransactionRepository transactionRepository = Get.put(
     TransactionRepository(),
   );
@@ -42,7 +42,7 @@ class MainController extends GetxController {
   final List<Widget> children = [
     HomeScreen(),
     HistoryScreen(),
-    CategoryScreen(),
+    MemberScreen(),
     BudgetScreen(),
     AccountScreen(),
   ];
@@ -62,13 +62,13 @@ class MainController extends GetxController {
         title = 'Transactions'.tr;
         break;
       case 2:
-        title = 'Subs'.tr;
+        title = 'Members'.tr;
         break;
       case 3:
         title = 'Budgets'.tr;
         break;
       case 4:
-        title = 'Accounts'.tr;
+        title = 'Payments'.tr;
         break;
       default:
         title = 'Home'.tr;

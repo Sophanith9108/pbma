@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class HomeController extends GetxController {
+  final UserRepository userRepository = Get.put(UserRepository());
+  final TargetRepository targetRepository = Get.put(TargetRepository());
+
   final _startDate = DateTime.now().obs;
   DateTime get startDate => _startDate.value;
   set startDate(DateTime value) => _startDate.value = value;
@@ -62,7 +65,7 @@ class HomeController extends GetxController {
     await Future.delayed(const Duration(seconds: 3), () async {
       AppUtils.showSuccess('Successfully refresing...');
 
-      calculateTotalAmount();
+      await calculateTotalAmount();
 
       return true;
     });
@@ -71,6 +74,11 @@ class HomeController extends GetxController {
   Future<void> setData() async {
     startDate = DateTime(startDate.year, startDate.month, 1);
     endDate = DateTime(endDate.year, endDate.month + 1, 0);
+
+    var targets = await targetRepository.gets() ?? [];
+    if (targets.isNotEmpty && targets.first.amount > 0.0) {
+      targetAmount = targets.first.amount;
+    }
 
     await calculateTotalAmount();
   }
@@ -112,7 +120,13 @@ class HomeController extends GetxController {
   }
 
   Future<void> onTargetUpdated() async {
-    String updateTarget = "";
+    String updatedTarget = "";
+
+    bool isRegistered = await checkIfUserIsRegister();
+    if (!isRegistered) {
+      await showConfirmDialog();
+      return;
+    }
 
     await Future.delayed(Duration(milliseconds: 300));
     showDialog(
@@ -129,7 +143,7 @@ class HomeController extends GetxController {
               ),
               LengthLimitingTextInputFormatter(10),
             ],
-            onChanged: (value) => updateTarget = value,
+            onChanged: (value) => updatedTarget = value,
             textInputAction: TextInputAction.done,
             decoration: InputDecoration(
               labelStyle: AppTextStyles.label,
@@ -156,19 +170,9 @@ class HomeController extends GetxController {
             ),
             TextButton(
               onPressed: () async {
-                double value = double.tryParse(updateTarget) ?? 0;
-                if (value == 0 || targetAmountController.text.isEmpty) {
-                  AppUtils.showError(
-                    "Target is with $updateTarget is not allow, please input the valid amount!",
-                  );
-                  return;
-                }
-
-                targetAmount = double.tryParse(updateTarget) ?? 1;
-
-                await calculateTotalAmount();
-
                 Get.back();
+
+                handleUpdateTarget(updatedTarget);
               },
               child: Text("Update".tr, style: AppTextStyles.title),
             ),
@@ -176,5 +180,76 @@ class HomeController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> handleSavingTarget() async {
+    AppUtils.showLoading();
+
+    var users = await userRepository.gets() ?? [];
+    var user = users.first;
+    var targets = await targetRepository.gets() ?? [];
+    if (targets.isNotEmpty) {
+      var value = targets.first;
+      var target = TargetModel.create(
+        id: value.id,
+        amount: targetAmount,
+        user: user,
+        updatedAt: DateTime.now(),
+      );
+      await targetRepository.update(target);
+    } else {
+      var target = TargetModel.create(amount: targetAmount, user: user);
+      await targetRepository.save(target);
+    }
+    await Future.delayed(Duration(seconds: 3));
+    AppUtils.hideLoading();
+  }
+
+  Future<bool> checkIfUserIsRegister() async {
+    var users = await userRepository.gets() ?? [];
+    return users.isNotEmpty;
+  }
+
+  Future<void> showConfirmDialog() async {
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Register'.tr, style: AppTextStyles.title),
+          content: Text('Please register first'.tr, style: AppTextStyles.value),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                Get.back();
+              },
+              child: Text('Cancel'.tr, style: AppTextStyles.button),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                Get.offAllNamed(AppRoutes.register);
+              },
+              child: Text("Yes".tr, style: AppTextStyles.button),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> handleUpdateTarget(String updateTarget) async {
+    double value = double.tryParse(updateTarget) ?? 0;
+    if (value == 0 || targetAmountController.text.isEmpty) {
+      AppUtils.showError(
+        "Target is with $updateTarget is not allow, please input the valid amount!",
+      );
+      return;
+    }
+
+    targetAmount = double.tryParse(updateTarget) ?? 1;
+
+    await calculateTotalAmount();
+
+    await handleSavingTarget();
   }
 }

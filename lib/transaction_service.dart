@@ -1,9 +1,10 @@
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:pbma/core.dart';
 
 class TransactionService extends AppStorageService<TransactionEntity> {
-  final Box<TransactionEntity> transactionBox = Hive.box<TransactionEntity>(
-    AppStorageBox.transactionBox,
+  final Box<TransactionEntity> transactionBox = Get.put(
+    Hive.box<TransactionEntity>(AppStorageBox.transactionBox),
   );
 
   @override

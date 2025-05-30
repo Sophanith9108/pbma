@@ -54,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               Text("Target".tr, style: AppTextStyles.label),
                               Text(
-                                "${controller.targetAmount} ${controller.currency.name}",
+                                "${controller.targetAmount.formatCurrency()}${controller.currency.name}",
                                 style: AppTextStyles.amountPositive,
                               ),
                             ],
@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Text("Current".tr, style: AppTextStyles.label),
                             Text(
-                              "${controller.currentAmount} ${controller.currency.name}",
+                              "${controller.currentAmount.formatCurrency()}${controller.currency.name}",
                               style: AppTextStyles.amountLeft,
                             ),
                           ],

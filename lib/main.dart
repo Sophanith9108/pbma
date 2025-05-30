@@ -23,9 +23,11 @@ Future<void> initializeStorage() async {
   Hive.registerAdapter(TransactionStatusEnumsAdapter());
   Hive.registerAdapter(UserRoleEnumsAdapter());
   Hive.registerAdapter(TransactionTypeEnumsAdapter());
+  Hive.registerAdapter(TargetEntityAdapter());
 
   await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
   await Hive.openBox<UserEntity>(AppStorageBox.userBox);
+  await Hive.openBox<TargetEntity>(AppStorageBox.targetBox);
 }
 
 void setControllers() {

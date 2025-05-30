@@ -61,7 +61,7 @@ extension NumberFormatExtension on num {
     String sign = '',
     String pattern = '#,##0.###',
     int decimalDigits = 2,
-  }) => '$sign${NumberFormat(pattern, 'en_US').format(this)} $symbol';
+  }) => '$sign${NumberFormat(pattern, 'en_US').format(this)}$symbol';
 }
 
 extension StringExtension on String {

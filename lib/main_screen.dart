@@ -31,7 +31,7 @@ class MainScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.toNamed(AppRoutes.transaction)?.then((value)  {
+              Get.toNamed(AppRoutes.transaction)?.then((value) {
                 mainController.onResetTab();
                 homeController.onRefreshing();
               });
@@ -43,24 +43,24 @@ class MainScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.houseChimney),
-              label: 'Home'.tr,
+              icon: Icon(FontAwesomeIcons.houseCircleCheck),
+              label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.businessTime),
-              label: 'Transactions'.tr,
+              icon: Icon(FontAwesomeIcons.clockRotateLeft),
+              label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.solidClock),
-              label: 'Subs',
+              icon: Icon(FontAwesomeIcons.personCircleCheck),
+              label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.calculator),
-              label: 'Budgets',
+              icon: Icon(FontAwesomeIcons.personRays),
+              label: ''.tr,
             ),
             BottomNavigationBarItem(
               icon: Icon(FontAwesomeIcons.wallet),
-              label: 'Accounts'.tr,
+              label: ''.tr,
             ),
           ],
           currentIndex: mainController.currentIndex,
@@ -69,8 +69,9 @@ class MainScreen extends StatelessWidget {
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
           showSelectedLabels: true,
-          selectedFontSize: 14,
-          unselectedFontSize: 14,
+          selectedFontSize: 0,
+          unselectedFontSize: 0,
+          iconSize: 30,
           type: BottomNavigationBarType.fixed,
           elevation: AppDimensions.elevation,
         ),

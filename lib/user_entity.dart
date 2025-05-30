@@ -44,7 +44,7 @@ class UserEntity extends HiveObject {
 
   UserEntity();
 
-  factory UserEntity.create({
+  UserEntity.create({
     String? id,
     required String name,
     required String email,
@@ -58,7 +58,7 @@ class UserEntity extends HiveObject {
     DateTime? updatedAt,
     UserRoleEnums? role,
   }) {
-    return UserEntity()
+    UserEntity()
       ..id = Uuid().v8()
       ..name = name
       ..email = email
