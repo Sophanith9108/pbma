@@ -71,7 +71,6 @@ class MainScreen extends StatelessWidget {
           showSelectedLabels: true,
           selectedFontSize: 0,
           unselectedFontSize: 0,
-          iconSize: 30,
           type: BottomNavigationBarType.fixed,
           elevation: AppDimensions.elevation,
         ),

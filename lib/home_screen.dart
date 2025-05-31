@@ -88,14 +88,14 @@ class HomeScreen extends StatelessWidget {
                                 backgroundColor: Colors.blueGrey.withValues(
                                   alpha: .5,
                                 ),
-                                minHeight: 50,
+                                minHeight: Get.width * .09,
                                 borderRadius: BorderRadius.circular(Get.width),
                               ),
                               const SizedBox(height: AppDimensions.spadding),
                               Text(
                                 controller.message.tr,
                                 style: GoogleFonts.battambang(
-                                  fontSize: 22,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: controller.messageColor,
                                 ),
