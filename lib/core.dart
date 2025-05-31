@@ -61,3 +61,7 @@ export 'target_service.dart';
 export 'target_repository.dart';
 export 'member_screen.dart';
 export 'member_controller.dart';
+export 'firebase_service.dart';
+export 'firebase_repository.dart';
+export 'app_remote_service.dart';
+export 'app_remote_repository.dart';
