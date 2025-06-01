@@ -88,4 +88,28 @@ class AppTextStyles {
   );
 
   static final note = GoogleFonts.battambang(fontSize: 14, color: Colors.grey);
+
+  static final TextStyle balance = GoogleFonts.battambang(
+    fontSize: 26,
+    color: Colors.blue.shade900,
+    fontWeight: FontWeight.bold,
+  );
+
+  static final TextStyle budget = GoogleFonts.battambang(
+    fontSize: 26,
+    color: Colors.deepPurple.shade900,
+    fontWeight: FontWeight.bold,
+  );
+
+  static final TextStyle expense = GoogleFonts.battambang(
+    fontSize: 26,
+    color: Colors.red.shade900,
+    fontWeight: FontWeight.bold,
+  );
+
+  static final TextStyle income = GoogleFonts.battambang(
+    fontSize: 26,
+    color: Colors.green.shade900,
+    fontWeight: FontWeight.bold,
+  );
 }

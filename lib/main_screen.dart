@@ -43,23 +43,23 @@ class MainScreen extends StatelessWidget {
         bottomNavigationBar: BottomNavigationBar(
           items: [
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.houseCircleCheck),
+              icon: Icon(FontAwesomeIcons.house),
               label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.clockRotateLeft),
+              icon: Icon(FontAwesomeIcons.fileInvoiceDollar),
               label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.personCircleCheck),
+              icon: Icon(FontAwesomeIcons.peopleGroup),
               label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.personRays),
+              icon: Icon(FontAwesomeIcons.fileInvoice),
               label: ''.tr,
             ),
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.wallet),
+              icon: Icon(FontAwesomeIcons.calculator),
               label: ''.tr,
             ),
           ],

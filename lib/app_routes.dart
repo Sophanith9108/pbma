@@ -16,6 +16,7 @@ class AppRoutes {
   static const String notifications = '/notifications';
   static const String transaction = '/transaction';
   static const String detailTransaction = '/detail_transaction';
+  static const String createMember = "/create_member";
 
   static final Map<String, Widget Function(BuildContext)> routes = {
     main: (context) => MainScreen(),
@@ -29,5 +30,6 @@ class AppRoutes {
     profile: (context) => ProfileScreen(),
     login: (context) => LoginScreen(),
     register: (context) => RegisterScreen(),
+    createMember: (context) => CreateMemberScreen(),
   };
 }

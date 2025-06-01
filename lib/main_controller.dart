@@ -16,6 +16,7 @@ class MainController extends GetxController {
   final TransactionRepository transactionRepository = Get.put(
     TransactionRepository(),
   );
+  final MemberRepository memberRepository = Get.put(MemberRepository());
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;

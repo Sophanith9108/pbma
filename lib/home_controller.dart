@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -23,14 +24,6 @@ class HomeController extends GetxController {
   CurrencyEnums get currency => _currency.value;
   set currency(CurrencyEnums value) => _currency.value = value;
 
-  final _currentAmount = 0.0.obs;
-  double get currentAmount => _currentAmount.value;
-  set currentAmount(double value) => _currentAmount.value = value;
-
-  final _progress = 0.0.obs;
-  double get progress => _progress.value;
-  set progress(double value) => _progress.value = value;
-
   final _message = "".obs;
   String get message => _message.value;
   set message(String value) => _message.value = value;
@@ -44,6 +37,23 @@ class HomeController extends GetxController {
       _targetAmountController.value;
   set targetAmountController(TextEditingController value) =>
       _targetAmountController.value = value;
+
+  final _remainingBalance = 0.0.obs;
+  double get remainingBalance => _remainingBalance.value;
+  set remainingBalance(double value) => _remainingBalance.value = value;
+
+  final _remainingBalancePercent = 0.0.obs;
+  double get remainingBalancePercent => _remainingBalancePercent.value;
+  set remainingBalancePercent(double value) =>
+      _remainingBalancePercent.value = value;
+
+  final _currentAmount = 0.0.obs;
+  double get currentAmount => _currentAmount.value;
+  set currentAmount(double value) => _currentAmount.value = value;
+
+  final _progress = 0.0.obs;
+  double get progress => _progress.value;
+  set progress(double value) => _progress.value = value;
 
   @override
   void onInit() async {
@@ -85,22 +95,27 @@ class HomeController extends GetxController {
 
   Future<void> calculateTotalAmount() async {
     var transactions = await TransactionRepository().gets();
-    double totalAmount = 0;
 
     if (transactions != null) {
       for (var transaction in transactions) {
         if (transaction.date.isAfter(startDate.add(Duration(days: -1))) &&
             transaction.date.isBefore(endDate.add(Duration(days: 1)))) {
-          totalAmount += transaction.amount;
+          currentAmount += transaction.amount;
         }
       }
     }
 
-    showMessageBaseOnProgress(totalAmount);
+    showMessageBaseOnProgress();
+
+    calculateRemainBalance();
   }
 
-  void showMessageBaseOnProgress(double totalAmount) {
-    currentAmount = totalAmount;
+  void calculateRemainBalance() {
+    remainingBalance = targetAmount - currentAmount;
+    remainingBalancePercent = (remainingBalance / targetAmount) * 100;
+  }
+
+  void showMessageBaseOnProgress() {
     progress = (currentAmount / targetAmount);
 
     if (progress > 1) {
@@ -250,5 +265,11 @@ class HomeController extends GetxController {
     await calculateTotalAmount();
 
     await handleSavingTarget();
+  }
+
+  Future<void> gotoTransactions() async {}
+
+  Future<void> onTransactionClick(int index) async {
+    await Future.delayed(const Duration(milliseconds: 300), () {});
   }
 }

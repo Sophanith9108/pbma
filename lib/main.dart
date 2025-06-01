@@ -28,6 +28,7 @@ Future<void> initializeStorage() async {
   await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
   await Hive.openBox<UserEntity>(AppStorageBox.userBox);
   await Hive.openBox<TargetEntity>(AppStorageBox.targetBox);
+  await Hive.openBox<UserEntity>(AppStorageBox.memberBox);
 }
 
 void setControllers() {

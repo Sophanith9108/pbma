@@ -22,4 +22,5 @@ class AppStorageBox {
   static const String settingBox = 'setting_box';
   static const String notificationBox = 'notification_box';
   static const String targetBox = 'target_box';
+  static const String memberBox = "member_box";
 }
