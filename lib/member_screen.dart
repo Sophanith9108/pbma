@@ -29,6 +29,9 @@ class MemberScreen extends StatelessWidget {
               UserModel member = controller.members[index];
 
               return ListTile(
+                onLongPress: () {
+                  controller.onLongPress(index);
+                },
                 onTap: () {
                   showModalBottomSheet(
                     isScrollControlled: true,

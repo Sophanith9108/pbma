@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -59,5 +60,20 @@ class MemberController extends GetxController {
   @override
   void onClose() {
     super.onClose();
+  }
+
+  Future<void> onLongPress(int index) async {
+    var member = members[index];
+    await Get.defaultDialog(
+      title: 'Delete member?'.tr,
+      middleText: 'Are you sure you want to delete ${member.name}?'.tr,
+      textConfirm: 'Yes'.tr,
+      textCancel: 'No'.tr,
+      onConfirm: () async {
+        Get.back();
+        await _memberRepository.delete(member.id);
+        onRefreshing();
+      },
+    );
   }
 }
