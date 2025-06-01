@@ -89,7 +89,7 @@ class HomeController extends GetxController {
 
     if (transactions != null) {
       for (var transaction in transactions) {
-        if (transaction.date.isAfter(startDate) &&
+        if (transaction.date.isAfter(startDate.add(Duration(days: -1))) &&
             transaction.date.isBefore(endDate.add(Duration(days: 1)))) {
           totalAmount += transaction.amount;
         }
