@@ -22,13 +22,9 @@ class MemberController extends GetxController {
   }
 
   Future<void> onRemoveMember(int index) async {
-    AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
-      AppUtils.hideLoading();
-
-      AppUtils.showSuccess('Successfully removing member...');
-      return true;
-    });
+    var member = members[index];
+    await _memberRepository.delete(member.id);
+    onRefreshing();
   }
 
   Future<void> gotoCreateMember() async {
@@ -64,15 +60,29 @@ class MemberController extends GetxController {
 
   Future<void> onLongPress(int index) async {
     var member = members[index];
-    await Get.defaultDialog(
-      title: 'Delete member?'.tr,
-      middleText: 'Are you sure you want to delete ${member.name}?'.tr,
-      textConfirm: 'Yes'.tr,
-      textCancel: 'No'.tr,
-      onConfirm: () async {
-        Get.back();
-        await _memberRepository.delete(member.id);
-        onRefreshing();
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Delete Member'.tr, style: AppTextStyles.title),
+          content: Text(
+            'Are you sure you want to delete this member?',
+            style: AppTextStyles.value,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text('Cancel'.tr, style: AppTextStyles.button),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                await onRemoveMember(index);
+              },
+              child: Text('Delete'.tr, style: AppTextStyles.button),
+            ),
+          ],
+        );
       },
     );
   }
