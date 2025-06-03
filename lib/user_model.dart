@@ -53,7 +53,7 @@ class UserModel extends Equatable {
   set role(UserRoleEnums value) => _role.value = value;
 
   UserModel();
-  
+
   factory UserModel.create({
     String? id,
     required String name,
@@ -97,6 +97,88 @@ class UserModel extends Equatable {
       ..createdAt = model.createdAt
       ..updatedAt = model.updatedAt
       ..role = model.role;
+  }
+
+  static List<UserModel> mockup() {
+    return [
+      UserModel.create(
+        name: 'John Doe',
+        email: 'sY4Yy@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.male,
+        role: UserRoleEnums.user,
+      ),
+      UserModel.create(
+        name: 'Jane Doe',
+        email: '0m5oM@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.female,
+        role: UserRoleEnums.user,
+      ),
+      UserModel.create(
+        name: 'John Doe',
+        email: 'sY4Yy@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.male,
+        role: UserRoleEnums.admin,
+      ),
+      UserModel.create(
+        name: 'Jane Doe',
+        email: '0m5oM@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.female,
+        role: UserRoleEnums.admin,
+      ),
+      UserModel.create(
+        name: 'John Doe',
+        email: 'sY4Yy@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.other,
+        role: UserRoleEnums.admin,
+      ),
+      UserModel.create(
+        name: 'Jane Doe',
+        email: '0m5oM@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.other,
+        role: UserRoleEnums.admin,
+      ),
+      UserModel.create(
+        name: 'John Doe',
+        email: 'sY4Yy@example.com',
+        phone: '08123456789',
+        password: 'password',
+        profilePicture: '',
+        address: 'Jl. Raya',
+        dateOfBirth: '2000-01-01',
+        gender: GenderEnums.other,
+        role: UserRoleEnums.admin,
+      ),
+    ];
   }
 
   @override

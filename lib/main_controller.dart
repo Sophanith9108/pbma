@@ -17,6 +17,7 @@ class MainController extends GetxController {
     TransactionRepository(),
   );
   final MemberRepository memberRepository = Get.put(MemberRepository());
+  final BudgetRepository budgetRepository = Get.put(BudgetRepository());
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -299,6 +300,51 @@ class MainController extends GetxController {
 
       currentIndex = 0;
       onTabSelected(currentIndex);
+    });
+  }
+
+  Future<void> showCurrencySelected({
+    required Function(CurrencyEnums currency) handler,
+  }) async {
+    await showModalBottomSheet(
+      context: Get.context!,
+      showDragHandle: true,
+      useSafeArea: true,
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          children:
+              CurrencyEnums.values.map((element) {
+                return ListTile(
+                  leading: Icon(element.icon),
+                  title: Text(element.name, style: AppTextStyles.title),
+                  subtitle: Text(
+                    element.description,
+                    style: AppTextStyles.subtitle,
+                  ),
+                  onTap: () {
+                    Get.back();
+                    handler(element);
+                  },
+                );
+              }).toList(),
+        );
+      },
+    );
+  }
+
+  Future<void> showDateTimePicker({
+    required Function(DateTime value) handler,
+  }) async {
+    await showDatePicker(
+      context: Get.context!,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 1),
+    ).then((value) {
+      if (value != null) {
+        handler(value);
+      }
     });
   }
 }

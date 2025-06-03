@@ -13,6 +13,8 @@ class AppConstants {
   static const String appTermsOfServiceUrl = '';
   static const String appSupportUrl = 'https://sophanit.dev/contact';
   static const String dateFormat = 'dd.MMM.yyyy';
+  static const String timeFormat = 'hh:mm a';
+  static const String budgetDateTimeFormat = 'dd.MM.yy hh:mm a';
 }
 
 class AppStorageBox {
@@ -23,4 +25,5 @@ class AppStorageBox {
   static const String notificationBox = 'notification_box';
   static const String targetBox = 'target_box';
   static const String memberBox = "member_box";
+  static const String budgetBox = "budget_box";
 }

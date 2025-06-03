@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -16,8 +15,7 @@ class CreateTransactionScreen extends StatelessWidget {
         title: "Create Transaction".tr,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => controller.onCreateTransaction(),
-          label: Text("Create".tr, style: AppTextStyles.button),
-          icon: Icon(FontAwesomeIcons.plus),
+          label: Text("Create Transaction".tr, style: AppTextStyles.button),
         ),
         body: Form(
           key: controller.formKey,
@@ -92,37 +90,9 @@ class CreateTransactionScreen extends StatelessWidget {
                       controller: controller.currencyController,
                       readOnly: true,
                       onTap: () {
-                        showModalBottomSheet(
-                          context: Get.context!,
-                          showDragHandle: true,
-                          useSafeArea: true,
-                          builder: (_) {
-                            return ListView(
-                              shrinkWrap: true,
-                              children:
-                                  CurrencyEnums.values.map((element) {
-                                    return ListTile(
-                                      leading: Icon(element.icon),
-                                      title: Text(
-                                        element.name,
-                                        style: AppTextStyles.title,
-                                      ),
-                                      subtitle: Text(
-                                        element.description,
-                                        style: AppTextStyles.subtitle,
-                                      ),
-                                      onTap: () async {
-                                        await Future.delayed(
-                                          const Duration(milliseconds: 300),
-                                        );
-                                        controller.currencyController.text =
-                                            element.name;
-                                        controller.selectedCurrency = element;
-                                        Get.back();
-                                      },
-                                    );
-                                  }).toList(),
-                            );
+                        controller.showCurrencySelected(
+                          handler: (CurrencyEnums currency) {
+                            controller.currencyController.text = currency.name;
                           },
                         );
                       },

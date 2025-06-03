@@ -16,8 +16,7 @@ class CreateMemberScreen extends StatelessWidget {
         title: 'Create Member'.tr,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => controller.onCreateMember(),
-          label: Text("Create".tr, style: AppTextStyles.button),
-          icon: Icon(FontAwesomeIcons.plus),
+          label: Text("Create Member".tr, style: AppTextStyles.button),
         ),
         body: Form(
           key: controller.formKey,

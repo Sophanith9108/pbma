@@ -39,6 +39,10 @@ class MemberController extends GetxController {
 
   Future<void> setData() async {
     members = await _memberRepository.gets() ?? [];
+    if (members.isEmpty) {
+      members = UserModel.mockup();
+      return;
+    }
     members = members.reversed.toList();
   }
 
@@ -64,10 +68,16 @@ class MemberController extends GetxController {
       context: Get.context!,
       builder: (_) {
         return AlertDialog(
-          title: Text('Delete Member'.tr, style: AppTextStyles.title),
-          content: Text(
-            'Are you sure you want to delete this member?',
-            style: AppTextStyles.value,
+          title: Text('Remove Member'.tr, style: AppTextStyles.label),
+          content: Text.rich(
+            TextSpan(
+              text: 'Are you sure you want to remove '.tr,
+              style: AppTextStyles.value,
+              children: [
+                TextSpan(text: member.name, style: AppTextStyles.header1),
+                TextSpan(text: '?', style: AppTextStyles.label),
+              ],
+            ),
           ),
           actions: [
             TextButton(

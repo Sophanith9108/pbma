@@ -25,6 +25,7 @@ class MemberScreen extends StatelessWidget {
         body: RefreshIndicator(
           onRefresh: () => controller.onRefreshing(),
           child: ListView.separated(
+            padding: EdgeInsets.only(bottom: Get.width * .15),
             itemBuilder: (context, index) {
               UserModel member = controller.members[index];
 
