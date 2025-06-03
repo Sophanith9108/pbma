@@ -299,8 +299,9 @@ class CreateTransactionScreen extends StatelessWidget {
                         showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
-                          firstDate: DateTime(2022),
-                          lastDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(DateTime.now().year + 1),
+                          initialEntryMode: DatePickerEntryMode.calendarOnly,
                         ).then((value) {
                           if (value != null) {
                             controller.selectedDate = value;

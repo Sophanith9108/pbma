@@ -121,6 +121,23 @@ class BudgetController extends GetxController {
               children: [
                 Expanded(
                   flex: 1,
+                  child: Text("Started At".tr, style: AppTextStyles.label),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Text(
+                    budget.date.format(pattern: AppConstants.dateFormat),
+                    style: AppTextStyles.value,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: AppDimensions.padding),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  flex: 1,
                   child: Text("Created At".tr, style: AppTextStyles.label),
                 ),
                 Expanded(
@@ -152,6 +169,52 @@ class BudgetController extends GetxController {
                   ),
                 ),
               ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> onLongPress(int index) async {
+    var budget = budgets[index];
+
+    await Future.delayed(const Duration(milliseconds: 300));
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Delete".tr, style: AppTextStyles.title),
+          content: Text.rich(
+            TextSpan(
+              text: "Are you sure you want to delete",
+              style: AppTextStyles.value,
+              children: [
+                TextSpan(text: " "),
+                TextSpan(text: budget.name, style: AppTextStyles.header1),
+                TextSpan(text: "?"),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text("Cancel".tr, style: AppTextStyles.button),
+            ),
+            TextButton(
+              onPressed: () async {
+                Get.back();
+                AppUtils.showLoading();
+                await Future.delayed(const Duration(seconds: 3), () async {
+                  AppUtils.hideLoading();
+
+                  await _budgetRepository.delete(budget.id);
+                  await setData();
+                });
+              },
+              child: Text("Delete".tr, style: AppTextStyles.title),
             ),
           ],
         );

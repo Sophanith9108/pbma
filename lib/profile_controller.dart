@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -5,10 +6,6 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class ProfileController extends MainController {
-  final _user = UserModel().obs;
-  UserModel get user => _user.value;
-  set user(UserModel value) => _user.value = value;
-
   final _profile = File("").obs;
   File get profile => _profile.value;
   set profile(File value) => _profile.value = value;
@@ -39,22 +36,11 @@ class ProfileController extends MainController {
     super.onClose();
   }
 
-  Future<void> setData() async {
-    List<UserModel> users = await userRepository.gets() ?? [];
-    if (users.isNotEmpty) {
-      user = users.first;
-      genderController.text = user.gender.value;
-      addressController.text = user.address;
-    } else {
-      user = UserModel();
-    }
-  }
-
   Future<void> onProfileUploaded() async {
     await Future.delayed(const Duration(milliseconds: 300));
     await showImagePicker((value) {
-      user.profilePicture = value?.path ?? "";
       profile = File(value?.path ?? "");
+      user.profilePicture = base64Encode(profile.readAsBytesSync());
     });
   }
 
@@ -62,6 +48,10 @@ class ProfileController extends MainController {
     AppUtils.showLoading();
     await Future.delayed(Duration(seconds: 3), () {
       AppUtils.hideLoading();
+      user.profilePicture = base64Encode(profile.readAsBytesSync());
+      user.updatedAt = DateTime.now();
+      userRepository.update(user);
+
       AppUtils.showSuccess(
         "The user information has been updated successfully.".tr,
       );

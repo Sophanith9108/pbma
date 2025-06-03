@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:uuid/data.dart';
-import 'package:uuid/uuid.dart';
 
 extension DateTimeFormatExtension on DateTime {
   String format({String pattern = 'dd.MMM.yyyy hh:mm:ss a'}) {
@@ -70,4 +68,9 @@ extension StringExtension on String {
     var digest = sha256.convert(bytes);
     return digest.toString();
   }
+}
+
+extension StringFirstLastExtenstion on String {
+  String get firstAndLastLetters =>
+      '${substring(0, 1)}${substring(length - 1)}';
 }

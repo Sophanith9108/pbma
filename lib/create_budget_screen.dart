@@ -184,15 +184,15 @@ class CreateBudgetScreen extends StatelessWidget {
                 textCapitalization: TextCapitalization.sentences,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return "Start date is required!".tr;
+                    return "Start month is required!".tr;
                   }
                   return null;
                 },
                 decoration: InputDecoration(
                   labelStyle: AppTextStyles.label,
                   hintStyle: AppTextStyles.hint,
-                  hintText: 'Start date'.tr,
-                  labelText: 'Start date'.tr,
+                  hintText: 'Start month'.tr,
+                  labelText: 'Start month'.tr,
                   prefixIcon: const Icon(Icons.date_range),
                   suffixIcon: IconButton(
                     onPressed: () {

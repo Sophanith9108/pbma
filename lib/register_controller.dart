@@ -1,9 +1,10 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:pbma/core.dart';
 
 class RegisterController extends MainController {
@@ -41,9 +42,9 @@ class RegisterController extends MainController {
   bool get isAgreedWithTerms => _isAgreedWithTerms.value;
   set isAgreedWithTerms(bool value) => _isAgreedWithTerms.value = value;
 
-  final _profile = XFile('').obs;
-  XFile get profile => _profile.value;
-  set profile(XFile value) => _profile.value = value;
+  final _profile = File('').obs;
+  File get profile => _profile.value;
+  set profile(File value) => _profile.value = value;
 
   final _addressController = TextEditingController().obs;
   TextEditingController get addressController => _addressController.value;
@@ -88,16 +89,13 @@ class RegisterController extends MainController {
         });
         return;
       }
-
+      var profilePicture = base64Encode(profile.readAsBytesSync());
       var user = UserModel.create(
         name: nameController.text,
         email: emailController.text,
         phone: phoneController.text,
         password: passwordController.text,
-        profilePicture:
-            profile.path.isNotEmpty
-                ? profile.path
-                : 'https://picsum.photos/500?random=${DateTime.now().millisecondsSinceEpoch}',
+        profilePicture: profilePicture,
         address: addressController.text,
         dateOfBirth: DateTime.now().format(pattern: 'dd.MMM.yyyy'),
         gender: GenderEnums.male,
@@ -283,7 +281,9 @@ class RegisterController extends MainController {
   Future<void> onProfileUploaded() async {
     await Future.delayed(const Duration(milliseconds: 300));
     await showImagePicker((value) {
-      profile = value ?? XFile('');
+      if (value != null) {
+        profile = File(value.path);
+      }
     });
   }
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -41,14 +43,13 @@ class ProfileScreen extends StatelessWidget {
                           width: 190,
                           height: 190,
                           child:
-                              controller.profile.path.isNotEmpty
-                                  ? Image.file(
-                                    controller.profile,
+                              controller.user.profilePicture.isNotEmpty
+                                  ? Image.memory(
+                                    base64Decode(
+                                      controller.user.profilePicture,
+                                    ),
                                     fit: BoxFit.cover,
                                     filterQuality: FilterQuality.high,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
-                                            const Icon(Icons.error, size: 90),
                                     frameBuilder: (
                                       context,
                                       child,
@@ -57,14 +58,17 @@ class ProfileScreen extends StatelessWidget {
                                     ) {
                                       if (wasSynchronouslyLoaded) {
                                         return child;
+                                      } else {
+                                        return AnimatedOpacity(
+                                          opacity: frame == null ? 0.0 : 1.0,
+                                          duration: const Duration(seconds: 1),
+                                          curve: Curves.easeOut,
+                                          child: child,
+                                        );
                                       }
-                                      return AnimatedOpacity(
-                                        duration: const Duration(
-                                          milliseconds: 500,
-                                        ),
-                                        opacity: frame != null ? 1.0 : 0.0,
-                                        child: child,
-                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return const Icon(Icons.person, size: 90);
                                     },
                                   )
                                   : CachedNetworkImage(
@@ -76,7 +80,7 @@ class ProfileScreen extends StatelessWidget {
                                         ),
                                     errorWidget:
                                         (context, url, error) =>
-                                            const Icon(Icons.error, size: 90),
+                                            const Icon(Icons.person, size: 90),
                                   ),
                         ),
                       ),

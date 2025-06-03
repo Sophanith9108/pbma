@@ -557,8 +557,13 @@ class HistoryScreen extends StatelessWidget {
                                       },
                                     );
                                   },
-                                  leading: Icon(
-                                    FontAwesomeIcons.tentArrowLeftRight,
+                                  leading: CircleAvatar(
+                                    backgroundColor: transaction.transactionBg,
+                                    child: Text(
+                                      transaction.purpose.firstAndLastLetters
+                                          .toUpperCase(),
+                                      style: AppTextStyles.value,
+                                    ),
                                   ),
                                   title: Text(
                                     transaction.purpose,
@@ -573,7 +578,7 @@ class HistoryScreen extends StatelessWidget {
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                   trailing: Text(
-                                    "${transaction.amount} ${transaction.currency.name}",
+                                    "${transaction.amount.formatCurrency()}${transaction.currency.name}",
                                     style: AppTextStyles.amountNegative,
                                   ),
                                 );

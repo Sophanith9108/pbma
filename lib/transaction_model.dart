@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 import 'package:uuid/uuid.dart';
@@ -85,6 +86,10 @@ class TransactionModel extends Equatable {
   set transactionType(TransactionTypeEnums value) =>
       _transactionType.value = value;
 
+  final _transactionBg = Colors.lightBlue.obs;
+  MaterialColor get transactionBg => _transactionBg.value;
+  set transactionBg(MaterialColor value) => _transactionBg.value = value;
+
   TransactionModel();
 
   factory TransactionModel.create({
@@ -125,9 +130,25 @@ class TransactionModel extends Equatable {
     transaction.updatedAt = updatedAt;
     transaction.updatedBy = updatedBy;
     transaction.status = status;
-    transaction.transactionType = transactionType;
     transaction.isOthersInvolved = isOthersInvolved ?? false;
     transaction.othersInvolved = othersInvolved ?? [];
+    transaction.transactionType = transactionType;
+
+    switch (transactionType) {
+      case TransactionTypeEnums.expense:
+        transaction.transactionBg = Colors.red;
+        break;
+      case TransactionTypeEnums.income:
+        transaction.transactionBg = Colors.green;
+        break;
+      case TransactionTypeEnums.transfer:
+        transaction.transactionBg = Colors.blue;
+        break;
+      default:
+        transaction.transactionBg = Colors.grey;
+        break;
+    }
+
     return transaction;
   }
 
@@ -171,6 +192,22 @@ class TransactionModel extends Equatable {
     entity.updatedAt = model.updatedAt;
     entity.status = model.status;
     entity.transactionType = model.transactionType;
+
+    switch (model.transactionType) {
+      case TransactionTypeEnums.expense:
+        model.transactionBg = Colors.red;
+        break;
+      case TransactionTypeEnums.income:
+        model.transactionBg = Colors.green;
+        break;
+      case TransactionTypeEnums.transfer:
+        model.transactionBg = Colors.blue;
+        break;
+      default:
+        model.transactionBg = Colors.grey;
+        break;
+    }
+
     return entity;
   }
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -95,6 +94,8 @@ class HomeController extends GetxController {
 
   Future<void> calculateTotalAmount() async {
     var transactions = await TransactionRepository().gets();
+
+    currentAmount = 0.0;
 
     if (transactions != null) {
       for (var transaction in transactions) {

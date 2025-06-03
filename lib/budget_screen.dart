@@ -49,6 +49,7 @@ class BudgetScreen extends StatelessWidget {
                 ),
                 child: InkWell(
                   onTap: () => controller.onBudgetClicked(index),
+                  onLongPress: () => controller.onLongPress(index),
                   borderRadius: BorderRadius.circular(
                     AppDimensions.borderRadius,
                   ),
@@ -66,6 +67,11 @@ class BudgetScreen extends StatelessWidget {
                               ),
                               SizedBox(height: AppDimensions.spadding),
                               Text(budget.purpose, style: AppTextStyles.value),
+                              SizedBox(height: AppDimensions.spadding),
+                              Text(
+                                budget.date.format(pattern: "dd.MMM.yyyy"),
+                                style: AppTextStyles.value,
+                              ),
                               SizedBox(height: AppDimensions.spadding),
                               Text(
                                 "${budget.createdAt.format(pattern: AppConstants.budgetDateTimeFormat)} | ${budget.updatedAt.format(pattern: AppConstants.budgetDateTimeFormat)}",

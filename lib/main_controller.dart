@@ -27,6 +27,10 @@ class MainController extends GetxController {
   String get title => _title.value;
   set title(String title) => _title.value = title;
 
+  final _user = UserModel().obs;
+  UserModel get user => _user.value;
+  set user(UserModel user) => _user.value = user;
+
   final _isLogin = false.obs;
   bool get isLogin => _isLogin.value;
   set isLogin(bool isLogin) => _isLogin.value = isLogin;
@@ -50,7 +54,10 @@ class MainController extends GetxController {
   ];
 
   @override
-  void onInit() {
+  void onInit() async {
+    await checkIfUserRegistered().then((_) async {
+      await checkIfUserLogin();
+    });
     super.onInit();
   }
 
@@ -239,14 +246,31 @@ class MainController extends GetxController {
     }
   }
 
+  Future<void> checkIfUserRegistered() async {
+    var users = await userRepository.gets() ?? [];
+    if (users.isNotEmpty) {
+      user = users.first;
+      isRegistered = users.isNotEmpty;
+    }
+  }
+
+  Future<void> checkIfUserLogin() async {
+    UserModel? currentUser = await userRepository.get(user.id);
+    isLogin = currentUser != null;
+  }
+
   Future<void> gotoProfile() async {
-    List<UserModel>? user = await userRepository.gets();
-    if (user == null || user.isEmpty) {
-      Get.offAllNamed(AppRoutes.register);
+    await checkIfUserRegistered();
+    await checkIfUserLogin();
+    
+    if (!isRegistered) {
+      Get.offAllNamed(AppRoutes.register)?.then((_) {
+        setData();
+      });
       return;
     }
-    var currentUser = await userRepository.get(user.last.id);
-    if (currentUser == null) {
+
+    if (!isLogin) {
       Get.offAllNamed(AppRoutes.login);
       return;
     }
@@ -341,10 +365,20 @@ class MainController extends GetxController {
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(DateTime.now().year + 1),
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
+      calendarDelegate: GregorianCalendarDelegate(),
     ).then((value) {
       if (value != null) {
         handler(value);
       }
     });
+  }
+
+  Future<void> setData() async {
+    var users = await userRepository.gets() ?? [];
+    if (users.isNotEmpty) {
+      user = users.first;
+      isRegistered = users.isNotEmpty;
+    }
   }
 }

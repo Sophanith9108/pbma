@@ -42,7 +42,7 @@ class HistoryController extends GetxController {
     var _transactions = await transactionRepository.gets() ?? [];
     transactions = _transactions
         .groupListsBy((element) {
-          return element.createdAt!.format(pattern: 'dd.MMM.yyyy');
+          return element.createdAt.format(pattern: AppConstants.dateFormat);
         })
         .map((key, value) {
           return MapEntry(key, value.reversed.toList());
