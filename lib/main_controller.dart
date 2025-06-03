@@ -262,7 +262,7 @@ class MainController extends GetxController {
   Future<void> gotoProfile() async {
     await checkIfUserRegistered();
     await checkIfUserLogin();
-    
+
     if (!isRegistered) {
       Get.offAllNamed(AppRoutes.register)?.then((_) {
         setData();
@@ -275,6 +275,7 @@ class MainController extends GetxController {
       return;
     }
 
+    debugPrint("tMain: $user");
     await Future.delayed(const Duration(milliseconds: 300), () {
       Get.toNamed(AppRoutes.profile);
     });
@@ -378,7 +379,6 @@ class MainController extends GetxController {
     var users = await userRepository.gets() ?? [];
     if (users.isNotEmpty) {
       user = users.first;
-      isRegistered = users.isNotEmpty;
     }
   }
 }

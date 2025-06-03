@@ -13,6 +13,9 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.setData();
+    controller.setView(controller.user);
+
     return Obx(
       () => AppNavigation(
         title: 'Profile'.tr,
@@ -102,6 +105,9 @@ class ProfileScreen extends StatelessWidget {
             TextFormField(
               initialValue: controller.user.name,
               readOnly: true,
+              onTap: () {
+                controller.onNameMessage();
+              },
               decoration: InputDecoration(
                 labelText: 'Name'.tr,
                 border: OutlineInputBorder(
@@ -116,7 +122,9 @@ class ProfileScreen extends StatelessWidget {
               readOnly: true,
               controller: controller.genderController,
               onTap: () {
-                controller.onGenderSelected();
+                controller.genderController.text.isNotEmpty
+                    ? controller.onGenderMessage()
+                    : controller.onGenderSelected();
               },
               decoration: InputDecoration(
                 labelText: 'Gender'.tr,
@@ -131,6 +139,7 @@ class ProfileScreen extends StatelessWidget {
             TextFormField(
               initialValue: controller.user.email,
               readOnly: true,
+              onTap: () => controller.onEmailMessage(),
               decoration: InputDecoration(
                 labelText: 'Email'.tr,
                 border: OutlineInputBorder(
@@ -144,6 +153,7 @@ class ProfileScreen extends StatelessWidget {
             TextFormField(
               initialValue: controller.user.phone,
               readOnly: true,
+              onTap: () => controller.onPhoneMessage(),
               decoration: InputDecoration(
                 labelText: 'Phone'.tr,
                 prefixText: "855 ",

@@ -36,6 +36,11 @@ class ProfileController extends MainController {
     super.onClose();
   }
 
+  void setView(UserModel user) {
+    genderController.text = user.gender.value.tr;
+    addressController.text = user.address;
+  }
+
   Future<void> onProfileUploaded() async {
     await Future.delayed(const Duration(milliseconds: 300));
     await showImagePicker((value) {
@@ -93,5 +98,25 @@ class ProfileController extends MainController {
     await showMapSelectAddress((value) {
       addressController.text = value;
     });
+  }
+
+  Future<void> onGenderMessage() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    AppUtils.showWarning("Gender cannot be changed!".tr);
+  }
+
+  void onNameMessage() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    AppUtils.showWarning("Name cannot be changed!".tr);
+  }
+
+  void onEmailMessage() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    AppUtils.showWarning("Email cannot be changed!".tr);
+  }
+
+  void onPhoneMessage() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    AppUtils.showWarning("Phone number cannot be changed!".tr);
   }
 }
