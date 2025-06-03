@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
@@ -7,7 +8,7 @@ import 'package:pbma/core.dart';
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
 
-  final LoginController controller = Get.find<LoginController>();
+  final LoginController controller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +168,59 @@ class LoginScreen extends StatelessWidget {
                   }
                   return null;
                 },
+              ),
+              // SizedBox(height: AppDimensions.spadding),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: () {
+                    controller.gotoForgotPassword();
+                  },
+                  child: Text(
+                    "Forgot Password".tr,
+                    style: AppTextStyles.button,
+                  ),
+                ),
+              ),
+              SizedBox(height: AppDimensions.padding),
+              Text(
+                "Or".tr,
+                style: AppTextStyles.header1,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: AppDimensions.padding),
+              IconButton.outlined(
+                padding: EdgeInsets.all(AppDimensions.padding),
+                onPressed: () {
+                  controller.loginWithBiometrics();
+                },
+                icon: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      AppAssets.faceid,
+                      width: 24,
+                      height: 24,
+                      colorFilter: ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                    SizedBox(width: AppDimensions.padding),
+                    Text("--OR--".tr, style: AppTextStyles.button),
+                    SizedBox(width: AppDimensions.padding),
+                    SvgPicture.asset(
+                      AppAssets.fingerprint,
+                      width: 24,
+                      height: 24,
+                      colorFilter: ColorFilter.mode(
+                        Colors.white,
+                        BlendMode.srcIn,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(height: AppDimensions.padding),
             ],

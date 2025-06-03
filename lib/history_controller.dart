@@ -85,7 +85,7 @@ class HistoryController extends GetxController {
                 await Future.delayed(const Duration(seconds: 3), () async {
                   AppUtils.hideLoading();
 
-                  await transactionRepository.delete(transaction.id!);
+                  await transactionRepository.delete(transaction.id);
                   await _initialized();
                 });
               },

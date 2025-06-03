@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -24,37 +23,45 @@ class LoginController extends MainController {
 
       var users = await userRepository.gets() ?? [];
       if (users.isEmpty) {
-        Fluttertoast.showToast(msg: 'Please register first'.tr);
+        AppUtils.showWarning("User is not yet register!");
         await Future.delayed(const Duration(seconds: 1));
         Get.offAllNamed(AppRoutes.register);
         return;
       }
 
+      String phone = phoneController.text.trim();
+      if (users.firstWhereOrNull((user) => user.phone == phone) == null) {
+        AppUtils.showError('User not found with this phone number'.tr);
+        return;
+      }
+
+      String password = passwordController.text.trim();
+      if (users.firstWhereOrNull((user) => user.password == password) == null) {
+        AppUtils.showError('Wrong password'.tr);
+        return;
+      }
+
       AppUtils.showLoading();
-      await Future.delayed(const Duration(seconds: 3), () async {
+
+      var currentUser = users.first;
+      var user = UserModel.create(
+        phone: phoneController.text.trim(),
+        password: passwordController.text.trim(),
+        name: currentUser.name.trim(),
+        email: currentUser.email.trim(),
+        address: currentUser.address.trim(),
+        gender: currentUser.gender,
+        profilePicture: currentUser.profilePicture,
+        role: currentUser.role,
+        dateOfBirth: currentUser.dateOfBirth,
+        updatedAt: DateTime.now(),
+      );
+
+      userRepository.update(user).then((response) async {
         AppUtils.hideLoading();
 
-        List<UserModel> users = await userRepository.gets() ?? [];
-        String phone = phoneController.text.trim();
-        if (users.firstWhereOrNull((user) => user.phone == phone) == null) {
-          AppUtils.showError('User not found with this phone number'.tr);
-          return;
-        }
-
-        var user = UserModel.create(
-          phone: phoneController.text,
-          password: passwordController.text,
-          updatedAt: DateTime.now(),
-          name: users.first.name,
-          email: users.first.email,
-          address: users.first.email,
-        );
-        userRepository.update(user).then((response) async {
-          await _onClear();
-          Get.offAllNamed(AppRoutes.main);
-        });
-      }).catchError((error) {
-        AppUtils.showError(error.toString());
+        await _onClear();
+        Get.offAllNamed(AppRoutes.main);
       });
     }
   }
@@ -66,5 +73,21 @@ class LoginController extends MainController {
 
     phoneController.text = "";
     passwordController.text = "";
+  }
+
+  Future<void> gotoForgotPassword() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3), () {
+      AppUtils.hideLoading();
+    });
+  }
+
+  Future<void> loginWithBiometrics() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3), () {
+      AppUtils.hideLoading();
+    });
   }
 }

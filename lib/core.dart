@@ -75,3 +75,4 @@ export 'budget_service.dart';
 export 'budget_repository.dart';
 export 'create_budget_screen.dart';
 export 'create_budget_controller.dart';
+export 'app_assets.dart';

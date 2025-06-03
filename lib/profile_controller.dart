@@ -119,4 +119,41 @@ class ProfileController extends MainController {
     await Future.delayed(const Duration(milliseconds: 300));
     AppUtils.showWarning("Phone number cannot be changed!".tr);
   }
+
+  Future<void> onLogout() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    showDialog(
+      context: Get.context!,
+      builder: (_) {
+        return AlertDialog(
+          title: Text("Logout".tr, style: AppTextStyles.title),
+          content: Text(
+            "Are you sure you want to logout?".tr,
+            style: AppTextStyles.value,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Get.back(),
+              child: Text("Cancel".tr, style: AppTextStyles.button),
+            ),
+            TextButton(
+              onPressed: () {
+                Get.back();
+                handleLogout();
+              },
+              child: Text("Logout".tr, style: AppTextStyles.button),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> handleLogout() async {
+    AppUtils.showLoading();
+    await userRepository.delete(user.id).then((_) {
+      AppUtils.hideLoading();
+      Get.offAllNamed(AppRoutes.login);
+    });
+  }
 }

@@ -24,6 +24,12 @@ class ProfileScreen extends StatelessWidget {
           label: Text('Edit Profile'.tr, style: AppTextStyles.button),
           icon: Icon(FontAwesomeIcons.penToSquare),
         ),
+        actions: [
+          IconButton(
+            onPressed: () => controller.onLogout(),
+            icon: const Icon(FontAwesomeIcons.rightFromBracket),
+          ),
+        ],
         body: ListView(
           padding: EdgeInsets.all(AppDimensions.padding),
           children: [
