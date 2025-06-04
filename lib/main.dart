@@ -87,7 +87,7 @@ class MainApp extends StatelessWidget {
         setApplicationConfigs();
         setControllers();
       }),
-      home: MainScreen(),
+      home: LoginScreen(),
     );
   }
 }

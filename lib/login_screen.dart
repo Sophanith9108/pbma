@@ -169,7 +169,6 @@ class LoginScreen extends StatelessWidget {
                   return null;
                 },
               ),
-              // SizedBox(height: AppDimensions.spadding),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(

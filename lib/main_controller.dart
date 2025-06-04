@@ -6,6 +6,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
 class MainController extends GetxController {
@@ -384,9 +385,58 @@ class MainController extends GetxController {
   }
 
   Future<void> biometricAuth() async {
-    AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
+    final localAuth = LocalAuthentication();
+
+    final isAvailable = await localAuth.canCheckBiometrics;
+    final List<BiometricType> availableBiometrics =
+        await localAuth.getAvailableBiometrics();
+
+    if (!isAvailable) {
+      return;
+    }
+
+    if (availableBiometrics.isEmpty) {
+      return;
+    }
+
+    try {
+      AppUtils.showLoading();
+
+      final isAuthenticated = await localAuth.authenticate(
+        localizedReason: 'Please authenticate to login'.tr,
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: false,
+          biometricOnly: true,
+        ),
+      );
+
+      if (isAuthenticated) {
+        await setData();
+        AppUtils.hideLoading();
+        Get.offAllNamed(AppRoutes.main);
+      } else {
+        AppUtils.hideLoading();
+      }
+    } catch (e) {
       AppUtils.hideLoading();
-    });
+    }
+
+    for (var biometric in availableBiometrics) {
+      switch (biometric) {
+        case BiometricType.face:
+          // App can detect Face ID
+          break;
+        case BiometricType.fingerprint:
+          // App can detect Fingerprint
+          break;
+        case BiometricType.iris:
+          // App can detect Iris
+          break;
+        default:
+          // Handle other types or unknown biometrics
+          break;
+      }
+    }
   }
 }

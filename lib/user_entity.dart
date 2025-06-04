@@ -42,6 +42,9 @@ class UserEntity extends HiveObject {
   @HiveField(11)
   late UserRoleEnums role;
 
+  @HiveField(12)
+  late bool isLogin;
+
   UserEntity();
 
   UserEntity.create({
@@ -57,6 +60,7 @@ class UserEntity extends HiveObject {
     DateTime? createdAt,
     DateTime? updatedAt,
     UserRoleEnums? role,
+    bool? isLogin,
   }) {
     UserEntity()
       ..id = Uuid().v8()
@@ -70,7 +74,8 @@ class UserEntity extends HiveObject {
       ..gender = gender
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now()
-      ..role = role ?? UserRoleEnums.user;
+      ..role = role ?? UserRoleEnums.user
+      ..isLogin = isLogin ?? false;
   }
 
   static UserModel toModel(UserEntity entity) {
@@ -86,6 +91,7 @@ class UserEntity extends HiveObject {
       ..gender = entity.gender ?? GenderEnums.values.first
       ..createdAt = entity.createdAt ?? DateTime.now()
       ..updatedAt = entity.updatedAt ?? DateTime.now()
-      ..role = entity.role;
+      ..role = entity.role
+      ..isLogin = entity.isLogin;
   }
 }

@@ -108,7 +108,7 @@ class RegisterController extends MainController {
         await userRepository
             .save(user)
             .then((response) {
-              Fluttertoast.showToast(msg: 'Registration successful'.tr);
+              _onClear();
               Get.offAllNamed(AppRoutes.main);
             })
             .catchError((error) {
@@ -292,5 +292,23 @@ class RegisterController extends MainController {
     await showMapSelectAddress((value) {
       addressController.text = value;
     });
+  }
+
+  void _onClear() {
+    nameController.clear();
+    phoneController.clear();
+    emailController.clear();
+    addressController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    formKey.currentState!.reset();
+
+    nameController.text = "";
+    phoneController.text = "";
+    emailController.text = "";
+    addressController.text = "";
+    passwordController.text = "";
+    confirmPasswordController.text = "";
+    isAgreedWithTerms = false;
   }
 }

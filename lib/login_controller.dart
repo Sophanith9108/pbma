@@ -55,6 +55,7 @@ class LoginController extends MainController {
         role: currentUser.role,
         dateOfBirth: currentUser.dateOfBirth,
         updatedAt: DateTime.now(),
+        isLogin: true,
       );
 
       userRepository.update(user).then((response) async {
@@ -85,6 +86,13 @@ class LoginController extends MainController {
 
   Future<void> loginWithBiometrics() async {
     await Future.delayed(Duration(milliseconds: 300));
+    var users = await userRepository.gets() ?? [];
+    if (users.isEmpty) {
+      AppUtils.showWarning("User is not yet register!".tr);
+      await Future.delayed(const Duration(seconds: 1));
+      Get.offAllNamed(AppRoutes.register);
+      return;
+    }
     await biometricAuth();
   }
 }

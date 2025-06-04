@@ -52,6 +52,10 @@ class UserModel extends Equatable {
   UserRoleEnums get role => _role.value;
   set role(UserRoleEnums value) => _role.value = value;
 
+  final _isLogin = false.obs;
+  bool get isLogin => _isLogin.value;
+  set isLogin(bool value) => _isLogin.value = value;
+
   UserModel();
 
   factory UserModel.create({
@@ -66,6 +70,7 @@ class UserModel extends Equatable {
     GenderEnums? gender,
     DateTime? updatedAt,
     UserRoleEnums? role,
+    bool? isLogin,
   }) {
     var user = UserModel();
     user.id = id ?? Uuid().v8();
@@ -80,6 +85,7 @@ class UserModel extends Equatable {
     user.createdAt = DateTime.now();
     user.updatedAt = updatedAt ?? DateTime.now();
     user.role = role ?? UserRoleEnums.user;
+    user.isLogin = isLogin ?? false;
     return user;
   }
 
@@ -96,7 +102,8 @@ class UserModel extends Equatable {
       ..gender = model.gender
       ..createdAt = model.createdAt
       ..updatedAt = model.updatedAt
-      ..role = model.role;
+      ..role = model.role
+      ..isLogin = model.isLogin;
   }
 
   static List<UserModel> mockup() {

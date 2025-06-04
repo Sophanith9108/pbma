@@ -151,7 +151,8 @@ class ProfileController extends MainController {
 
   Future<void> handleLogout() async {
     AppUtils.showLoading();
-    await userRepository.delete(user.id).then((_) {
+    user.isLogin = false;
+    await userRepository.update(user).then((_) {
       AppUtils.hideLoading();
       Get.offAllNamed(AppRoutes.login);
     });
