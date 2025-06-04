@@ -55,5 +55,7 @@
     <string>We need access to your camera so you can take photos or videos directly within the app.</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>We need access to your microphone to record audio when you're capturing videos in the app.</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>This app uses Face ID to authenticate users.</string>
 </dict>
 </plist>

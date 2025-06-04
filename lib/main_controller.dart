@@ -382,4 +382,11 @@ class MainController extends GetxController {
       isLogin = true;
     }
   }
+
+  Future<void> biometricAuth() async {
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3), () async {
+      AppUtils.hideLoading();
+    });
+  }
 }
