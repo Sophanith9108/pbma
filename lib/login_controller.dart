@@ -44,9 +44,7 @@ class LoginController extends MainController {
 
       var users = await userRepository.gets() ?? [];
       if (users.isEmpty) {
-        AppUtils.showWarning("User is not yet register!");
-        await Future.delayed(const Duration(seconds: 1));
-        Get.offAllNamed(AppRoutes.register);
+        AppUtils.showWarning("User is not yet register!".tr);
         return;
       }
 
@@ -111,8 +109,6 @@ class LoginController extends MainController {
     var users = await userRepository.gets() ?? [];
     if (users.isEmpty) {
       AppUtils.showWarning("User is not yet register!".tr);
-      await Future.delayed(const Duration(seconds: 1));
-      Get.offAllNamed(AppRoutes.register);
       return;
     }
 
@@ -130,5 +126,10 @@ class LoginController extends MainController {
     var isAvailable = await LocalAuthentication().canCheckBiometrics;
 
     showBiometric = isAvailable && availableBiometrics.isNotEmpty;
+  }
+
+  void gotoRegister() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    Get.offAllNamed(AppRoutes.register);
   }
 }

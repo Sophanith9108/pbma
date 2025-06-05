@@ -59,6 +59,7 @@ class RegisterScreen extends StatelessWidget {
               TextFormField(
                 controller: controller.nameController,
                 textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.words,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name'.tr;
@@ -85,7 +86,6 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 keyboardType: TextInputType.name,
-                textCapitalization: TextCapitalization.words,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
                   LengthLimitingTextInputFormatter(50),
@@ -300,9 +300,20 @@ class RegisterScreen extends StatelessWidget {
                   Expanded(
                     child: Text.rich(
                       TextSpan(
-                        text: 'I agree to the ',
+                        text: ' ',
                         style: AppTextStyles.subtitle,
                         children: [
+                          TextSpan(
+                            text: 'I am agree with'.tr,
+                            style: AppTextStyles.button,
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () {
+                                    controller.isAgreedWithTerms =
+                                        !controller.isAgreedWithTerms;
+                                  },
+                          ),
+                          TextSpan(text: " "),
                           TextSpan(
                             text: 'Terms of Service'.tr,
                             style: AppTextStyles.link,
@@ -325,6 +336,7 @@ class RegisterScreen extends StatelessWidget {
                                     controller.onAgreeWithPolicy();
                                   },
                           ),
+                          TextSpan(text: '.', style: AppTextStyles.subtitle),
                         ],
                       ),
                     ),

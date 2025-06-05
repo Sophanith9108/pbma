@@ -183,12 +183,12 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppDimensions.padding),
+              Divider(),
+              SizedBox(height: AppDimensions.padding),
               Visibility(
                 visible: controller.showBiometric,
                 child: Column(
                   children: [
-                    Divider(),
-                    SizedBox(height: AppDimensions.padding),
                     IconButton.outlined(
                       onPressed: () {
                         controller.loginWithBiometrics();
@@ -208,7 +208,17 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: AppDimensions.padding),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    controller.gotoRegister();
+                  },
+                  child: Text(
+                    'Do not have account yet?'.tr,
+                    style: AppTextStyles.button,
+                  ),
+                ),
+              ),
             ],
           ),
         ),
