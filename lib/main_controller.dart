@@ -387,18 +387,6 @@ class MainController extends GetxController {
   Future<void> biometricAuth() async {
     final localAuth = LocalAuthentication();
 
-    final isAvailable = await localAuth.canCheckBiometrics;
-    final List<BiometricType> availableBiometrics =
-        await localAuth.getAvailableBiometrics();
-
-    if (!isAvailable) {
-      return;
-    }
-
-    if (availableBiometrics.isEmpty) {
-      return;
-    }
-
     try {
       AppUtils.showLoading();
 
@@ -420,23 +408,6 @@ class MainController extends GetxController {
       }
     } catch (e) {
       AppUtils.hideLoading();
-    }
-
-    for (var biometric in availableBiometrics) {
-      switch (biometric) {
-        case BiometricType.face:
-          // App can detect Face ID
-          break;
-        case BiometricType.fingerprint:
-          // App can detect Fingerprint
-          break;
-        case BiometricType.iris:
-          // App can detect Iris
-          break;
-        default:
-          // Handle other types or unknown biometrics
-          break;
-      }
     }
   }
 }

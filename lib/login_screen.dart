@@ -169,6 +169,7 @@ class LoginScreen extends StatelessWidget {
                   return null;
                 },
               ),
+              SizedBox(height: AppDimensions.spadding),
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
@@ -182,40 +183,26 @@ class LoginScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppDimensions.padding),
-              Text(
-                "Or".tr,
-                style: AppTextStyles.header1,
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: AppDimensions.padding),
-              IconButton.outlined(
-                padding: EdgeInsets.all(AppDimensions.padding),
-                onPressed: () {
-                  controller.loginWithBiometrics();
-                },
-                icon: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
+              Visibility(
+                visible: controller.showBiometric,
+                child: Column(
                   children: [
-                    SvgPicture.asset(
-                      AppAssets.faceid,
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                    SizedBox(width: AppDimensions.padding),
-                    Text("--OR--".tr, style: AppTextStyles.button),
-                    SizedBox(width: AppDimensions.padding),
-                    SvgPicture.asset(
-                      AppAssets.fingerprint,
-                      width: 24,
-                      height: 24,
-                      colorFilter: ColorFilter.mode(
-                        Colors.white,
-                        BlendMode.srcIn,
+                    Divider(),
+                    SizedBox(height: AppDimensions.padding),
+                    IconButton.outlined(
+                      onPressed: () {
+                        controller.loginWithBiometrics();
+                      },
+                      icon: SvgPicture.asset(
+                        width: 30,
+                        height: 30,
+                        GetPlatform.isAndroid
+                            ? AppAssets.fingerprint
+                            : AppAssets.faceid,
+                        colorFilter: ColorFilter.mode(
+                          Colors.white,
+                          BlendMode.srcIn,
+                        ),
                       ),
                     ),
                   ],

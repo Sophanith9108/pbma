@@ -89,7 +89,10 @@ class RegisterController extends MainController {
         });
         return;
       }
-      var profilePicture = base64Encode(profile.readAsBytesSync());
+      var profilePicture =
+          profile.path.isNotEmpty
+              ? base64Encode(profile.readAsBytesSync())
+              : "";
       var user = UserModel.create(
         name: nameController.text,
         email: emailController.text,

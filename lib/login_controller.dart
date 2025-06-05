@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
 class LoginController extends MainController {
@@ -16,6 +17,26 @@ class LoginController extends MainController {
   TextEditingController get passwordController => _passwordController.value;
   set passwordController(TextEditingController value) =>
       _passwordController.value = value;
+
+  final _showBiometric = false.obs;
+  bool get showBiometric => _showBiometric.value;
+  set showBiometric(bool value) => _showBiometric.value = value;
+
+  @override
+  void onInit() {
+    checkIfBiometricAvialable();
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
 
   Future<void> onLogin() async {
     if (formKey.currentState!.validate()) {
@@ -86,6 +107,7 @@ class LoginController extends MainController {
 
   Future<void> loginWithBiometrics() async {
     await Future.delayed(Duration(milliseconds: 300));
+
     var users = await userRepository.gets() ?? [];
     if (users.isEmpty) {
       AppUtils.showWarning("User is not yet register!".tr);
@@ -93,6 +115,20 @@ class LoginController extends MainController {
       Get.offAllNamed(AppRoutes.register);
       return;
     }
+
+    if (!showBiometric) {
+      AppUtils.showWarning('Biometric authentication is not available'.tr);
+      return;
+    }
+
     await biometricAuth();
+  }
+
+  Future<void> checkIfBiometricAvialable() async {
+    var availableBiometrics =
+        await LocalAuthentication().getAvailableBiometrics();
+    var isAvailable = await LocalAuthentication().canCheckBiometrics;
+
+    showBiometric = isAvailable && availableBiometrics.isNotEmpty;
   }
 }
