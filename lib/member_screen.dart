@@ -48,16 +48,19 @@ class MemberScreen extends StatelessWidget {
                           bottom: AppDimensions.xxxlpadding,
                         ),
                         children: [
-                          CircleAvatar(
-                            radius: 50,
-                            backgroundColor: AppColors.primary,
-                            backgroundImage:
-                                member.profilePicture.isNotEmpty
-                                    ? FileImage(File(member.profilePicture))
-                                    : CachedNetworkImageProvider(
-                                      "https://picsum.photos/200?id=${index + 1}&randoms=true",
-                                    ),
-                          ),
+                          member.profilePicture.isNotEmpty
+                              ? CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: AppColors.primary,
+                                  backgroundImage:
+                                      FileImage(File(member.profilePicture)))
+                              : CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: AppColors.primary,
+                                  backgroundImage: CachedNetworkImageProvider(
+                                    "https://picsum.photos/200?id=${index + 1}&randoms=true",
+                                  ),
+                                ),
                           SizedBox(height: AppDimensions.padding),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,15 +219,16 @@ class MemberScreen extends StatelessWidget {
                     },
                   );
                 },
-                leading: CircleAvatar(
-                  backgroundColor: AppColors.primary,
-                  backgroundImage:
-                      member.profilePicture.isNotEmpty
-                          ? FileImage(File(member.profilePicture))
-                          : CachedNetworkImageProvider(
-                            "https://picsum.photos/200?id=${index + 1}&randoms=true",
-                          ),
-                ),
+                leading: member.profilePicture.isNotEmpty
+                    ? CircleAvatar(
+                        backgroundColor: AppColors.primary,
+                        backgroundImage: FileImage(File(member.profilePicture)))
+                    : CircleAvatar(
+                        backgroundColor: AppColors.primary,
+                        backgroundImage: CachedNetworkImageProvider(
+                          "https://picsum.photos/200?id=${index + 1}&randoms=true",
+                        ),
+                      ),
                 title: Text(member.name, style: AppTextStyles.title),
                 subtitle: Text(member.phone, style: AppTextStyles.subtitle),
                 trailing: Text(
