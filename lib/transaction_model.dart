@@ -152,6 +152,55 @@ class TransactionModel extends Equatable {
     return transaction;
   }
 
+  static Map<String, dynamic> toJson({required TransactionModel model}) {
+    return {
+      "id": model.id,
+      "purpose": model.purpose,
+      "amount": model.amount,
+      "currency": model.currency,
+      "expenseType": model.expenseType,
+      "reason": model.reason,
+      "paymentMethod": model.paymentMethod,
+      "isOthersInvolved": model.isOthersInvolved,
+      "date": model.date,
+      "time": model.time,
+      "location": model.location,
+      "latitude": model.latitude,
+      "longitude": model.longitude,
+      "othersInvolved": model.othersInvolved,
+      "createdAt": model.createdAt,
+      "updatedAt": model.updatedAt,
+      "createdBy": model.createdBy,
+      "updatedBy": model.updatedBy,
+      "status": model.status,
+      "transactionType": model.transactionType,
+    };
+  }
+
+  static TransactionModel fromMap({required Map<String, dynamic> json}) {
+    return TransactionModel()
+      ..id = json['id']
+      ..purpose = json['purpose']
+      ..amount = json['amount']
+      ..currency = json['currency']
+      ..expenseType = json['expenseType']
+      ..reason = json['reason']
+      ..paymentMethod = json['paymentMethod']
+      ..isOthersInvolved = json['isOthersInvolved']
+      ..date = json['date']
+      ..time = json['time']
+      ..location = json['location']
+      ..latitude = json['latitude']
+      ..longitude = json['longitude']
+      ..othersInvolved = json['othersInvolved']
+      ..createdAt = json['createdAt']
+      ..updatedAt = json['updatedAt']
+      ..createdBy = json['createdBy']
+      ..updatedBy = json['updatedBy']
+      ..status = json['status']
+      ..transactionType = json['transactionType'];
+  }
+
   static TransactionEntity toEntity(TransactionModel model) {
     var entity = TransactionEntity();
 

@@ -27,3 +27,18 @@ class AppStorageBox {
   static const String memberBox = "member_box";
   static const String budgetBox = "budget_box";
 }
+
+class AppFirebaseReference {
+  static const String devNode = "development";
+  static const String preNode = "preproduction";
+  static const String proNode = "production";
+
+  static const String transaction = "transaction";
+  static const String user = "user";
+  static const String category = "category";
+  static const String setting = "setting";
+  static const String notification = "notification";
+  static const String target = "target";
+  static const String member = "member";
+  static const String budget = "budget";
+}
