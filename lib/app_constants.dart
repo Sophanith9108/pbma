@@ -29,16 +29,17 @@ class AppStorageBox {
 }
 
 class AppFirebaseReference {
+  static const String root = "data";
   static const String devNode = "development";
   static const String preNode = "preproduction";
   static const String proNode = "production";
 
-  static const String transaction = "transaction";
-  static const String user = "user";
-  static const String category = "category";
-  static const String setting = "setting";
-  static const String notification = "notification";
-  static const String target = "target";
-  static const String member = "member";
-  static const String budget = "budget";
+  static const String transaction = "transactions";
+  static const String user = "users";
+  static const String category = "categories";
+  static const String setting = "settings";
+  static const String notification = "notifications";
+  static const String target = "targets";
+  static const String member = "members";
+  static const String budget = "budgets";
 }

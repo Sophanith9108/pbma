@@ -1,18 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
-  final DatabaseReference database = Get.put(FirebaseDatabase.instance.ref());
+  final DatabaseReference database = Get.put(
+    FirebaseDatabase.instanceFor(
+      app: Firebase.app(),
+      databaseURL:
+          "https://pbma-app-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    ).ref(AppFirebaseReference.root).child(AppFirebaseReference.devNode),
+  );
 
   @override
   Future<void> add(TransactionModel value) async {
-    try {
-      var ref = database.child(AppFirebaseReference.transaction);
-      return await ref.push().set(TransactionModel.toJson(model: value));
-    } catch (e) {
-      print('Error: ${e.toString()}');
-    }
+    var ref = database.child(AppFirebaseReference.transaction);
+    return await ref.child(value.id).set(TransactionModel.toJson(model: value));
   }
 
   @override
