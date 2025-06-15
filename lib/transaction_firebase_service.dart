@@ -37,12 +37,17 @@ class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
   Future<List<TransactionModel>?> reads() async {
     var ref = database.child(AppFirebaseReference.transaction);
     var snapshot = await ref.get();
-    return snapshot.children
-        .map(
-          (e) =>
-              TransactionModel.fromJson(json: e.value as Map<String, dynamic>),
-        )
-        .toList();
+    List<TransactionModel> transactions = [];
+    snapshot.children.map((element) {
+      element.children.map((transaction) {
+        transactions.add(
+          TransactionModel.fromJson(
+            json: transaction.value as Map<String, dynamic>,
+          ),
+        );
+      });
+    });
+    return transactions;
   }
 
   @override
