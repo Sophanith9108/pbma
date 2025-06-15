@@ -19,6 +19,9 @@ class MainController extends GetxController {
   );
   final MemberRepository memberRepository = Get.put(MemberRepository());
   final BudgetRepository budgetRepository = Get.put(BudgetRepository());
+  final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
+    TransactionFirebaseRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;

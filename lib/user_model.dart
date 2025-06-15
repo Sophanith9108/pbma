@@ -89,6 +89,41 @@ class UserModel extends Equatable {
     return user;
   }
 
+  static Map<String, dynamic> toJson({required UserModel model}) {
+    return {
+      "id": model.id,
+      "name": model.name,
+      "email": model.email,
+      "phone": model.phone,
+      "password": model.password,
+      "profilePicture": model.profilePicture,
+      "address": model.address,
+      "dateOfBirth": model.dateOfBirth,
+      "gender": model.gender.name,
+      "createdAt": model.createdAt.millisecondsSinceEpoch,
+      "updatedAt": model.updatedAt.millisecondsSinceEpoch,
+      "role": model.role.name,
+      "isLogin": model.isLogin,
+    };
+  }
+
+  static UserModel fromJson({required Map<String, dynamic> json}) {
+    return UserModel()
+      ..id = json['id']
+      ..name = json['name']
+      ..email = json['email']
+      ..phone = json['phone']
+      ..password = json['password']
+      ..profilePicture = json['profilePicture']
+      ..address = json['address']
+      ..dateOfBirth = json['dateOfBirth']
+      ..gender = GenderEnums.values.byName(json['gender'])
+      ..createdAt = DateTime.fromMillisecondsSinceEpoch(json['createdAt'])
+      ..updatedAt = DateTime.fromMillisecondsSinceEpoch(json['updatedAt'])
+      ..role = UserRoleEnums.values.byName(json['role'])
+      ..isLogin = json['isLogin'];
+  }
+
   static UserEntity toEntity(UserModel model) {
     return UserEntity()
       ..id = model.id

@@ -157,27 +157,27 @@ class TransactionModel extends Equatable {
       "id": model.id,
       "purpose": model.purpose,
       "amount": model.amount,
-      "currency": model.currency,
-      "expenseType": model.expenseType,
+      "currency": model.currency.name,
+      "expenseType": model.expenseType.name,
       "reason": model.reason,
-      "paymentMethod": model.paymentMethod,
+      "paymentMethod": model.paymentMethod.name,
       "isOthersInvolved": model.isOthersInvolved,
-      "date": model.date,
+      "date": model.date.millisecondsSinceEpoch,
       "time": model.time,
       "location": model.location,
       "latitude": model.latitude,
       "longitude": model.longitude,
       "othersInvolved": model.othersInvolved,
-      "createdAt": model.createdAt,
-      "updatedAt": model.updatedAt,
-      "createdBy": model.createdBy,
-      "updatedBy": model.updatedBy,
-      "status": model.status,
-      "transactionType": model.transactionType,
+      "createdAt": model.createdAt.millisecondsSinceEpoch,
+      "updatedAt": model.updatedAt.millisecondsSinceEpoch,
+      "createdBy": UserModel.toJson(model: model.createdBy),
+      "updatedBy": UserModel.toJson(model: model.updatedBy),
+      "status": model.status.name,
+      "transactionType": model.transactionType.name,
     };
   }
 
-  static TransactionModel fromMap({required Map<String, dynamic> json}) {
+  static TransactionModel fromJson({required Map<String, dynamic> json}) {
     return TransactionModel()
       ..id = json['id']
       ..purpose = json['purpose']

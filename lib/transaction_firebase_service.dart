@@ -3,27 +3,29 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
-  final DatabaseReference database = Get.put(
-    FirebaseDatabase.instance.ref(AppFirebaseReference.devNode),
-  );
+  final DatabaseReference database = Get.put(FirebaseDatabase.instance.ref());
 
   @override
-  Future<void> create(TransactionModel value) async {
-    var ref = database.child(AppFirebaseReference.transaction);
-    await ref.push().set(TransactionModel.toJson(model: value));
+  Future<void> add(TransactionModel value) async {
+    try {
+      var ref = database.child(AppFirebaseReference.transaction);
+      return await ref.push().set(TransactionModel.toJson(model: value));
+    } catch (e) {
+      print('Error: ${e.toString()}');
+    }
   }
 
   @override
   Future<void> delete(String key) async {
     var ref = database.child(AppFirebaseReference.transaction);
-    await ref.child(key).remove();
+    return await ref.child(key).remove();
   }
 
   @override
   Future<TransactionModel> read(String key) async {
     var ref = database.child(AppFirebaseReference.transaction);
     var snapshot = await ref.child(key).get();
-    return TransactionModel.fromMap(
+    return TransactionModel.fromJson(
       json: snapshot.value as Map<String, dynamic>,
     );
   }
@@ -35,7 +37,7 @@ class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
     return snapshot.children
         .map(
           (e) =>
-              TransactionModel.fromMap(json: e.value as Map<String, dynamic>),
+              TransactionModel.fromJson(json: e.value as Map<String, dynamic>),
         )
         .toList();
   }
@@ -43,6 +45,6 @@ class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
   @override
   Future<void> update(TransactionModel value) async {
     var ref = database.child(AppFirebaseReference.transaction);
-    await ref.child(value.id).set(TransactionModel.toJson(model: value));
+    return await ref.child(value.id).set(TransactionModel.toJson(model: value));
   }
 }

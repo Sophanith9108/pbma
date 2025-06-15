@@ -8,8 +8,8 @@ class TransactionFirebaseRepository
   );
 
   @override
-  Future<void> add(TransactionModel value) async {
-    return _firebaseService.create(value);
+  Future<void> save(TransactionModel value) async {
+    return _firebaseService.add(value);
   }
 
   @override
