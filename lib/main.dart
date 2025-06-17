@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,6 +8,7 @@ import 'package:pbma/core.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeStorage();
+  await Firebase.initializeApp();
 
   runApp(MainApp());
 }
@@ -14,38 +16,38 @@ void main() async {
 Future<void> initializeStorage() async {
   await Hive.initFlutter();
 
-  Hive.registerAdapter(TransactionEntityAdapter());
   Hive.registerAdapter(UserEntityAdapter());
   Hive.registerAdapter(GenderEnumsAdapter());
-  Hive.registerAdapter(CurrencyEnumsAdapter());
-  Hive.registerAdapter(ExpenseTypeEnumsAdapter());
-  Hive.registerAdapter(PaymentMethodEnumsAdapter());
-  Hive.registerAdapter(TransactionStatusEnumsAdapter());
-  Hive.registerAdapter(UserRoleEnumsAdapter());
-  Hive.registerAdapter(TransactionTypeEnumsAdapter());
   Hive.registerAdapter(TargetEntityAdapter());
   Hive.registerAdapter(BudgetEntityAdapter());
+  Hive.registerAdapter(UserRoleEnumsAdapter());
+  Hive.registerAdapter(CurrencyEnumsAdapter());
+  Hive.registerAdapter(ExpenseTypeEnumsAdapter());
+  Hive.registerAdapter(TransactionEntityAdapter());
+  Hive.registerAdapter(PaymentMethodEnumsAdapter());
+  Hive.registerAdapter(TransactionTypeEnumsAdapter());
+  Hive.registerAdapter(TransactionStatusEnumsAdapter());
 
-  await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
   await Hive.openBox<UserEntity>(AppStorageBox.userBox);
-  await Hive.openBox<TargetEntity>(AppStorageBox.targetBox);
   await Hive.openBox<UserEntity>(AppStorageBox.memberBox);
+  await Hive.openBox<TargetEntity>(AppStorageBox.targetBox);
   await Hive.openBox<BudgetEntity>(AppStorageBox.budgetBox);
+  await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
 }
 
 void setControllers() {
   Get.put(MainController());
   Get.put(HomeController());
+  Get.put(LoginController());
+  Get.put(ProfileController());
   Get.put(HistoryController());
   Get.put(SettingController());
+  Get.put(AccountController());
+  Get.put(RegisterController());
   Get.put(CategoryController());
   Get.put(NotificationController());
   Get.put(CreateTransactionController());
-  Get.put(AccountController());
   Get.put(DetailTransactionController());
-  Get.put(ProfileController());
-  Get.put(LoginController());
-  Get.put(RegisterController());
 }
 
 void setApplicationConfigs() {

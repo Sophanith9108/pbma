@@ -130,16 +130,16 @@ class CreateTransactionController extends MainController {
     var createdBy = currentUsers.first;
 
     var transaction = TransactionModel.create(
-      purpose: purposeController.text,
+      purpose: purposeController.text.trim(),
       amount: double.tryParse(amountController.text) ?? 0.0,
       currency: selectedCurrency,
       expenseType: selectedExpenseType,
-      reason: reasonController.text,
+      reason: reasonController.text.trim(),
       paymentMethod: selectedPaymentMethod,
       isOthersInvolved: isOthersInvolved,
       date: selectedDate,
       time: timeController.text,
-      location: address,
+      location: address.trim(),
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
       othersInvolved: isOthersInvolved ? [] : [],
@@ -151,10 +151,11 @@ class CreateTransactionController extends MainController {
     );
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       AppUtils.hideLoading();
 
       await transactionRepository.save(transaction);
+      await transactionFirebaseRepository.save(transaction);
 
       _onClear();
       await Future.delayed(Duration(seconds: 1));

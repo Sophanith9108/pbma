@@ -10,6 +10,8 @@ class AppThemes {
     ),
     useMaterial3: true,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    splashFactory: InkRipple.splashFactory,
+    splashColor: AppColors.primaryLight,
   );
 
   static final ThemeData dark = ThemeData(
@@ -21,5 +23,7 @@ class AppThemes {
     useMaterial3: true,
     brightness: Brightness.dark,
     visualDensity: VisualDensity.adaptivePlatformDensity,
+    splashFactory: InkRipple.splashFactory,
+    splashColor: AppColors.primaryLight,
   );
 }

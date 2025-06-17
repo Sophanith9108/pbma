@@ -9,6 +9,10 @@ class HistoryController extends GetxController {
     TransactionRepository(),
   );
 
+  final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
+    TransactionFirebaseRepository(),
+  );
+
   final _transactions = <String, List<TransactionModel>>{}.obs;
   Map<String, List<TransactionModel>> get transactions => _transactions;
   set transactions(Map<String, List<TransactionModel>> value) =>
