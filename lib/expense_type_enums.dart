@@ -125,4 +125,9 @@ extension ExpenseTypeEnumsExtension on ExpenseTypeEnums {
         return 'Other miscellaneous expenses.';
     }
   }
+
+  static ExpenseTypeEnums? fromString(String? name) {
+    if (name == null) return null;
+    return ExpenseTypeEnums.values.firstWhere((e) => e.name == name);
+  }
 }

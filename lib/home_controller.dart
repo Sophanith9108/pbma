@@ -6,6 +6,9 @@ import 'package:pbma/core.dart';
 class HomeController extends GetxController {
   final UserRepository userRepository = Get.put(UserRepository());
   final TargetRepository targetRepository = Get.put(TargetRepository());
+  final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
+    TransactionFirebaseRepository(),
+  );
 
   final _startDate = DateTime.now().obs;
   DateTime get startDate => _startDate.value;
@@ -93,7 +96,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> calculateTotalAmount() async {
-    var transactions = await TransactionRepository().gets();
+    var transactions = await transactionFirebaseRepository.gets();
 
     currentAmount = 0.0;
 

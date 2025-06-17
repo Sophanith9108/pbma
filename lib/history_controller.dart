@@ -38,28 +38,15 @@ class HistoryController extends GetxController {
     AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3), () async {
       AppUtils.hideLoading();
-      await _initialized();
+
+      await onRetrieveTransactionFromFirebase();
     });
-  }
-
-  Future<void> _initialized() async {
-    var _transactions = await transactionRepository.gets() ?? [];
-    transactions = _transactions
-        .groupListsBy((element) {
-          return element.createdAt.format(pattern: AppConstants.dateFormat);
-        })
-        .map((key, value) {
-          return MapEntry(key, value.reversed.toList());
-        });
-
-    var result = transactions.entries.toList().reversed.toList();
-    transactions = Map.fromEntries(result);
   }
 
   Future<void> onRefreshing() async {
     await Future.delayed(const Duration(seconds: 3), () async {
       Fluttertoast.showToast(msg: "Done Refreshing!".tr);
-      await _initialized();
+      await onRetrieveTransactionFromFirebase();
       return true;
     });
   }
@@ -90,7 +77,8 @@ class HistoryController extends GetxController {
                   AppUtils.hideLoading();
 
                   await transactionRepository.delete(transaction.id);
-                  await _initialized();
+                  await transactionFirebaseRepository.delete(transaction.id);
+                  await onRetrieveTransactionFromFirebase();
                 });
               },
               child: Text("Delete".tr, style: AppTextStyles.title),
@@ -99,5 +87,22 @@ class HistoryController extends GetxController {
         );
       },
     );
+  }
+
+  Future<void> onRetrieveTransactionFromFirebase() async {
+    await transactionFirebaseRepository.gets().then((value) async {
+      if (value != null) {
+        transactions = value
+            .groupListsBy((element) {
+              return element.createdAt.format(pattern: AppConstants.dateFormat);
+            })
+            .map((key, value) {
+              return MapEntry(key, value.reversed.toList());
+            });
+
+        var result = transactions.entries.toList().reversed.toList();
+        transactions = Map.fromEntries(result);
+      }
+    });
   }
 }

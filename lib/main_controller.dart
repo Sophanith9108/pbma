@@ -159,7 +159,7 @@ class MainController extends GetxController {
                       ),
                     ),
                     Positioned(
-                      bottom: 32,
+                      bottom: Get.width * .2,
                       left: 32,
                       right: 32,
                       child: FloatingActionButton(

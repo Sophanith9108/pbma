@@ -91,23 +91,23 @@ class UserModel extends Equatable {
 
   static Map<String, dynamic> toJson({required UserModel model}) {
     return {
-      "id": model.id,
-      "name": model.name,
-      "email": model.email,
-      "phone": model.phone,
-      "password": model.password,
-      "profilePicture": model.profilePicture,
-      "address": model.address,
-      "dateOfBirth": model.dateOfBirth,
-      "gender": model.gender.name,
-      "createdAt": model.createdAt.millisecondsSinceEpoch,
-      "updatedAt": model.updatedAt.millisecondsSinceEpoch,
-      "role": model.role.name,
-      "isLogin": model.isLogin,
+      "id": model.id.toString(),
+      "name": model.name.toString(),
+      "email": model.email.toString(),
+      "phone": model.phone.toString(),
+      "password": model.password.toString(),
+      "profilePicture": model.profilePicture.toString(),
+      "address": model.address.toString(),
+      "dateOfBirth": model.dateOfBirth.toString(),
+      "gender": model.gender.name.toString(),
+      "createdAt": model.createdAt.millisecondsSinceEpoch.toString(),
+      "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
+      "role": model.role.name.toString(),
+      "isLogin": model.isLogin.toString(),
     };
   }
 
-  static UserModel fromJson({required Map<String, dynamic> json}) {
+  static UserModel fromJson({required Map<dynamic, dynamic> json}) {
     return UserModel()
       ..id = json['id']
       ..name = json['name']
@@ -118,10 +118,10 @@ class UserModel extends Equatable {
       ..address = json['address']
       ..dateOfBirth = json['dateOfBirth']
       ..gender = GenderEnums.values.byName(json['gender'])
-      ..createdAt = DateTime.fromMillisecondsSinceEpoch(json['createdAt'])
-      ..updatedAt = DateTime.fromMillisecondsSinceEpoch(json['updatedAt'])
+      ..createdAt = DateTime.tryParse(json['createdAt']) ?? DateTime.now()
+      ..updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now()
       ..role = UserRoleEnums.values.byName(json['role'])
-      ..isLogin = json['isLogin'];
+      ..isLogin = json['isLogin'] == 'true';
   }
 
   static UserEntity toEntity(UserModel model) {

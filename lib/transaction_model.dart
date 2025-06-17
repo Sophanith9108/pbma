@@ -154,51 +154,64 @@ class TransactionModel extends Equatable {
 
   static Map<String, dynamic> toJson({required TransactionModel model}) {
     return {
-      "id": model.id,
-      "purpose": model.purpose,
-      "amount": model.amount,
-      "currency": model.currency.name,
-      "expenseType": model.expenseType.name,
-      "reason": model.reason,
-      "paymentMethod": model.paymentMethod.name,
-      "isOthersInvolved": model.isOthersInvolved,
-      "date": model.date.millisecondsSinceEpoch,
-      "time": model.time,
-      "location": model.location,
-      "latitude": model.latitude,
-      "longitude": model.longitude,
-      "othersInvolved": model.othersInvolved,
-      "createdAt": model.createdAt.millisecondsSinceEpoch,
-      "updatedAt": model.updatedAt.millisecondsSinceEpoch,
+      "id": model.id.toString(),
+      "purpose": model.purpose.toString(),
+      "amount": model.amount.toString(),
+      "currency": model.currency.name.toString(),
+      "expenseType": model.expenseType.name.toString(),
+      "reason": model.reason.toString(),
+      "paymentMethod": model.paymentMethod.name.toString(),
+      "isOthersInvolved": model.isOthersInvolved.toString(),
+      "date": model.date.millisecondsSinceEpoch.toString(),
+      "time": model.time.toString(),
+      "location": model.location.toString(),
+      "latitude": model.latitude.toString(),
+      "longitude": model.longitude.toString(),
+      "othersInvolved":
+          model.othersInvolved.isNotEmpty ? model.othersInvolved : "",
+      "createdAt": model.createdAt.millisecondsSinceEpoch.toString(),
+      "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
       "createdBy": UserModel.toJson(model: model.createdBy),
       "updatedBy": UserModel.toJson(model: model.updatedBy),
-      "status": model.status.name,
-      "transactionType": model.transactionType.name,
+      "status": model.status.name.toString(),
+      "transactionType": model.transactionType.name.toString(),
     };
   }
 
   static TransactionModel fromJson({required Map<dynamic, dynamic> json}) {
     return TransactionModel()
-      ..id = json['id']
-      ..purpose = json['purpose']
-      ..amount = json['amount']
-      ..currency = json['currency']
-      ..expenseType = json['expenseType']
-      ..reason = json['reason']
-      ..paymentMethod = json['paymentMethod']
-      ..isOthersInvolved = json['isOthersInvolved']
-      ..date = json['date']
-      ..time = json['time']
-      ..location = json['location']
-      ..latitude = json['latitude']
-      ..longitude = json['longitude']
-      ..othersInvolved = json['othersInvolved']
-      ..createdAt = json['createdAt']
-      ..updatedAt = json['updatedAt']
-      ..createdBy = json['createdBy']
-      ..updatedBy = json['updatedBy']
-      ..status = json['status']
-      ..transactionType = json['transactionType'];
+      ..id = json['id'].toString()
+      ..purpose = json['purpose'].toString()
+      ..amount = double.tryParse(json['amount'].toString()) ?? 0.0
+      ..currency = CurrencyEnums.values.firstWhere(
+        (e) => e.name == json['currency'].toString(),
+      )
+      ..expenseType = ExpenseTypeEnums.values.firstWhere(
+        (e) => e.name == json['expenseType'].toString(),
+      )
+      ..reason = json['reason'].toString()
+      ..paymentMethod = PaymentMethodEnums.values.firstWhere(
+        (e) => e.name == json['paymentMethod'].toString(),
+      )
+      ..isOthersInvolved = json['isOthersInvolved'].toString() == 'true'
+      ..date = DateTime.tryParse(json['date'].toString()) ?? DateTime.now()
+      ..time = json['time'].toString()
+      ..location = json['location'].toString()
+      ..latitude = double.tryParse(json['latitude'].toString()) ?? 0.0
+      ..longitude = double.tryParse(json['longitude'].toString()) ?? 0.0
+      ..othersInvolved = []
+      ..createdAt =
+          DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
+      ..updatedAt =
+          DateTime.tryParse(json['updatedAt'].toString()) ?? DateTime.now()
+      ..createdBy = UserModel.fromJson(json: json['createdBy'])
+      ..updatedBy = UserModel.fromJson(json: json['updatedBy'])
+      ..status = TransactionStatusEnums.values.firstWhere(
+        (e) => e.name == json['status'].toString(),
+      )
+      ..transactionType = TransactionTypeEnums.values.firstWhere(
+        (e) => e.name == json['transactionType'].toString(),
+      );
   }
 
   static TransactionEntity toEntity(TransactionModel model) {

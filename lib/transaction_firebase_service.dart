@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -33,17 +33,15 @@ class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
 
   @override
   Future<List<TransactionModel>?> reads() async {
-    var snapshot = await database.get();
     List<TransactionModel> transactions = [];
-    snapshot.children.map((element) {
-      element.children.map((transaction) {
-        transactions.add(
-          TransactionModel.fromJson(
-            json: transaction.value as Map<dynamic, dynamic>,
-          ),
-        );
-      });
-    });
+
+    DataSnapshot snapshot = await database.get();
+    for (var item in snapshot.children) {
+      transactions.add(
+        TransactionModel.fromJson(json: item.value as Map<dynamic, dynamic>),
+      );
+    }
+
     return transactions;
   }
 

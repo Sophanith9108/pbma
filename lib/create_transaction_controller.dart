@@ -152,10 +152,9 @@ class CreateTransactionController extends MainController {
 
     AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 1), () async {
-      AppUtils.hideLoading();
-
       await transactionRepository.save(transaction);
       await transactionFirebaseRepository.save(transaction);
+      AppUtils.hideLoading();
 
       _onClear();
       await Future.delayed(Duration(seconds: 1));
