@@ -39,14 +39,15 @@ class CreateMemberController extends MainController {
     FocusScope.of(Get.context!).unfocus();
 
     var member = UserModel.create(
-      name: nameController.text,
-      email: emailController.text,
-      phone: phoneController.text,
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      phone: phoneController.text.trim(),
       password: "",
-      address: addressController.text,
+      address: addressController.text.trim(),
     );
 
     AppUtils.showLoading();
+    await memberFirebaseRepository.save(member);
     await memberRepository.save(member).then((response) async {
       await Future.delayed(const Duration(seconds: 3));
       AppUtils.hideLoading();
@@ -70,6 +71,8 @@ class CreateMemberController extends MainController {
   }
 
   void _onClear() {
+    formKey.currentState!.reset();
+    profile = File("");
     nameController.clear();
     phoneController.clear();
     emailController.clear();

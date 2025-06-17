@@ -8,25 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:269030192115:android:fc1c1250ec73786c3a9886",
-        "android_client_info": {
-          "package_name": "com.sophanit.pbma.android"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAUky2ZxCiHcc2PNwXIK544HPX2lWUga00"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:269030192115:android:6be0c02e4cf5bd193a9886",
         "android_client_info": {
           "package_name": "com.sophanit.pbma.android"

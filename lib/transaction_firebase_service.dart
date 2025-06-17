@@ -1,15 +1,11 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
-  final DatabaseReference database = Get.put(
-    FirebaseDatabase.instance
-        .ref()
-        .child(AppFirebaseReference.root)
-        .child(AppFirebaseReference.transaction),
-  );
+  final DatabaseReference database = FirebaseDatabase.instance
+      .ref()
+      .child(AppFirebaseReference.root)
+      .child(AppFirebaseReference.transaction);
 
   @override
   Future<void> add(TransactionModel value) async {

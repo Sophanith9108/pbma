@@ -4,6 +4,9 @@ import 'package:pbma/core.dart';
 
 class MemberController extends GetxController {
   final MemberRepository _memberRepository = Get.put(MemberRepository());
+  final MemberFirebaseRepository memberFirebaseRepository = Get.put(
+    MemberFirebaseRepository(),
+  );
 
   final _members = <UserModel>[].obs;
   List<UserModel> get members => _members;
@@ -38,7 +41,7 @@ class MemberController extends GetxController {
   }
 
   Future<void> setData() async {
-    members = await _memberRepository.gets() ?? [];
+    members = await memberFirebaseRepository.gets() ?? [];
     if (members.isEmpty) {
       members = UserModel.mockup();
       return;

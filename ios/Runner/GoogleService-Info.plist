@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyC6CzNdZGclJX0iCcda8jK85W61xR3t8TQ</string>
+	<string>AIzaSyAu0_pOKs5UlxncthOaGPCcvDQ6aENkzFs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>531713784727</string>
+	<string>269030192115</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.sophanit.pbma.ios</string>
 	<key>PROJECT_ID</key>
-	<string>pbma-app</string>
+	<string>pbma-460316</string>
 	<key>STORAGE_BUCKET</key>
-	<string>pbma-app.firebasestorage.app</string>
+	<string>pbma-460316.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:531713784727:ios:fb017bf9923c5d9c87e2d2</string>
+	<string>1:269030192115:ios:2f3c0c356a5f5d4f3a9886</string>
+	<key>DATABASE_URL</key>
+	<string>https://pbma-460316-default-rtdb.asia-southeast1.firebasedatabase.app</string>
 </dict>
 </plist>

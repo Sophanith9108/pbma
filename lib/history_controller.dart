@@ -37,9 +37,8 @@ class HistoryController extends GetxController {
   Future<void> setData() async {
     AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3), () async {
-      AppUtils.hideLoading();
-
       await onRetrieveTransactionFromFirebase();
+      AppUtils.hideLoading();
     });
   }
 
@@ -74,11 +73,10 @@ class HistoryController extends GetxController {
 
                 AppUtils.showLoading();
                 await Future.delayed(const Duration(seconds: 3), () async {
-                  AppUtils.hideLoading();
-
                   await transactionRepository.delete(transaction.id);
                   await transactionFirebaseRepository.delete(transaction.id);
                   await onRetrieveTransactionFromFirebase();
+                  AppUtils.hideLoading();
                 });
               },
               child: Text("Delete".tr, style: AppTextStyles.title),

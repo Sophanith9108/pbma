@@ -22,6 +22,12 @@ class MainController extends GetxController {
   final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
     TransactionFirebaseRepository(),
   );
+  final UserFirebaseRepository userFirebaseRepository = Get.put(
+    UserFirebaseRepository(),
+  );
+  final MemberFirebaseRepository memberFirebaseRepository = Get.put(
+    MemberFirebaseRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;

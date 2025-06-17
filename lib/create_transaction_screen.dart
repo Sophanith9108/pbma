@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -16,6 +17,7 @@ class CreateTransactionScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => controller.onCreateTransaction(),
           label: Text("Create Transaction".tr, style: AppTextStyles.button),
+          icon: Icon(FontAwesomeIcons.fileCirclePlus),
         ),
         body: Form(
           key: controller.formKey,

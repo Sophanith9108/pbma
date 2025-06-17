@@ -51,15 +51,17 @@ class ProfileController extends MainController {
 
   Future<void> onUserInfoUpdated() async {
     AppUtils.showLoading();
-    await Future.delayed(Duration(seconds: 3), () {
+    await Future.delayed(Duration(seconds: 3), () async {
       AppUtils.hideLoading();
+
       user.profilePicture = base64Encode(profile.readAsBytesSync());
       user.updatedAt = DateTime.now();
+      user.isLogin = true;
       userRepository.update(user);
 
-      AppUtils.showSuccess(
-        "The user information has been updated successfully.".tr,
-      );
+      await userFirebaseRepository.update(user);
+
+      Get.back(result: true);
     });
   }
 
@@ -152,6 +154,7 @@ class ProfileController extends MainController {
   Future<void> handleLogout() async {
     AppUtils.showLoading();
     user.isLogin = false;
+    await userFirebaseRepository.update(user);
     await userRepository.update(user).then((_) {
       AppUtils.hideLoading();
       Get.offAllNamed(AppRoutes.login);
