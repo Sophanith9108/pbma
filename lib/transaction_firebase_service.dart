@@ -5,29 +5,27 @@ import 'package:pbma/core.dart';
 
 class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
   final DatabaseReference database = Get.put(
-    FirebaseDatabase.instanceFor(
-      app: Firebase.app(),
-      databaseURL:
-          "https://pbma-app-default-rtdb.asia-southeast1.firebasedatabase.app/",
-    ).ref(AppFirebaseReference.root).child(AppFirebaseReference.devNode),
+    FirebaseDatabase.instance
+        .ref()
+        .child(AppFirebaseReference.root)
+        .child(AppFirebaseReference.transaction),
   );
 
   @override
   Future<void> add(TransactionModel value) async {
-    var ref = database.child(AppFirebaseReference.transaction);
-    return await ref.child(value.id).set(TransactionModel.toJson(model: value));
+    return await database
+        .child(value.id)
+        .set(TransactionModel.toJson(model: value));
   }
 
   @override
   Future<void> delete(String key) async {
-    var ref = database.child(AppFirebaseReference.transaction);
-    return await ref.child(key).remove();
+    return await database.child(key).remove();
   }
 
   @override
   Future<TransactionModel> read(String key) async {
-    var ref = database.child(AppFirebaseReference.transaction);
-    var snapshot = await ref.child(key).get();
+    var snapshot = await database.child(key).get();
     return TransactionModel.fromJson(
       json: snapshot.value as Map<String, dynamic>,
     );
@@ -35,14 +33,13 @@ class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
 
   @override
   Future<List<TransactionModel>?> reads() async {
-    var ref = database.child(AppFirebaseReference.transaction);
-    var snapshot = await ref.get();
+    var snapshot = await database.get();
     List<TransactionModel> transactions = [];
     snapshot.children.map((element) {
       element.children.map((transaction) {
         transactions.add(
           TransactionModel.fromJson(
-            json: transaction.value as Map<String, dynamic>,
+            json: transaction.value as Map<dynamic, dynamic>,
           ),
         );
       });
@@ -52,7 +49,8 @@ class TransactionFirebaseService extends AppRemoteService<TransactionModel> {
 
   @override
   Future<void> update(TransactionModel value) async {
-    var ref = database.child(AppFirebaseReference.transaction);
-    return await ref.child(value.id).set(TransactionModel.toJson(model: value));
+    return await database
+        .child(value.id)
+        .set(TransactionModel.toJson(model: value));
   }
 }

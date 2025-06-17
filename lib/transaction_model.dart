@@ -177,7 +177,7 @@ class TransactionModel extends Equatable {
     };
   }
 
-  static TransactionModel fromJson({required Map<String, dynamic> json}) {
+  static TransactionModel fromJson({required Map<dynamic, dynamic> json}) {
     return TransactionModel()
       ..id = json['id']
       ..purpose = json['purpose']
