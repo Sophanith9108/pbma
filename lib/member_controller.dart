@@ -15,10 +15,8 @@ class MemberController extends GetxController {
   Future<void> onRefreshing() async {
     Get.back();
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       AppUtils.hideLoading();
-
-      AppUtils.showSuccess('Successfully refresing...');
 
       setData();
     });

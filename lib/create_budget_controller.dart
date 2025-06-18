@@ -45,17 +45,18 @@ class CreateBudgetController extends MainController {
     FocusScope.of(Get.context!).unfocus();
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
-      AppUtils.hideLoading();
-
+    await Future.delayed(const Duration(seconds: 1), () async {
       var budget = BudgetModel.create(
-        name: titleController.text,
-        amount: double.tryParse(amountController.text) ?? 0.0,
+        name: titleController.text.trim(),
+        amount: double.tryParse(amountController.text.tr) ?? 0.0,
         currency: selectedCurrency,
-        purpose: purposeController.text,
+        purpose: purposeController.text.tr,
         date: selectedDate,
       );
-      await budgetRepository.save(budget).then((value) {
+
+      await budgetFirebaseRepository.save(budget).then((value) {
+        AppUtils.hideLoading();
+
         _onClear();
 
         Get.back(result: true);
@@ -73,6 +74,7 @@ class CreateBudgetController extends MainController {
   }
 
   Future<void> _onClear() async {
+    formKey.currentState!.reset();
     titleController.clear();
     amountController.clear();
     currencyController.clear();

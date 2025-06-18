@@ -59,6 +59,33 @@ class BudgetModel extends Equatable {
       ..updatedAt = updatedAt ?? DateTime.now();
   }
 
+  static Map<String, dynamic> toJson({required BudgetModel model}) {
+    return {
+      "id": model.id.toString(),
+      "name": model.name.toString(),
+      "amount": model.amount.toString(),
+      "currency": model.currency.name.toString(),
+      "purpose": model.purpose.toString(),
+      "date": model.date.toString(),
+      "createdAt": model.createdAt.toString(),
+      "updatedAt": model.updatedAt.toString(),
+    };
+  }
+
+  static BudgetModel fromJson({required Map<dynamic, dynamic> json}) {
+    return BudgetModel()
+      ..id = json["id"].toString()
+      ..name = json["name"].toString()
+      ..amount = double.parse(json["amount"].toString())
+      ..currency = CurrencyEnums.values.firstWhere(
+        (element) => element.name == json["currency"].toString(),
+      )
+      ..purpose = json["purpose"].toString()
+      ..date = DateTime.parse(json["date"].toString())
+      ..createdAt = DateTime.parse(json["createdAt"].toString())
+      ..updatedAt = DateTime.parse(json["updatedAt"].toString());
+  }
+
   static BudgetEntity toEntity({required BudgetModel model}) {
     return BudgetEntity()
       ..id = model.id

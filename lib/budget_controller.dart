@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class BudgetController extends GetxController {
-  final BudgetRepository _budgetRepository = Get.put(BudgetRepository());
+  final BudgetRepository budgetRepository = Get.put(BudgetRepository());
+  final BudgetFirebaseRepository budgetFirebaseRepository = Get.put(
+    BudgetFirebaseRepository(),
+  );
 
   final _budgets = <BudgetModel>[].obs;
   List<BudgetModel> get budgets => _budgets;
@@ -26,16 +29,15 @@ class BudgetController extends GetxController {
   }
 
   Future<void> setData() async {
-    budgets = await _budgetRepository.gets() ?? [];
+    budgets = await budgetFirebaseRepository.gets() ?? [];
     if (budgets.isEmpty) {
       budgets = BudgetModel.mockup();
     }
   }
 
   Future<void> onRefreshing() async {
-    AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
-      AppUtils.hideLoading();
+    await Future.delayed(const Duration(seconds: 1), () async {
+      await setData();
       return true;
     });
   }
@@ -187,7 +189,7 @@ class BudgetController extends GetxController {
           title: Text("Delete".tr, style: AppTextStyles.title),
           content: Text.rich(
             TextSpan(
-              text: "Are you sure you want to delete",
+              text: "Are you sure you want to delete".tr,
               style: AppTextStyles.value,
               children: [
                 TextSpan(text: " "),
@@ -206,12 +208,13 @@ class BudgetController extends GetxController {
             TextButton(
               onPressed: () async {
                 Get.back();
-                AppUtils.showLoading();
-                await Future.delayed(const Duration(seconds: 3), () async {
-                  AppUtils.hideLoading();
 
-                  await _budgetRepository.delete(budget.id);
+                AppUtils.showLoading();
+                await Future.delayed(const Duration(seconds: 1), () async {
+                  await budgetFirebaseRepository.delete(budget.id);
                   await setData();
+
+                  AppUtils.hideLoading();
                 });
               },
               child: Text("Delete".tr, style: AppTextStyles.title),

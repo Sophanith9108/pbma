@@ -28,6 +28,9 @@ class MainController extends GetxController {
   final MemberFirebaseRepository memberFirebaseRepository = Get.put(
     MemberFirebaseRepository(),
   );
+  final BudgetFirebaseRepository budgetFirebaseRepository = Get.put(
+    BudgetFirebaseRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -329,7 +332,7 @@ class MainController extends GetxController {
 
   Future<void> onResetTab() async {
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       AppUtils.hideLoading();
 
       currentIndex = 0;
