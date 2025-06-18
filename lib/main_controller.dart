@@ -260,7 +260,7 @@ class MainController extends GetxController {
   }
 
   Future<void> checkIfUserRegistered() async {
-    var users = await userRepository.gets() ?? [];
+    var users = await userFirebaseRepository.gets() ?? [];
     if (users.isNotEmpty) {
       user = users.first;
       isRegistered = users.isNotEmpty;
@@ -268,13 +268,15 @@ class MainController extends GetxController {
   }
 
   Future<void> checkIfUserLogin() async {
-    UserModel? currentUser = await userRepository.get(user.id);
+    UserModel? currentUser = await userFirebaseRepository.get(user.id);
     isLogin = currentUser != null;
   }
 
   Future<void> gotoProfile() async {
+    AppUtils.showLoading();
     await checkIfUserRegistered();
     await checkIfUserLogin();
+    AppUtils.hideLoading();
 
     if (!isRegistered) {
       Get.offAllNamed(AppRoutes.register)?.then((_) {
