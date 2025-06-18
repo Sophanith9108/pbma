@@ -77,7 +77,7 @@ class RegisterController extends MainController {
         return;
       }
 
-      List<UserModel> userExist = await userRepository.gets() ?? [];
+      List<UserModel> userExist = await userFirebaseRepository.gets() ?? [];
       String phone = phoneController.text.trim();
       bool isAlreadyRegistered = userExist.any((user) => user.phone == phone);
       if (isAlreadyRegistered) {
@@ -105,10 +105,10 @@ class RegisterController extends MainController {
       );
 
       AppUtils.showLoading();
-      await Future.delayed(const Duration(seconds: 3), () async {
+      await Future.delayed(const Duration(seconds: 1), () async {
         AppUtils.hideLoading();
 
-        await userRepository
+        await userFirebaseRepository
             .save(user)
             .then((response) {
               _onClear();

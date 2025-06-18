@@ -34,10 +34,8 @@ class HistoryController extends GetxController {
   }
 
   Future<void> setData() async {
-    AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 1), () async {
       await onRetrieveTransactionFromFirebase();
-      AppUtils.hideLoading();
     });
   }
 
