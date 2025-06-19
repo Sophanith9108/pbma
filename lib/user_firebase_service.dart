@@ -18,10 +18,18 @@ class UserFirebaseService extends AppRemoteService<UserModel> {
   }
 
   @override
-  Future<UserModel> read(String key) async {
-    return UserModel.fromJson(
-      json: (await _database.child(key).get()).value as Map<dynamic, dynamic>,
-    );
+  Future<UserModel?> read(String key) async {
+    return _database
+        .child(key)
+        .get()
+        .then(
+          (snapshot) =>
+              snapshot.exists
+                  ? UserModel.fromJson(
+                    json: snapshot.value as Map<dynamic, dynamic>,
+                  )
+                  : null,
+        );
   }
 
   @override

@@ -48,14 +48,6 @@ class UserModel extends Equatable {
   bool get isLogin => _isLogin.value;
   set isLogin(bool value) => _isLogin.value = value;
 
-  final _createdBy = UserModel().obs;
-  UserModel get createdBy => _createdBy.value;
-  set createdBy(UserModel value) => _createdBy.value = value;
-
-  final _updatedBy = UserModel().obs;
-  UserModel get updatedBy => _updatedBy.value;
-  set updatedBy(UserModel value) => _updatedBy.value = value;
-
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -73,8 +65,6 @@ class UserModel extends Equatable {
     required String phone,
     required String password,
     required String address,
-    UserModel? createdBy,
-    UserModel? updatedBy,
     String? profilePicture,
     String? dateOfBirth,
     GenderEnums? gender,
@@ -95,9 +85,7 @@ class UserModel extends Equatable {
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now()
       ..role = role ?? UserRoleEnums.user
-      ..isLogin = isLogin ?? false
-      ..createdBy = createdBy ?? UserModel()
-      ..updatedBy = updatedBy ?? UserModel();
+      ..isLogin = isLogin ?? false;
   }
 
   static Map<String, dynamic> toJson({required UserModel model}) {
@@ -115,8 +103,6 @@ class UserModel extends Equatable {
       "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
       "role": model.role.name.toString(),
       "isLogin": model.isLogin.toString(),
-      "createdBy": UserModel.toJson(model: model.createdBy),
-      "updatedBy": UserModel.toJson(model: model.updatedBy),
     };
   }
 
@@ -134,9 +120,7 @@ class UserModel extends Equatable {
       ..createdAt = DateTime.tryParse(json['createdAt']) ?? DateTime.now()
       ..updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now()
       ..role = UserRoleEnums.values.byName(json['role'])
-      ..isLogin = json['isLogin'] == 'true'
-      ..createdBy = UserModel.fromJson(json: json['createdBy'])
-      ..updatedBy = UserModel.fromJson(json: json['updatedBy']);
+      ..isLogin = json['isLogin'] == 'true';
   }
 
   static UserEntity toEntity(UserModel model) {
@@ -156,104 +140,6 @@ class UserModel extends Equatable {
       ..isLogin = model.isLogin;
   }
 
-  static List<UserModel> mockup() {
-    var user = UserModel.mockup().first;
-
-    return [
-      UserModel.create(
-        name: 'John Doe',
-        email: 'sY4Yy@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.male,
-        role: UserRoleEnums.user,
-        createdBy: user,
-        updatedBy: user,
-      ),
-      UserModel.create(
-        name: 'Jane Doe',
-        email: '0m5oM@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.female,
-        role: UserRoleEnums.user,
-        createdBy: user,
-        updatedBy: user,
-      ),
-      UserModel.create(
-        name: 'John Doe',
-        email: 'sY4Yy@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.male,
-        role: UserRoleEnums.admin,
-        createdBy: user,
-        updatedBy: user,
-      ),
-      UserModel.create(
-        name: 'Jane Doe',
-        email: '0m5oM@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.female,
-        role: UserRoleEnums.admin,
-        createdBy: user,
-        updatedBy: user,
-      ),
-      UserModel.create(
-        name: 'John Doe',
-        email: 'sY4Yy@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.other,
-        role: UserRoleEnums.admin,
-        createdBy: user,
-        updatedBy: user,
-      ),
-      UserModel.create(
-        name: 'Jane Doe',
-        email: '0m5oM@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.other,
-        role: UserRoleEnums.admin,
-        createdBy: user,
-        updatedBy: user,
-      ),
-      UserModel.create(
-        name: 'John Doe',
-        email: 'sY4Yy@example.com',
-        phone: '08123456789',
-        password: 'password',
-        profilePicture: '',
-        address: 'Jl. Raya',
-        dateOfBirth: '2000-01-01',
-        gender: GenderEnums.other,
-        role: UserRoleEnums.admin,
-        createdBy: user,
-        updatedBy: user,
-      ),
-    ];
-  }
-
   @override
   List<Object?> get props => [
     id,
@@ -269,7 +155,5 @@ class UserModel extends Equatable {
     updatedAt,
     role,
     isLogin,
-    createdBy,
-    updatedBy,
   ];
 }

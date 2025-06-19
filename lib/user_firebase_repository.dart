@@ -10,7 +10,7 @@ class UserFirebaseRepository extends AppRemoteRepository<UserModel> {
   }
 
   @override
-  Future<UserModel> get(String key) async {
+  Future<UserModel?> get(String key) async {
     return _service.read(key);
   }
 

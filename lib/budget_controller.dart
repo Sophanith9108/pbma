@@ -30,9 +30,6 @@ class BudgetController extends GetxController {
 
   Future<void> setData() async {
     budgets = await budgetFirebaseRepository.gets() ?? [];
-    if (budgets.isEmpty) {
-      budgets = BudgetModel.mockup();
-    }
   }
 
   Future<void> onRefreshing() async {
