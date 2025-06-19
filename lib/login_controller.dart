@@ -75,6 +75,8 @@ class LoginController extends MainController {
         dateOfBirth: currentUser.dateOfBirth,
         updatedAt: DateTime.now(),
         isLogin: true,
+        createdBy: currentUser.createdBy,
+        updatedBy: currentUser.updatedBy,
       );
 
       userRepository.update(user).then((response) async {

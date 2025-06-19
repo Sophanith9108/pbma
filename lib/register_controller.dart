@@ -22,6 +22,11 @@ class RegisterController extends MainController {
   set emailController(TextEditingController value) =>
       _emailController.value = value;
 
+  final _genderController = TextEditingController().obs;
+  TextEditingController get genderController => _genderController.value;
+  set genderController(TextEditingController value) =>
+      _genderController.value = value;
+
   final _phoneController = TextEditingController().obs;
   TextEditingController get phoneController => _phoneController.value;
   set phoneController(TextEditingController value) =>
@@ -50,6 +55,10 @@ class RegisterController extends MainController {
   TextEditingController get addressController => _addressController.value;
   set addressController(TextEditingController value) =>
       _addressController.value = value;
+
+  final _selectedGender = GenderEnums.male.obs;
+  GenderEnums get selectedGender => _selectedGender.value;
+  set selectedGender(GenderEnums value) => _selectedGender.value = value;
 
   @override
   void onReady() {
@@ -93,15 +102,18 @@ class RegisterController extends MainController {
           profile.path.isNotEmpty
               ? base64Encode(profile.readAsBytesSync())
               : "";
+
       var user = UserModel.create(
-        name: nameController.text,
-        email: emailController.text,
-        phone: phoneController.text,
-        password: passwordController.text,
+        name: nameController.text.trim(),
+        email: emailController.text.trim(),
+        phone: phoneController.text.trim(),
+        password: passwordController.text.trim(),
+        address: addressController.text.trim(),
         profilePicture: profilePicture,
-        address: addressController.text,
-        dateOfBirth: DateTime.now().format(pattern: 'dd.MMM.yyyy'),
-        gender: GenderEnums.male,
+        dateOfBirth: DateTime.now().format(pattern: AppConstants.dateFormat),
+        gender: selectedGender,
+        role: UserRoleEnums.user,
+        isLogin: true,
       );
 
       AppUtils.showLoading();
@@ -313,5 +325,31 @@ class RegisterController extends MainController {
     passwordController.text = "";
     confirmPasswordController.text = "";
     isAgreedWithTerms = false;
+  }
+
+  Future<void> onGenderSelected() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    showModalBottomSheet(
+      context: Get.context!,
+      showDragHandle: true,
+      useSafeArea: true,
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          padding: EdgeInsets.symmetric(horizontal: AppDimensions.padding),
+          children:
+              GenderEnums.values.map((gender) {
+                return ListTile(
+                  title: Text(gender.name, style: AppTextStyles.title),
+                  onTap: () {
+                    genderController.text = gender.name;
+                    user.gender = gender;
+                    Get.back();
+                  },
+                );
+              }).toList(),
+        );
+      },
+    );
   }
 }

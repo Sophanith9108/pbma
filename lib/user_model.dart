@@ -40,14 +40,6 @@ class UserModel extends Equatable {
   GenderEnums get gender => _gender.value;
   set gender(GenderEnums value) => _gender.value = value;
 
-  final _createdAt = DateTime.now().obs;
-  DateTime get createdAt => _createdAt.value;
-  set createdAt(DateTime value) => _createdAt.value = value;
-
-  final _updatedAt = DateTime.now().obs;
-  DateTime get updatedAt => _updatedAt.value;
-  set updatedAt(DateTime value) => _updatedAt.value = value;
-
   final _role = UserRoleEnums.user.obs;
   UserRoleEnums get role => _role.value;
   set role(UserRoleEnums value) => _role.value = value;
@@ -55,6 +47,22 @@ class UserModel extends Equatable {
   final _isLogin = false.obs;
   bool get isLogin => _isLogin.value;
   set isLogin(bool value) => _isLogin.value = value;
+
+  final _createdBy = UserModel().obs;
+  UserModel get createdBy => _createdBy.value;
+  set createdBy(UserModel value) => _createdBy.value = value;
+
+  final _updatedBy = UserModel().obs;
+  UserModel get updatedBy => _updatedBy.value;
+  set updatedBy(UserModel value) => _updatedBy.value = value;
+
+  final _createdAt = DateTime.now().obs;
+  DateTime get createdAt => _createdAt.value;
+  set createdAt(DateTime value) => _createdAt.value = value;
+
+  final _updatedAt = DateTime.now().obs;
+  DateTime get updatedAt => _updatedAt.value;
+  set updatedAt(DateTime value) => _updatedAt.value = value;
 
   UserModel();
 
@@ -64,29 +72,32 @@ class UserModel extends Equatable {
     required String email,
     required String phone,
     required String password,
-    String? profilePicture,
     required String address,
+    UserModel? createdBy,
+    UserModel? updatedBy,
+    String? profilePicture,
     String? dateOfBirth,
     GenderEnums? gender,
     DateTime? updatedAt,
     UserRoleEnums? role,
     bool? isLogin,
   }) {
-    var user = UserModel();
-    user.id = id ?? Uuid().v8();
-    user.name = name;
-    user.email = email;
-    user.phone = phone;
-    user.password = password.hashPassword();
-    user.profilePicture = profilePicture ?? "";
-    user.address = address;
-    user.dateOfBirth = dateOfBirth ?? "";
-    user.gender = gender ?? GenderEnums.other;
-    user.createdAt = DateTime.now();
-    user.updatedAt = updatedAt ?? DateTime.now();
-    user.role = role ?? UserRoleEnums.user;
-    user.isLogin = isLogin ?? false;
-    return user;
+    return UserModel()
+      ..id = id ?? Uuid().v8()
+      ..name = name
+      ..email = email
+      ..phone = phone
+      ..password = password.hashPassword()
+      ..profilePicture = profilePicture ?? ""
+      ..address = address
+      ..dateOfBirth = dateOfBirth ?? ""
+      ..gender = gender ?? GenderEnums.other
+      ..createdAt = DateTime.now()
+      ..updatedAt = updatedAt ?? DateTime.now()
+      ..role = role ?? UserRoleEnums.user
+      ..isLogin = isLogin ?? false
+      ..createdBy = createdBy ?? UserModel()
+      ..updatedBy = updatedBy ?? UserModel();
   }
 
   static Map<String, dynamic> toJson({required UserModel model}) {
@@ -104,6 +115,8 @@ class UserModel extends Equatable {
       "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
       "role": model.role.name.toString(),
       "isLogin": model.isLogin.toString(),
+      "createdBy": UserModel.toJson(model: model.createdBy),
+      "updatedBy": UserModel.toJson(model: model.updatedBy),
     };
   }
 
@@ -121,7 +134,9 @@ class UserModel extends Equatable {
       ..createdAt = DateTime.tryParse(json['createdAt']) ?? DateTime.now()
       ..updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now()
       ..role = UserRoleEnums.values.byName(json['role'])
-      ..isLogin = json['isLogin'] == 'true';
+      ..isLogin = json['isLogin'] == 'true'
+      ..createdBy = UserModel.fromJson(json: json['createdBy'])
+      ..updatedBy = UserModel.fromJson(json: json['updatedBy']);
   }
 
   static UserEntity toEntity(UserModel model) {
@@ -142,6 +157,8 @@ class UserModel extends Equatable {
   }
 
   static List<UserModel> mockup() {
+    var user = UserModel.mockup().first;
+
     return [
       UserModel.create(
         name: 'John Doe',
@@ -153,6 +170,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.male,
         role: UserRoleEnums.user,
+        createdBy: user,
+        updatedBy: user,
       ),
       UserModel.create(
         name: 'Jane Doe',
@@ -164,6 +183,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.female,
         role: UserRoleEnums.user,
+        createdBy: user,
+        updatedBy: user,
       ),
       UserModel.create(
         name: 'John Doe',
@@ -175,6 +196,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.male,
         role: UserRoleEnums.admin,
+        createdBy: user,
+        updatedBy: user,
       ),
       UserModel.create(
         name: 'Jane Doe',
@@ -186,6 +209,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.female,
         role: UserRoleEnums.admin,
+        createdBy: user,
+        updatedBy: user,
       ),
       UserModel.create(
         name: 'John Doe',
@@ -197,6 +222,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.other,
         role: UserRoleEnums.admin,
+        createdBy: user,
+        updatedBy: user,
       ),
       UserModel.create(
         name: 'Jane Doe',
@@ -208,6 +235,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.other,
         role: UserRoleEnums.admin,
+        createdBy: user,
+        updatedBy: user,
       ),
       UserModel.create(
         name: 'John Doe',
@@ -219,6 +248,8 @@ class UserModel extends Equatable {
         dateOfBirth: '2000-01-01',
         gender: GenderEnums.other,
         role: UserRoleEnums.admin,
+        createdBy: user,
+        updatedBy: user,
       ),
     ];
   }
@@ -237,5 +268,8 @@ class UserModel extends Equatable {
     createdAt,
     updatedAt,
     role,
+    isLogin,
+    createdBy,
+    updatedBy,
   ];
 }

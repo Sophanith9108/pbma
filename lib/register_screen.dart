@@ -94,6 +94,41 @@ class RegisterScreen extends StatelessWidget {
               ),
               const SizedBox(height: AppDimensions.padding),
               TextFormField(
+                readOnly: true,
+                onTap: () => controller.onGenderSelected(),
+                controller: controller.genderController,
+                textInputAction: TextInputAction.next,
+                textCapitalization: TextCapitalization.none,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please select your gender!'.tr;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelStyle: AppTextStyles.label,
+                  hintStyle: AppTextStyles.hint,
+                  hintText: 'Male'.tr,
+                  labelText: 'Male'.tr,
+                  prefixIcon: const Icon(Icons.person),
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.clear),
+                    onPressed: () {
+                      controller.genderController.clear();
+                    },
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(color: AppColors.primary, width: 1),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+                maxLines: 1,
+              ),
+              const SizedBox(height: AppDimensions.padding),
+              TextFormField(
                 controller: controller.emailController,
                 textInputAction: TextInputAction.next,
                 textCapitalization: TextCapitalization.none,
@@ -109,7 +144,7 @@ class RegisterScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   labelStyle: AppTextStyles.label,
                   hintStyle: AppTextStyles.hint,
-                  hintText: 'asdasdasd.9108@gmail.com'.tr,
+                  hintText: 'samplemail@mail.com'.tr,
                   labelText: 'Email'.tr,
                   prefixIcon: const Icon(Icons.email),
                   suffixIcon: IconButton(
@@ -157,7 +192,7 @@ class RegisterScreen extends StatelessWidget {
                 decoration: InputDecoration(
                   labelStyle: AppTextStyles.label,
                   hintStyle: AppTextStyles.hint,
-                  hintText: '89267375'.tr,
+                  hintText: '12xxxxxx'.tr,
                   labelText: 'Phone'.tr,
                   prefixIcon: const Icon(Icons.phone),
                   prefixText: '+855 ',
@@ -190,8 +225,8 @@ class RegisterScreen extends StatelessWidget {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your password'.tr;
                   }
-                  if (value.length < 6) {
-                    return 'Password must be at least 6 characters'.tr;
+                  if (value.length < 8) {
+                    return 'Password must be at least 8 characters'.tr;
                   }
                   return null;
                 },

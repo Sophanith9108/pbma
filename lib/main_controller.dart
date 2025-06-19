@@ -318,7 +318,12 @@ class MainController extends GetxController {
                     Get.back();
 
                     await Future.delayed(Duration(milliseconds: 300));
-                    var image = await ImagePicker().pickImage(source: source);
+                    var image = await ImagePicker().pickImage(
+                      source: source,
+                      maxHeight: 500,
+                      maxWidth: 500,
+                      imageQuality: 85,
+                    );
                     handler(image);
                   },
                 );

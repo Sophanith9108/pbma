@@ -52,6 +52,8 @@ class CreateBudgetController extends MainController {
         currency: selectedCurrency,
         purpose: purposeController.text.tr,
         date: selectedDate,
+        createdBy: user,
+        updatedBy: user,
       );
 
       await budgetFirebaseRepository.save(budget).then((value) {

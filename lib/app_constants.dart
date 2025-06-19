@@ -42,4 +42,5 @@ class AppFirebaseReference {
   static const String target = "targets";
   static const String member = "members";
   static const String budget = "budgets";
+  static const String image = "images";
 }

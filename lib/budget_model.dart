@@ -24,6 +24,14 @@ class BudgetModel extends Equatable {
   String get purpose => _purpose.value;
   set purpose(String value) => _purpose.value = value;
 
+  final _createdBy = UserModel().obs;
+  UserModel get createdBy => _createdBy.value;
+  set createdBy(UserModel value) => _createdBy.value = value;
+
+  final _updatedBy = UserModel().obs;
+  UserModel get updatedBy => _updatedBy.value;
+  set updatedBy(UserModel value) => _updatedBy.value = value;
+
   final _date = DateTime.now().obs;
   DateTime get date => _date.value;
   set date(DateTime value) => _date.value = value;
@@ -44,6 +52,8 @@ class BudgetModel extends Equatable {
     required double amount,
     required CurrencyEnums currency,
     required String purpose,
+    required UserModel createdBy,
+    required UserModel updatedBy,
     required DateTime date,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -54,6 +64,8 @@ class BudgetModel extends Equatable {
       ..amount = amount
       ..currency = currency
       ..purpose = purpose
+      ..createdBy = createdBy
+      ..updatedBy = updatedBy
       ..date = date
       ..createdAt = createdAt ?? DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now();
@@ -66,6 +78,8 @@ class BudgetModel extends Equatable {
       "amount": model.amount.toString(),
       "currency": model.currency.name.toString(),
       "purpose": model.purpose.toString(),
+      "createdBy": UserModel.toJson(model: model.createdBy),
+      "updatedBy": UserModel.toJson(model: model.updatedBy),
       "date": model.date.toString(),
       "createdAt": model.createdAt.toString(),
       "updatedAt": model.updatedAt.toString(),
@@ -81,6 +95,8 @@ class BudgetModel extends Equatable {
         (element) => element.name == json["currency"].toString(),
       )
       ..purpose = json["purpose"].toString()
+      ..createdBy = UserModel.fromJson(json: json["createdBy"])
+      ..updatedBy = UserModel.fromJson(json: json["updatedBy"])
       ..date = DateTime.parse(json["date"].toString())
       ..createdAt = DateTime.parse(json["createdAt"].toString())
       ..updatedAt = DateTime.parse(json["updatedAt"].toString());
@@ -99,6 +115,8 @@ class BudgetModel extends Equatable {
   }
 
   static List<BudgetModel> mockup() {
+    var user = UserModel.mockup().first;
+
     return [
       BudgetModel.create(
         name: 'Food',
@@ -106,6 +124,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Food',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
       BudgetModel.create(
         name: 'Entertainment',
@@ -113,6 +133,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Entertainment',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
       BudgetModel.create(
         name: 'Travel',
@@ -120,6 +142,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Travel',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
       BudgetModel.create(
         name: 'Shopping',
@@ -127,6 +151,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Shopping',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
       BudgetModel.create(
         name: 'Health',
@@ -134,6 +160,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Health',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
       BudgetModel.create(
         name: 'Education',
@@ -141,6 +169,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Education',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
       BudgetModel.create(
         name: 'Bills',
@@ -148,6 +178,8 @@ class BudgetModel extends Equatable {
         currency: CurrencyEnums.USD,
         purpose: 'Bills',
         date: DateTime.now(),
+        createdBy: user,
+        updatedBy: user,
       ),
     ];
   }
@@ -159,6 +191,8 @@ class BudgetModel extends Equatable {
     amount,
     currency,
     purpose,
+    createdBy,
+    updatedBy,
     date,
     createdAt,
     updatedAt,
