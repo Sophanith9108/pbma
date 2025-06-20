@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -9,30 +10,40 @@ class NotificationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppNavigation(
-      title: 'Notifications'.tr,
-      actions: [
-        IconButton(icon: const Icon(Icons.clear_all), onPressed: () {}),
-      ],
-      body: AppListview(
-        onFreshing: () async {
-          await Future.delayed(const Duration(seconds: 2));
-        },
-        itemCount: 20,
-        itemBuilder:
-            (index) => ListTile(
-              leading: const Icon(Icons.notifications),
-              title: Text('Notification $index', style: AppTextStyles.title),
+    return Obx(
+      () => AppNavigation(
+        title: 'Notifications'.tr,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.clear_all),
+            onPressed: () {
+              controller.onMarkasRead();
+            },
+          ),
+        ],
+        body: AppListview(
+          onFreshing: () async {
+            controller.onFreshing();
+          },
+          itemCount: controller.notifications.length,
+          itemBuilder: (index) {
+            final notification = controller.notifications[index];
+
+            return ListTile(
+              leading: CircleAvatar(child: Icon(FontAwesomeIcons.solidBell)),
+              title: Text(notification.title, style: AppTextStyles.title),
               subtitle: Text(
-                'This is the description of notification $index',
+                notification.message,
                 style: AppTextStyles.subtitle,
               ),
               trailing: Text(
-                DateTime.now().format(pattern: "dd.MMM.yyyy"),
+                notification.createdAt.format(pattern: "dd.MMM.yyyy"),
                 style: AppTextStyles.caption,
               ),
               onTap: () => controller.onNotificationClick(index),
-            ),
+            );
+          },
+        ),
       ),
     );
   }

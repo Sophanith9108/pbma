@@ -340,9 +340,12 @@ class RegisterController extends MainController {
           children:
               GenderEnums.values.map((gender) {
                 return ListTile(
-                  title: Text(gender.name, style: AppTextStyles.title),
+                  title: Text(
+                    gender.name.capitalizeFirst!,
+                    style: AppTextStyles.title,
+                  ),
                   onTap: () {
-                    genderController.text = gender.name;
+                    genderController.text = gender.name.capitalizeFirst!;
                     user.gender = gender;
                     Get.back();
                   },

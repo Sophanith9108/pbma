@@ -98,7 +98,7 @@ class RegisterScreen extends StatelessWidget {
                 onTap: () => controller.onGenderSelected(),
                 controller: controller.genderController,
                 textInputAction: TextInputAction.next,
-                textCapitalization: TextCapitalization.none,
+                textCapitalization: TextCapitalization.words,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please select your gender!'.tr;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class AppListview extends StatelessWidget {
@@ -22,10 +23,27 @@ class AppListview extends StatelessWidget {
     return RefreshIndicator(
       elevation: AppDimensions.elevation,
       onRefresh: () => onFreshing(),
-      child: ListView.builder(
-        itemCount: itemCount,
-        itemBuilder: (context, index) => itemBuilder(index),
-      ),
+      child:
+          itemCount == 0
+              ? ListView(
+                children: [
+                  SizedBox(height: Get.width * 0.3),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("No Data".tr, style: AppTextStyles.title),
+                      Text(
+                        "You can pull to refresh".tr,
+                        style: AppTextStyles.subtitle,
+                      ),
+                    ],
+                  ),
+                ],
+              )
+              : ListView.builder(
+                itemCount: itemCount,
+                itemBuilder: (context, index) => itemBuilder(index),
+              ),
     );
   }
 }

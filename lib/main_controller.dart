@@ -31,6 +31,9 @@ class MainController extends GetxController {
   final BudgetFirebaseRepository budgetFirebaseRepository = Get.put(
     BudgetFirebaseRepository(),
   );
+  final NotificationFirebaseRepository notificationFirebaseRepository = Get.put(
+    NotificationFirebaseRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -291,7 +294,11 @@ class MainController extends GetxController {
     }
 
     await Future.delayed(const Duration(milliseconds: 300), () {
-      Get.toNamed(AppRoutes.profile);
+      Get.toNamed(AppRoutes.profile)?.then((value) {
+        if (value != null && value) {
+          setData();
+        }
+      });
     });
   }
 

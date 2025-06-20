@@ -40,6 +40,27 @@ class TargetModel extends Equatable {
       ..updatedAt = updatedAt ?? DateTime.now();
   }
 
+  static Map<String, dynamic> toJson({required TargetModel model}) {
+    return {
+      'id': model.id,
+      'amount': model.amount,
+      'user': UserModel.toJson(model: model.user),
+      'createdAt': model.createdAt.millisecondsSinceEpoch.toString(),
+      'updatedAt': model.updatedAt.millisecondsSinceEpoch.toString(),
+    };
+  }
+
+  factory TargetModel.fromJson({required Map<dynamic, dynamic> json}) {
+    return TargetModel()
+      ..id = json['id'] as String
+      ..amount = json['amount'] as double
+      ..user = UserModel.fromJson(json: json['user'] as Map<dynamic, dynamic>)
+      ..createdAt = DateTime.fromMillisecondsSinceEpoch(
+        json['createdAt'] as int,
+      )
+      ..updatedAt = DateTime.parse(json['updatedAt'] as String);
+  }
+
   static TargetEntity toEntity({required TargetModel model}) {
     return TargetEntity()
       ..id = model.id
