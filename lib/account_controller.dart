@@ -6,6 +6,10 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class AccountController extends GetxController {
+  final BankCardFirebaseRepository bankCardFirebaseRepository = Get.put(
+    BankCardFirebaseRepository(),
+  );
+
   final _banks = <Widget>[].obs;
   List<Widget> get banks => _banks;
   set banks(List<Widget> value) => _banks.value = value;

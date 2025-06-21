@@ -90,3 +90,6 @@ export 'notification_firebase_service.dart';
 export 'notification_firebase_repository.dart';
 export 'notification_model.dart';
 export 'target_firebase_service.dart';
+export 'bankcard_model.dart';
+export 'bankcard_firebase_service.dart';
+export 'bankcard_firebase_repository.dart';
