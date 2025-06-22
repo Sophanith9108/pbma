@@ -93,3 +93,6 @@ export 'target_firebase_service.dart';
 export 'bankcard_model.dart';
 export 'bankcard_firebase_service.dart';
 export 'bankcard_firebase_repository.dart';
+export 'create_bankcard_screen.dart';
+export 'create_bankcard_controller.dart';
+export 'bankcard_enum.dart';

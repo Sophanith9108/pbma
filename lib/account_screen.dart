@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -12,17 +13,24 @@ class AccountScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.setData();
-
     return Obx(
       () => AppNavigation(
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 2));
-            Fluttertoast.showToast(msg: "Successfully refreshing data!".tr);
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            controller.onAddAccount();
           },
+          label: Text("Add Account".tr, style: AppTextStyles.button),
+          icon: const Icon(FontAwesomeIcons.circlePlus),
+        ),
+        body: RefreshIndicator(
+          onRefresh: () => controller.onRefreshing(),
           child: ListView(
-            padding: EdgeInsets.all(AppDimensions.padding),
+            padding: EdgeInsets.only(
+              left: AppDimensions.padding,
+              right: AppDimensions.padding,
+              top: AppDimensions.padding,
+              bottom: Get.width * .2,
+            ),
             children: [
               Text("Banks".tr, style: AppTextStyles.header1),
               const SizedBox(height: 8),

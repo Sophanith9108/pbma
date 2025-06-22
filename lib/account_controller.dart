@@ -44,6 +44,10 @@ class AccountController extends GetxController {
   }
 
   Future<void> setData() async {
+    await bankCardFirebaseRepository.reads().then((value) {
+      debugPrint("Bank Cards: ${value.length}");
+    });
+
     banks = [
       Card(
         shape: RoundedRectangleBorder(
@@ -753,5 +757,17 @@ class AccountController extends GetxController {
 
   void onPageScrolled(double? value) {
     selectedPage = value!.toInt();
+  }
+
+  Future<void> onRefreshing() async {
+    await Future.delayed(const Duration(seconds: 3), () async {
+      await setData();
+      return true;
+    });
+  }
+
+  Future<void> onAddAccount() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    Get.toNamed(AppRoutes.createBankCard);
   }
 }

@@ -34,6 +34,9 @@ class MainController extends GetxController {
   final NotificationFirebaseRepository notificationFirebaseRepository = Get.put(
     NotificationFirebaseRepository(),
   );
+  final BankCardFirebaseRepository bankCardFirebaseRepository = Get.put(
+    BankCardFirebaseRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
