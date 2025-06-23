@@ -46,7 +46,7 @@ extension CurrencyEnumsExtension on CurrencyEnums {
       case CurrencyEnums.USD:
         return Symbols.paid;
       case CurrencyEnums.KHR:
-        return Symbols.unpaved_road;
+        return Symbols.flag;
     }
   }
 

@@ -1,0 +1,123 @@
+[
+  {
+    "name": "ABA Bank",
+    "type": "Commercial Bank",
+    "license_type": "Domestic Commercial Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://ababank.com", 
+    "phone": "+855 23 999 999",
+    "email": "customerservice@ababank.com",
+    "swift_bic": "ABABKHPP",
+    "logo": "https://ababank.com/wp-content/uploads/2022/11/cropped-aba-logo-2022.png" 
+  },
+  {
+    "name": "ACLEDA Bank",
+    "type": "Commercial Bank",
+    "license_type": "Domestic Commercial Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://acledabank.com.kh", 
+    "phone": "+855 23 888 888",
+    "email": "care@acledabank.com.kh",
+    "swift_bic": "ACLAKHPP",
+    "logo": "https://acledabank.com.kh/wp-content/uploads/2022/04/acleda-bank-logo.png" 
+  },
+  {
+    "name": "Cambodia Commercial Bank (CCB)",
+    "type": "Commercial Bank",
+    "license_type": "Domestic Commercial Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://ccb.com.kh", 
+    "phone": "+855 23 222 111",
+    "email": "info@ccb.com.kh",
+    "swift_bic": "CCBAKHPP",
+    "logo": "https://ccb.com.kh/wp-content/uploads/2021/07/ccb-logo.png" 
+  },
+  {
+    "name": "Canadia Bank",
+    "type": "Commercial Bank",
+    "license_type": "Domestic Commercial Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://canadiabank.com.kh", 
+    "phone": "+855 23 722 222",
+    "email": "contactus@canadiabank.com.kh",
+    "swift_bic": "CDBAKHPP",
+    "logo": "https://canadiabank.com.kh/wp-content/uploads/2021/06/logo-cb.png" 
+  },
+  {
+    "name": "Indovina Bank",
+    "type": "Joint Venture Bank",
+    "license_type": "JV Commercial Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://indovinabank.com.kh", 
+    "phone": "+855 23 966 888",
+    "email": "support@indovinabank.com.kh",
+    "swift_bic": "INVBKHPP",
+    "logo": "https://indovinabank.com.kh/wp-content/uploads/2020/05/ivb-logo.png" 
+  },
+  {
+    "name": "Maybank Cambodia",
+    "type": "Subsidiary",
+    "license_type": "Foreign Subsidiary Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://maybank.com.kh", 
+    "phone": "+855 23 977 999",
+    "email": "customer_service@maybank.com.kh",
+    "swift_bic": "MBBEKHPP",
+    "logo": "https://maybank.com.kh/wp-content/uploads/2021/03/maybank-logo.png" 
+  },
+  {
+    "name": "Mega Bank Cambodia",
+    "type": "Subsidiary",
+    "license_type": "Foreign Subsidiary Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://megabank.com.kh", 
+    "phone": "+855 23 988 888",
+    "email": "contact@megabank.com.kh",
+    "swift_bic": "MEGAKHPP",
+    "logo": "https://megabank.com.kh/wp-content/uploads/2022/02/megabank-logo.png" 
+  },
+  {
+    "name": "Prince Bank",
+    "type": "Commercial Bank",
+    "license_type": "Domestic Commercial Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://princebank.com.kh", 
+    "phone": "+855 23 999 888",
+    "email": "service@princebank.com.kh",
+    "swift_bic": "PRBCKHPP",
+    "logo": "https://princebank.com.kh/wp-content/uploads/2022/07/prince-bank-logo.png" 
+  },
+  {
+    "name": "Siam Commercial Bank (Cambodia)",
+    "type": "Subsidiary",
+    "license_type": "Foreign Subsidiary Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://scb.com.kh", 
+    "phone": "+855 23 999 777",
+    "email": "info@scb.com.kh",
+    "swift_bic": "SCBLKHPP",
+    "logo": "https://scb.com.kh/wp-content/uploads/2022/01/scb-logo.png" 
+  },
+  {
+    "name": "Standard Chartered Bank Cambodia",
+    "type": "International Branch",
+    "license_type": "Foreign Branch Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://standardchartered.com.kh", 
+    "phone": "+855 23 999 666",
+    "email": "customercare@sc.com.kh",
+    "swift_bic": "SCBLKHPP",
+    "logo": "https://standardchartered.com.kh/wp-content/uploads/2022/08/sc-logo.png" 
+  },
+  {
+    "name": "Woori Bank Cambodia",
+    "type": "Subsidiary",
+    "license_type": "Foreign Subsidiary Bank",
+    "headquarters": "Phnom Penh, Cambodia",
+    "website": "https://wooribank.com.kh", 
+    "phone": "+855 23 999 555",
+    "email": "cs@wooribank.com.kh",
+    "swift_bic": "WOORIKHM",
+    "logo": "https://wooribank.com.kh/wp-content/uploads/2022/03/woori-logo.png" 
+  }
+]

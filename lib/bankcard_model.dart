@@ -7,37 +7,25 @@ class BankCardModel {
   String get id => _id.value;
   set id(String value) => _id.value = value;
 
-  final _cardNumber = "".obs;
-  String get cardNumber => _cardNumber.value;
-  set cardNumber(String value) => _cardNumber.value = value;
-
-  final _cardHolderName = "".obs;
-  String get cardHolderName => _cardHolderName.value;
-  set cardHolderName(String value) => _cardHolderName.value = value;
-
-  final _expiryDate = "".obs;
-  String get expiryDate => _expiryDate.value;
-  set expiryDate(String value) => _expiryDate.value = value;
-
-  final _cvv = "".obs;
-  String get cvv => _cvv.value;
-  set cvv(String value) => _cvv.value = value;
-
   final _bankName = "".obs;
   String get bankName => _bankName.value;
   set bankName(String value) => _bankName.value = value;
 
-  final _cardType = "".obs;
-  String get cardType => _cardType.value;
-  set cardType(String value) => _cardType.value = value;
+  final _cardType = BankCardEnum.visa.obs;
+  BankCardEnum get cardType => _cardType.value;
+  set cardType(BankCardEnum value) => _cardType.value = value;
 
-  final _cardBrand = "".obs;
-  String get cardBrand => _cardBrand.value;
-  set cardBrand(String value) => _cardBrand.value = value;
+  final _cardBrand = BankCardEnum.visa.obs;
+  BankCardEnum get cardBrand => _cardBrand.value;
+  set cardBrand(BankCardEnum value) => _cardBrand.value = value;
 
-  final _cardImageUrl = "".obs;
-  String get cardImageUrl => _cardImageUrl.value;
-  set cardImageUrl(String value) => _cardImageUrl.value = value;
+  final _balance = 0.0.obs;
+  double get balance => _balance.value;
+  set balance(double value) => _balance.value = value;
+
+  final _currency = CurrencyEnums.USD.obs;
+  CurrencyEnums get currency => _currency.value;
+  set currency(CurrencyEnums value) => _currency.value = value;
 
   final _user = UserModel().obs;
   UserModel get user => _user.value;
@@ -55,64 +43,61 @@ class BankCardModel {
 
   factory BankCardModel.create({
     String? id,
-    required String cardNumber,
-    required String cardHolderName,
-    required String expiryDate,
-    required String cvv,
     required String bankName,
-    required String cardType,
-    required String cardBrand,
-    String? cardImageUrl,
+    required BankCardEnum cardType,
+    required BankCardEnum cardBrand,
+    required double balance,
+    required CurrencyEnums currency,
     required UserModel user,
     DateTime? updatedAt,
   }) {
     return BankCardModel()
       ..id = id ?? Uuid().v8()
-      ..cardNumber = cardNumber
-      ..cardHolderName = cardHolderName
-      ..expiryDate = expiryDate
-      ..cvv = cvv
       ..bankName = bankName
       ..cardType = cardType
       ..cardBrand = cardBrand
-      ..cardImageUrl = cardImageUrl ?? ""
+      ..balance = balance
+      ..currency = currency
       ..user = user
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now();
   }
 
-  static BankCardModel fromJson({required Map<String, dynamic> json}) {
+  static BankCardModel fromJson({required Map<dynamic, dynamic> json}) {
     return BankCardModel()
-      ..id = json['id'] ?? Uuid().v8()
-      ..cardNumber = json['cardNumber'] ?? ""
-      ..cardHolderName = json['cardHolderName'] ?? ""
-      ..expiryDate = json['expiryDate'] ?? ""
-      ..cvv = json['cvv'] ?? ""
-      ..bankName = json['bankName'] ?? ""
-      ..cardType = json['cardType'] ?? ""
-      ..cardBrand = json['cardBrand'] ?? ""
-      ..cardImageUrl = json['cardImageUrl'] ?? ""
-      ..user = UserModel.fromJson(json: json['user'])
+      ..id = json['id'] as String
+      ..bankName = json['bankName'] as String
+      ..cardType = BankCardEnum.values.firstWhere(
+        (e) => e.name == json['cardType'],
+        orElse: () => BankCardEnum.visa,
+      )
+      ..cardBrand = BankCardEnum.values.firstWhere(
+        (e) => e.name == json['cardBrand'],
+        orElse: () => BankCardEnum.visa,
+      )
+      ..balance = (json['balance'] as num?)?.toDouble() ?? 0.0
+      ..currency = CurrencyEnums.values.firstWhere(
+        (e) => e.name == json['currency'],
+        orElse: () => CurrencyEnums.USD,
+      )
+      ..user = UserModel.fromJson(json: json['user'] as Map<dynamic, dynamic>)
       ..createdAt = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(json['createdAt']),
+        int.parse(json['createdAt'] as String),
       )
       ..updatedAt = DateTime.fromMillisecondsSinceEpoch(
-        int.parse(json['updatedAt']),
+        int.parse(json['updatedAt'] as String),
       );
   }
 
   static Map<String, dynamic> toJson({required BankCardModel model}) {
     return {
       'id': model.id,
-      'cardNumber': model.cardNumber,
-      'cardHolderName': model.cardHolderName,
-      'expiryDate': model.expiryDate,
-      'cvv': model.cvv,
       'bankName': model.bankName,
-      'cardType': model.cardType,
-      'cardBrand': model.cardBrand,
-      'cardImageUrl': model.cardImageUrl,
-      'user': model.user,
+      'cardType': model.cardType.name,
+      'cardBrand': model.cardBrand.name,
+      'balance': model.balance,
+      'currency': model.currency.name,
+      'user': UserModel.toJson(model: model.user),
       'createdAt': model.createdAt.millisecondsSinceEpoch.toString(),
       'updatedAt': model.updatedAt.millisecondsSinceEpoch.toString(),
     };

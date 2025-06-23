@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pbma/core.dart';
 
 class AppUtils {
   static Future<void> showLoading() async {
@@ -53,5 +56,9 @@ class AppUtils {
       backgroundColor: Colors.orange,
       colorText: Colors.white,
     );
+  }
+
+  static MaterialColor randomColor() {
+    return Colors.primaries[Random().nextInt(Colors.primaries.length)];
   }
 }

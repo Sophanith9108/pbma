@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
@@ -17,7 +16,7 @@ class AccountScreen extends StatelessWidget {
       () => AppNavigation(
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            controller.onAddAccount();
+            controller.gotoBankCard();
           },
           label: Text("Add Account".tr, style: AppTextStyles.button),
           icon: const Icon(FontAwesomeIcons.circlePlus),

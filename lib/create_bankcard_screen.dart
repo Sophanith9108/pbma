@@ -60,6 +60,135 @@ class CreateBankCardScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              controller: controller.cardTypeController,
+              readOnly: true,
+              onTap: () {
+                controller.onCardTypeSelected();
+              },
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Card Type is required".tr;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: "Card Type".tr,
+                hintText: "Select Card Type".tr,
+                prefixIcon: const Icon(FontAwesomeIcons.creditCard),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    controller.cardTypeController.clear();
+                  },
+                  icon: Icon(FontAwesomeIcons.circleXmark),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.padding),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDimensions.padding),
+            TextFormField(
+              controller: controller.cardBrandController,
+              readOnly: true,
+              onTap: () {
+                controller.onCardBrandSelected();
+              },
+              keyboardType: TextInputType.text,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return "Card Brand is required".tr;
+                }
+                return null;
+              },
+              decoration: InputDecoration(
+                labelText: "Card Brand".tr,
+                hintText: "Select Card Brand".tr,
+                prefixIcon: const Icon(FontAwesomeIcons.creditCard),
+                suffixIcon: IconButton(
+                  onPressed: () {
+                    controller.cardBrandController.clear();
+                  },
+                  icon: Icon(FontAwesomeIcons.circleXmark),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.padding),
+                ),
+              ),
+            ),
+            const SizedBox(height: AppDimensions.padding),
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: TextFormField(
+                    controller: controller.cardBalanceController,
+                    keyboardType: TextInputType.number,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Card Balance is required".tr;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Card Balance".tr,
+                      hintText: "Enter Available Balance".tr,
+                      prefixIcon: const Icon(FontAwesomeIcons.creditCard),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          controller.cardBalanceController.clear();
+                        },
+                        icon: Icon(FontAwesomeIcons.circleXmark),
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.padding,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: AppDimensions.padding),
+                Expanded(
+                  flex: 2,
+                  child: TextFormField(
+                    controller: controller.cardCurrencyController,
+                    readOnly: true,
+                    onTap: () {
+                      controller.onCurrencySelected();
+                    },
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "Currency is required".tr;
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: "Currency".tr,
+                      hintText: "Currency?".tr,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                          AppDimensions.padding,
+                        ),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          controller.cardCurrencyController.clear();
+                        },
+                        icon: Icon(FontAwesomeIcons.circleXmark),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
@@ -67,8 +196,8 @@ class CreateBankCardScreen extends StatelessWidget {
         onPressed: () {
           controller.onAddBankCard();
         },
-        label: Text("Add Card".tr, style: AppTextStyles.button),
-        icon: const Icon(FontAwesomeIcons.creditCard),
+        label: Text("Save Bank".tr, style: AppTextStyles.button),
+        icon: const Icon(FontAwesomeIcons.buildingColumns),
       ),
     );
   }

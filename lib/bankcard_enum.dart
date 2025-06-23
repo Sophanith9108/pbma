@@ -23,7 +23,7 @@ extension BankCardEnumExtension on BankCardEnum {
     }
   }
 
-  String get description {
+  String get type {
     switch (this) {
       case BankCardEnum.visa:
         return 'Visa';
@@ -42,6 +42,44 @@ extension BankCardEnumExtension on BankCardEnum {
     }
   }
 
+  String get brand {
+    switch (this) {
+      case BankCardEnum.visa:
+        return 'Visa';
+      case BankCardEnum.mastercard:
+        return 'MasterCard';
+      case BankCardEnum.amex:
+        return 'American Express';
+      case BankCardEnum.discover:
+        return 'Discover';
+      case BankCardEnum.diners:
+        return 'Diners Club';
+      case BankCardEnum.jcb:
+        return 'JCB';
+      case BankCardEnum.unionPay:
+        return 'UnionPay';
+    }
+  }
+
+  String get description {
+    switch (this) {
+      case BankCardEnum.visa:
+        return 'visa';
+      case BankCardEnum.mastercard:
+        return 'mastercard';
+      case BankCardEnum.amex:
+        return 'amex';
+      case BankCardEnum.discover:
+        return 'discover';
+      case BankCardEnum.diners:
+        return 'diners';
+      case BankCardEnum.jcb:
+        return 'jcb';
+      case BankCardEnum.unionPay:
+        return 'unionPay';
+    }
+  }
+
   IconData get icon {
     switch (this) {
       case BankCardEnum.visa:
@@ -57,8 +95,7 @@ extension BankCardEnumExtension on BankCardEnum {
       case BankCardEnum.jcb:
         return FontAwesomeIcons.ccJcb;
       case BankCardEnum.unionPay:
-        return FontAwesomeIcons
-            .ccVisa; // Placeholder, UnionPay icon not available
+        return FontAwesomeIcons.ccVisa;
     }
   }
 }

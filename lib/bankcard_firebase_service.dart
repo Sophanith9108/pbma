@@ -10,7 +10,7 @@ class BankCardFirebaseService extends AppFirebaseStorageService<BankCardModel> {
   @override
   Future<BankCardModel> create(BankCardModel data) async {
     return await _database
-        .push()
+        .child(data.id)
         .set(BankCardModel.toJson(model: data))
         .then((_) => data)
         .catchError((error) {
@@ -49,10 +49,10 @@ class BankCardFirebaseService extends AppFirebaseStorageService<BankCardModel> {
     return await _database.get().then((snapshot) {
       if (snapshot.exists) {
         final List<BankCardModel> bankCards = [];
-        final data = snapshot.value as Map<String, dynamic>;
+        final data = snapshot.value as Map<dynamic, dynamic>;
         data.forEach((key, value) {
           bankCards.add(
-            BankCardModel.fromJson(json: value as Map<String, dynamic>),
+            BankCardModel.fromJson(json: value as Map<dynamic, dynamic>),
           );
         });
         return bankCards;
