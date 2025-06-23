@@ -100,12 +100,26 @@ class CreateTransactionController extends MainController {
   set selectedPaymentMethod(PaymentMethodEnums value) =>
       _selectedPaymentMethod.value = value;
 
+  final _bankCardController = TextEditingController().obs;
+  TextEditingController get bankCardController => _bankCardController.value;
+  set bankCardController(TextEditingController value) =>
+      _bankCardController.value = value;
+
+  final _selectedBankCard = BankCardModel().obs;
+  BankCardModel get selectedBankCard => _selectedBankCard.value;
+  set selectedBankCard(BankCardModel value) => _selectedBankCard.value = value;
+
+  final _bankCards = <BankCardModel>[].obs;
+  List<BankCardModel> get bankCards => _bankCards;
+  set bankCards(List<BankCardModel> value) => _bankCards.value = value;
+
   late GoogleMapController mapController;
 
   static const double zoomLevel = 12;
 
   @override
   void onInit() {
+    _setData();
     super.onInit();
   }
 
@@ -136,6 +150,7 @@ class CreateTransactionController extends MainController {
       expenseType: selectedExpenseType,
       reason: reasonController.text.trim(),
       paymentMethod: selectedPaymentMethod,
+      bankCard: selectedBankCard,
       isOthersInvolved: isOthersInvolved,
       date: selectedDate,
       time: timeController.text,
@@ -210,6 +225,12 @@ class CreateTransactionController extends MainController {
     await showMapSelectAddress((value) {
       address = value;
       locationController.text = value;
+    });
+  }
+
+  Future<void> _setData() async {
+    await bankCardFirebaseRepository.reads().then((value) {
+      bankCards = value;
     });
   }
 }

@@ -9,6 +9,9 @@ class AccountController extends GetxController {
   final BankCardFirebaseRepository bankCardFirebaseRepository = Get.put(
     BankCardFirebaseRepository(),
   );
+  final UserFirebaseRepository userFirebaseRepository = Get.put(
+    UserFirebaseRepository(),
+  );
 
   final _banks = <Widget>[].obs;
   List<Widget> get banks => _banks;
@@ -28,8 +31,8 @@ class AccountController extends GetxController {
   set selectedPage(int value) => _selectedPage.value = value;
 
   @override
-  void onInit() {
-    setData();
+  void onInit() async {
+    await setData();
     super.onInit();
   }
 
@@ -45,6 +48,9 @@ class AccountController extends GetxController {
 
   Future<void> setData() async {
     await bankCardFirebaseRepository.reads().then((value) {
+      value.sort((a, b) {
+        return b.createdAt.compareTo(a.createdAt);
+      });
       banks =
           value.map((bank) {
             return Card(
@@ -86,7 +92,7 @@ class AccountController extends GetxController {
                         child: IconButton(
                           onPressed: () async {
                             await Future.delayed(Duration(milliseconds: 300));
-                            _handleSettingOptions();
+                            _handleSettingOptions(bankCard: bank);
                           },
                           icon: Icon(
                             FontAwesomeIcons.ellipsisVertical,
@@ -179,7 +185,7 @@ class AccountController extends GetxController {
                   child: IconButton(
                     onPressed: () async {
                       await Future.delayed(Duration(milliseconds: 300));
-                      _handleSettingOptions();
+                      // _handleSettingOptions(bankCard: );
                     },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
@@ -265,7 +271,7 @@ class AccountController extends GetxController {
                   child: IconButton(
                     onPressed: () async {
                       await Future.delayed(Duration(milliseconds: 300));
-                      _handleSettingOptions();
+                      // _handleSettingOptions(bankCard: );
                     },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
@@ -351,7 +357,7 @@ class AccountController extends GetxController {
                   child: IconButton(
                     onPressed: () async {
                       await Future.delayed(Duration(milliseconds: 300));
-                      _handleSettingOptions();
+                      // _handleSettingOptions(bankCard: );
                     },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
@@ -437,7 +443,7 @@ class AccountController extends GetxController {
                   child: IconButton(
                     onPressed: () async {
                       await Future.delayed(Duration(milliseconds: 300));
-                      _handleSettingOptions();
+                      // _handleSettingOptions(bankCard: );
                     },
                     icon: Icon(
                       FontAwesomeIcons.ellipsisVertical,
@@ -482,7 +488,7 @@ class AccountController extends GetxController {
     ];
   }
 
-  void _handleSettingOptions() {
+  void _handleSettingOptions({required BankCardModel bankCard}) {
     showModalBottomSheet(
       context: Get.context!,
       showDragHandle: true,
@@ -495,12 +501,10 @@ class AccountController extends GetxController {
         return SafeArea(
           child: ListView(
             shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.all(AppDimensions.padding),
             children: [
               ListTile(
                 leading: Icon(FontAwesomeIcons.pen, color: Colors.blue),
-                title: Text('Edit'.tr),
+                title: Text('Edit'.tr, style: AppTextStyles.title),
                 onTap: () async {
                   await Future.delayed(Duration(milliseconds: 300));
                   Get.back();
@@ -508,10 +512,12 @@ class AccountController extends GetxController {
               ),
               ListTile(
                 leading: Icon(FontAwesomeIcons.trash, color: Colors.red),
-                title: Text('Delete'.tr),
+                title: Text('Delete'.tr, style: AppTextStyles.title),
                 onTap: () async {
                   await Future.delayed(Duration(milliseconds: 300));
                   Get.back();
+
+                  _showDeleteConfirmation(bankCard: bankCard);
                 },
               ),
             ],
@@ -531,7 +537,7 @@ class AccountController extends GetxController {
   }
 
   void onPageScrolled(double? value) {
-    selectedPage = value!.toInt();
+    selectedPage = value?.toInt() ?? 0;
   }
 
   Future<void> onRefreshing() async {
@@ -543,10 +549,64 @@ class AccountController extends GetxController {
 
   Future<void> gotoBankCard() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    Get.toNamed(AppRoutes.createBankCard)?.then((value) {
+    Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
       if (value != null && value) {
-        setData();
+        await setData();
+        if (banks.isNotEmpty && selectedPage > 1) {
+          selectedPage = 0;
+          carouselController.animateToPage(selectedPage);
+        }
       }
+    });
+  }
+
+  Future<void> _showDeleteConfirmation({
+    required BankCardModel bankCard,
+  }) async {
+    await Get.dialog(
+      AlertDialog(
+        title: Text('Delete Confirmation'.tr, style: AppTextStyles.header1),
+        content: Text.rich(
+          TextSpan(
+            text: 'Are you sure you want to delete'.tr,
+            style: AppTextStyles.value,
+            children: [
+              TextSpan(text: " "),
+              TextSpan(
+                text: bankCard.bankName.toUpperCase(),
+                style: AppTextStyles.value.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(text: "?"),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Cancel'.tr, style: AppTextStyles.button),
+          ),
+          TextButton(
+            onPressed: () {
+              Get.back();
+              _handleDeleteBankCard(bankCard: bankCard);
+            },
+            child: Text('Delete'.tr, style: AppTextStyles.button),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleDeleteBankCard({required BankCardModel bankCard}) async {
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3), () async {
+      await bankCardFirebaseRepository.delete(bankCard.id);
+
+      await setData();
+
+      AppUtils.hideLoading();
     });
   }
 }

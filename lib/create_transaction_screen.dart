@@ -287,6 +287,72 @@ class CreateTransactionScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppDimensions.padding),
+              TextFormField(
+                controller: controller.bankCardController,
+                readOnly: true,
+                onTap: () {
+                  showModalBottomSheet(
+                    context: Get.context!,
+                    showDragHandle: true,
+                    useSafeArea: true,
+                    isScrollControlled: true,
+                    isDismissible: true,
+                    builder: (_) {
+                      return ListView(
+                        shrinkWrap: true,
+                        children:
+                            controller.bankCards.map((element) {
+                              return ListTile(
+                                leading: Icon(element.cardBrand.icon),
+                                title: Text(
+                                  element.bankName,
+                                  style: AppTextStyles.title,
+                                ),
+                                subtitle: Text(
+                                  element.cardType.name,
+                                  style: AppTextStyles.subtitle,
+                                ),
+                                onTap: () async {
+                                  await Future.delayed(
+                                    const Duration(milliseconds: 300),
+                                  );
+                                  controller.bankCardController.text =
+                                      element.bankName;
+                                  controller.selectedBankCard = element;
+                                  Get.back();
+                                },
+                              );
+                            }).toList(),
+                      );
+                    },
+                  );
+                },
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Which Banks?".tr;
+                  }
+                  return null;
+                },
+                decoration: InputDecoration(
+                  labelText: "Which Banks?".tr,
+                  labelStyle: AppTextStyles.label,
+                  hintText: "Which Banks?".tr,
+                  hintStyle: AppTextStyles.hint,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(
+                      color: AppColors.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: AppDimensions.padding),
               Row(
                 children: [
                   Expanded(

@@ -86,6 +86,10 @@ class TransactionModel extends Equatable {
   set transactionType(TransactionTypeEnums value) =>
       _transactionType.value = value;
 
+  final _bankCard = BankCardModel().obs;
+  BankCardModel get bankCard => _bankCard.value;
+  set bankCard(BankCardModel value) => _bankCard.value = value;
+
   final _transactionBg = Colors.lightBlue.obs;
   MaterialColor get transactionBg => _transactionBg.value;
   set transactionBg(MaterialColor value) => _transactionBg.value = value;
@@ -99,6 +103,7 @@ class TransactionModel extends Equatable {
     required ExpenseTypeEnums expenseType,
     required String reason,
     required PaymentMethodEnums paymentMethod,
+    required BankCardModel bankCard,
     required DateTime date,
     required String time,
     required String location,
@@ -120,6 +125,7 @@ class TransactionModel extends Equatable {
     transaction.expenseType = expenseType;
     transaction.reason = reason;
     transaction.paymentMethod = paymentMethod;
+    transaction.bankCard = bankCard;
     transaction.date = date;
     transaction.time = time;
     transaction.location = location;
@@ -159,6 +165,7 @@ class TransactionModel extends Equatable {
       "amount": model.amount.toString(),
       "currency": model.currency.name.toString(),
       "expenseType": model.expenseType.name.toString(),
+      "bankCard": BankCardModel.toJson(model: model.bankCard),
       "reason": model.reason.toString(),
       "paymentMethod": model.paymentMethod.name.toString(),
       "isOthersInvolved": model.isOthersInvolved.toString(),
@@ -193,6 +200,7 @@ class TransactionModel extends Equatable {
       ..paymentMethod = PaymentMethodEnums.values.firstWhere(
         (e) => e.name == json['paymentMethod'].toString(),
       )
+      ..bankCard = BankCardModel.fromJson(json: json['bankCard'])
       ..isOthersInvolved = json['isOthersInvolved'].toString() == 'true'
       ..date = DateTime.tryParse(json['date'].toString()) ?? DateTime.now()
       ..time = json['time'].toString()

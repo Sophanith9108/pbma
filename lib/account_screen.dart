@@ -33,23 +33,49 @@ class AccountScreen extends StatelessWidget {
             children: [
               Text("Banks".tr, style: AppTextStyles.header1),
               const SizedBox(height: 8),
-              CarouselSlider(
-                items: controller.banks,
-                carouselController: controller.carouselController,
-                options: CarouselOptions(
-                  height: 200,
-                  aspectRatio: 16 / 9,
-                  viewportFraction: 1,
-                  initialPage: controller.selectedPage,
-                  enableInfiniteScroll: false,
-                  onPageChanged:
-                      (index, reason) =>
-                          controller.onPageChanged(index, reason),
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  onScrolled: (value) => controller.onPageScrolled(value),
-                ),
-              ),
+              controller.banks.isEmpty
+                  ? Card(
+                    elevation: AppDimensions.elevation,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.borderRadius,
+                      ),
+                    ),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.borderRadius,
+                      ),
+                      onTap: () => controller.gotoBankCard(),
+                      child: SizedBox(
+                        height: Get.width * .5,
+                        child: Center(
+                          child: Text(
+                            "Add your bank accounts".tr,
+                            style: AppTextStyles.label,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                  : CarouselSlider(
+                    items: controller.banks,
+                    carouselController: controller.carouselController,
+                    options: CarouselOptions(
+                      height: Get.width * .5,
+                      aspectRatio: 16 / 9,
+                      viewportFraction: 1,
+                      initialPage: controller.selectedPage,
+                      enableInfiniteScroll: false,
+                      onPageChanged:
+                          (index, reason) =>
+                              controller.onPageChanged(index, reason),
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      onScrolled: (value) {
+                        controller.onPageScrolled(value);
+                      },
+                    ),
+                  ),
               const SizedBox(height: 8),
               Center(
                 child: AnimatedSmoothIndicator(
