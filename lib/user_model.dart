@@ -48,6 +48,14 @@ class UserModel extends Equatable {
   bool get isLogin => _isLogin.value;
   set isLogin(bool value) => _isLogin.value = value;
 
+  final _deviceId = ''.obs;
+  String get deviceId => _deviceId.value;
+  set deviceId(String value) => _deviceId.value = value;
+
+  final _deviceToken = ''.obs;
+  String get deviceToken => _deviceToken.value;
+  set deviceToken(String value) => _deviceToken.value = value;
+
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -65,6 +73,8 @@ class UserModel extends Equatable {
     required String phone,
     required String password,
     required String address,
+    required String deviceId,
+    required String deviceToken,
     String? profilePicture,
     String? dateOfBirth,
     GenderEnums? gender,
@@ -82,6 +92,8 @@ class UserModel extends Equatable {
       ..address = address
       ..dateOfBirth = dateOfBirth ?? ""
       ..gender = gender ?? GenderEnums.other
+      ..deviceId = deviceId
+      ..deviceToken = deviceToken
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now()
       ..role = role ?? UserRoleEnums.user
@@ -103,6 +115,8 @@ class UserModel extends Equatable {
       "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
       "role": model.role.name.toString(),
       "isLogin": model.isLogin.toString(),
+      "deviceId": model.deviceId.toString(),
+      "deviceToken": model.deviceToken.toString(),
     };
   }
 
@@ -120,6 +134,8 @@ class UserModel extends Equatable {
       ..createdAt = DateTime.tryParse(json['createdAt']) ?? DateTime.now()
       ..updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now()
       ..role = UserRoleEnums.values.byName(json['role'])
+      ..deviceId = json['deviceId']
+      ..deviceToken = json['deviceToken']
       ..isLogin = json['isLogin'] == 'true';
   }
 
@@ -155,5 +171,7 @@ class UserModel extends Equatable {
     updatedAt,
     role,
     isLogin,
+    deviceId,
+    deviceToken,
   ];
 }

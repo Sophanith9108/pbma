@@ -77,16 +77,19 @@ class AccountScreen extends StatelessWidget {
                     ),
                   ),
               const SizedBox(height: 8),
-              Center(
-                child: AnimatedSmoothIndicator(
-                  activeIndex: controller.selectedPage,
-                  count: controller.banks.length,
-                  onDotClicked: (index) => controller.onDotClicked(index),
-                  effect: WormEffect(
-                    dotHeight: 8,
-                    dotWidth: 8,
-                    activeDotColor: AppColors.primary,
-                    dotColor: Colors.grey.withValues(alpha: .5),
+              Visibility(
+                visible: controller.banks.isNotEmpty,
+                child: Center(
+                  child: AnimatedSmoothIndicator(
+                    activeIndex: controller.selectedPage,
+                    count: controller.banks.length,
+                    onDotClicked: (index) => controller.onDotClicked(index),
+                    effect: WormEffect(
+                      dotHeight: 8,
+                      dotWidth: 8,
+                      activeDotColor: AppColors.primary,
+                      dotColor: Colors.grey.withValues(alpha: .5),
+                    ),
                   ),
                 ),
               ),

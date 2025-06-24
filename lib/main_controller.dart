@@ -74,10 +74,18 @@ class MainController extends GetxController {
 
   @override
   void onInit() async {
-    await checkIfUserRegistered().then((_) async {
-      await checkIfUserLogin();
-    });
+    await setData();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
   }
 
   Future onTabSelected(int index) async {
@@ -265,25 +273,7 @@ class MainController extends GetxController {
     }
   }
 
-  Future<void> checkIfUserRegistered() async {
-    var users = await userFirebaseRepository.gets() ?? [];
-    if (users.isNotEmpty) {
-      user = users.first;
-      isRegistered = users.isNotEmpty;
-    }
-  }
-
-  Future<void> checkIfUserLogin() async {
-    UserModel? currentUser = await userFirebaseRepository.get(user.id);
-    isLogin = currentUser != null;
-  }
-
   Future<void> gotoProfile() async {
-    AppUtils.showLoading();
-    await checkIfUserRegistered();
-    await checkIfUserLogin();
-    AppUtils.hideLoading();
-
     if (!isRegistered) {
       Get.offAllNamed(AppRoutes.register)?.then((_) {
         setData();

@@ -75,6 +75,8 @@ class LoginController extends MainController {
         dateOfBirth: currentUser.dateOfBirth,
         updatedAt: DateTime.now(),
         isLogin: true,
+        deviceId: currentUser.deviceId,
+        deviceToken: currentUser.deviceToken,
       );
 
       userRepository.update(user).then((response) async {
@@ -87,12 +89,9 @@ class LoginController extends MainController {
   }
 
   Future<void> _onClear() async {
+    formKey.currentState?.reset();
     phoneController.clear();
     passwordController.clear();
-    formKey.currentState!.reset();
-
-    phoneController.text = "";
-    passwordController.text = "";
   }
 
   Future<void> gotoForgotPassword() async {

@@ -103,6 +103,9 @@ class RegisterController extends MainController {
               ? base64Encode(profile.readAsBytesSync())
               : "";
 
+      String deviceId = await AppUtils.getDeviceId();
+      String deviceToken = await AppUtils.getDeviceToken();
+
       var user = UserModel.create(
         name: nameController.text.trim(),
         email: emailController.text.trim(),
@@ -113,6 +116,8 @@ class RegisterController extends MainController {
         dateOfBirth: DateTime.now().format(pattern: AppConstants.dateFormat),
         gender: selectedGender,
         role: UserRoleEnums.user,
+        deviceId: deviceId,
+        deviceToken: deviceToken,
         isLogin: true,
       );
 

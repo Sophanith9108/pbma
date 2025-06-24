@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -59,5 +60,29 @@ class AppUtils {
 
   static MaterialColor randomColor() {
     return Colors.primaries[Random().nextInt(Colors.primaries.length)];
+  }
+
+  static Future<String> getDeviceId() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor ?? '';
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id;
+    }
+    return '';
+  }
+
+  static Future<String> getDeviceToken() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return "${iosInfo.identifierForVendor}.${DateTime.now().millisecondsSinceEpoch}";
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return "${androidInfo.id}.${DateTime.now().millisecondsSinceEpoch}";
+    }
+    return '';
   }
 }

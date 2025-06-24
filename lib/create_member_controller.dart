@@ -44,6 +44,10 @@ class CreateMemberController extends MainController {
       phone: phoneController.text.trim(),
       password: "",
       address: addressController.text.trim(),
+
+      profilePicture: profile.path.isNotEmpty ? profile.path : "",
+      deviceId: '',
+      deviceToken: '',
     );
 
     AppUtils.showLoading();
