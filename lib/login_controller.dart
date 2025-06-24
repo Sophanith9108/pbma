@@ -42,6 +42,53 @@ class LoginController extends MainController {
     if (formKey.currentState!.validate()) {
       FocusScope.of(Get.context!).unfocus();
 
+      AppUtils.showLoading();
+      await userFirebaseRepository.gets().then((users) async {
+        AppUtils.hideLoading();
+
+        if (users == null || users.isEmpty) {
+          showDialog(
+            context: Get.context!,
+            builder: (_) {
+              return AlertDialog(
+                title: Text('Attention!'.tr),
+                content: Text(
+                  'There is no user found, Do you want to register?'.tr,
+                  style: AppTextStyles.title,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Get.back(),
+                    child: Text('Cancel'.tr, style: AppTextStyles.button),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Get.offAllNamed(AppRoutes.register);
+                      Get.back();
+                    },
+                    child: Text('Ok'.tr, style: AppTextStyles.budget),
+                  ),
+                ],
+              );
+            },
+          );
+          return;
+        }
+
+        String phone = phoneController.text.trim();
+        if (users.firstWhereOrNull((user) => user.phone == phone) == null) {
+          AppUtils.showError('User not found with this phone number'.tr);
+          return;
+        }
+
+        String password = passwordController.text.trim();
+        if (users.firstWhereOrNull((user) => user.password == password) ==
+            null) {
+          AppUtils.showError('Wrong password'.tr);
+          return;
+        }
+      });
+
       var users = await userRepository.gets() ?? [];
       if (users.isEmpty) {
         AppUtils.showWarning("User is not yet register!".tr);
