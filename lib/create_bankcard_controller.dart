@@ -22,18 +22,21 @@ class CreateBankCardController extends MainController {
   set cardTypeController(TextEditingController value) =>
       _cardTypeController.value = value;
 
-  final _selectedCardType = BankCardEnum.visa.obs;
+  final _selectedCardType = BankCardEnum.debit.obs;
   BankCardEnum get selectedCardType => _selectedCardType.value;
   set selectedCardType(BankCardEnum value) => _selectedCardType.value = value;
 
-  final _cardBrandController = TextEditingController().obs;
-  TextEditingController get cardBrandController => _cardBrandController.value;
-  set cardBrandController(TextEditingController value) =>
-      _cardBrandController.value = value;
+  final _paymentNetworkController = TextEditingController().obs;
+  TextEditingController get paymentNetworkController =>
+      _paymentNetworkController.value;
+  set paymentNetworkController(TextEditingController value) =>
+      _paymentNetworkController.value = value;
 
-  final _selectedCardBrand = BankCardEnum.visa.obs;
-  BankCardEnum get selectedCardBrand => _selectedCardBrand.value;
-  set selectedCardBrand(BankCardEnum value) => _selectedCardBrand.value = value;
+  final _selectedPaymentNetwork = PaymentNetworkEnum.visa.obs;
+  PaymentNetworkEnum get selectedPaymentNetwork =>
+      _selectedPaymentNetwork.value;
+  set selectedPaymentNetwork(PaymentNetworkEnum value) =>
+      _selectedPaymentNetwork.value = value;
 
   final _cardBalanceController = TextEditingController().obs;
   TextEditingController get cardBalanceController =>
@@ -81,7 +84,7 @@ class CreateBankCardController extends MainController {
     final bankCard = BankCardModel.create(
       bankName: bankNameController.text.trim(),
       cardType: selectedCardType,
-      cardBrand: selectedCardBrand,
+      paymentNetwork: selectedPaymentNetwork,
       balance: double.tryParse(cardBalanceController.text.trim()) ?? 0.0,
       currency: selectedCurrency,
       user: user,
@@ -104,7 +107,7 @@ class CreateBankCardController extends MainController {
     cardBalanceController.clear();
     cardCurrencyController.clear();
     cardTypeController.clear();
-    cardBrandController.clear();
+    paymentNetworkController.clear();
   }
 
   Future<void> onBankSelected() async {
@@ -232,18 +235,18 @@ class CreateBankCardController extends MainController {
         return ListView(
           shrinkWrap: true,
           children:
-              BankCardEnum.values.map((cardBrand) {
+              PaymentNetworkEnum.values.map((network) {
                 return ListTile(
-                  leading: Icon(cardBrand.icon, size: 18),
-                  title: Text(cardBrand.name.tr, style: AppTextStyles.title),
+                  leading: Icon(network.icon, size: 18),
+                  title: Text(network.name.tr, style: AppTextStyles.title),
                   subtitle: Text(
-                    cardBrand.description.tr,
+                    network.description.tr,
                     style: AppTextStyles.subtitle,
                   ),
                   onTap: () async {
                     await Future.delayed(const Duration(milliseconds: 300));
-                    selectedCardBrand = cardBrand;
-                    cardBrandController.text = cardBrand.name;
+                    selectedPaymentNetwork = network;
+                    paymentNetworkController.text = network.name;
                     Get.back();
                   },
                 );

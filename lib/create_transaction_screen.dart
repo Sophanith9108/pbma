@@ -303,7 +303,7 @@ class CreateTransactionScreen extends StatelessWidget {
                         children:
                             controller.bankCards.map((element) {
                               return ListTile(
-                                leading: Icon(element.cardBrand.icon),
+                                leading: Icon(element.paymentNetwork.icon),
                                 title: Text(
                                   element.bankName,
                                   style: AppTextStyles.title,

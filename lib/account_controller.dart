@@ -126,7 +126,7 @@ class AccountController extends GetxController {
                       Positioned(
                         right: 10,
                         bottom: 10,
-                        child: Icon(bank.cardBrand.icon),
+                        child: Icon(bank.paymentNetwork.icon),
                       ),
                     ],
                   ),

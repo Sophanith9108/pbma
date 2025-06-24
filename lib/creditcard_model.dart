@@ -1,19 +1,10 @@
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
-import 'package:uuid/uuid.dart';
 
-class BankCardModel {
-  final _id = Uuid().v8().obs;
+class CreditCardModel {
+  final _id = "".obs;
   String get id => _id.value;
   set id(String value) => _id.value = value;
-
-  final _bankName = "".obs;
-  String get bankName => _bankName.value;
-  set bankName(String value) => _bankName.value = value;
-
-  final _cardType = BankCardEnum.debit.obs;
-  BankCardEnum get cardType => _cardType.value;
-  set cardType(BankCardEnum value) => _cardType.value = value;
 
   final _paymentNetwork = PaymentNetworkEnum.visa.obs;
   PaymentNetworkEnum get paymentNetwork => _paymentNetwork.value;
@@ -31,6 +22,10 @@ class BankCardModel {
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
 
+  final _dueDate = DateTime.now().obs;
+  DateTime get dueDate => _dueDate.value;
+  set dueDate(DateTime value) => _dueDate.value = value;
+
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -39,40 +34,13 @@ class BankCardModel {
   DateTime get updatedAt => _updatedAt.value;
   set updatedAt(DateTime value) => _updatedAt.value = value;
 
-  BankCardModel();
+  CreditCardModel();
 
-  factory BankCardModel.create({
-    String? id,
-    required String bankName,
-    required BankCardEnum cardType,
-    required PaymentNetworkEnum paymentNetwork,
-    required double balance,
-    required CurrencyEnums currency,
-    required UserModel user,
-    DateTime? updatedAt,
-  }) {
-    return BankCardModel()
-      ..id = id ?? Uuid().v8()
-      ..bankName = bankName
-      ..cardType = cardType
-      ..paymentNetwork = paymentNetwork
-      ..balance = balance
-      ..currency = currency
-      ..user = user
-      ..createdAt = DateTime.now()
-      ..updatedAt = updatedAt ?? DateTime.now();
-  }
-
-  static BankCardModel fromJson({required Map<dynamic, dynamic> json}) {
-    return BankCardModel()
+  static CreditCardModel fromJson({required Map<dynamic, dynamic> json}) {
+    return CreditCardModel()
       ..id = json['id'] as String
-      ..bankName = json['bankName'] as String
-      ..cardType = BankCardEnum.values.firstWhere(
-        (e) => e.name == json['cardType'],
-        orElse: () => BankCardEnum.debit,
-      )
       ..paymentNetwork = PaymentNetworkEnum.values.firstWhere(
-        (e) => e.name == json['cardBrand'],
+        (e) => e.name == json['paymentNetwork'],
         orElse: () => PaymentNetworkEnum.visa,
       )
       ..balance = (json['balance'] as num?)?.toDouble() ?? 0.0
@@ -81,6 +49,9 @@ class BankCardModel {
         orElse: () => CurrencyEnums.USD,
       )
       ..user = UserModel.fromJson(json: json['user'] as Map<dynamic, dynamic>)
+      ..dueDate = DateTime.fromMillisecondsSinceEpoch(
+        int.parse(json['dueDate'] as String),
+      )
       ..createdAt = DateTime.fromMillisecondsSinceEpoch(
         int.parse(json['createdAt'] as String),
       )
@@ -89,15 +60,14 @@ class BankCardModel {
       );
   }
 
-  static Map<String, dynamic> toJson({required BankCardModel model}) {
+  static Map<String, dynamic> toJson({required CreditCardModel model}) {
     return {
       'id': model.id,
-      'bankName': model.bankName,
-      'cardType': model.cardType.name,
       'paymentNetwork': model.paymentNetwork.name,
-      'balance': model.balance,
+      'balance': model.balance.toString(),
       'currency': model.currency.name,
       'user': UserModel.toJson(model: model.user),
+      'dueDate': model.dueDate.millisecondsSinceEpoch.toString(),
       'createdAt': model.createdAt.millisecondsSinceEpoch.toString(),
       'updatedAt': model.updatedAt.millisecondsSinceEpoch.toString(),
     };

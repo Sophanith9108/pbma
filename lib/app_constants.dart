@@ -44,4 +44,5 @@ class AppFirebaseReference {
   static const String budget = "budgets";
   static const String image = "images";
   static const String bankCard = "bankcards";
+  static const String creditCard = "creditcards";
 }

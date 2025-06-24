@@ -1,101 +1,77 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum BankCardEnum { visa, mastercard, amex, discover, diners, jcb, unionPay }
+enum BankCardEnum {
+  debit,
+  credit,
+  prepaid,
+  charge,
+  atm,
+  virtual,
+  business,
+  securedCredit,
+}
 
 extension BankCardEnumExtension on BankCardEnum {
   String get name {
     switch (this) {
-      case BankCardEnum.visa:
-        return 'Visa';
-      case BankCardEnum.mastercard:
-        return 'MasterCard';
-      case BankCardEnum.amex:
-        return 'American Express';
-      case BankCardEnum.discover:
-        return 'Discover';
-      case BankCardEnum.diners:
-        return 'Diners Club';
-      case BankCardEnum.jcb:
-        return 'JCB';
-      case BankCardEnum.unionPay:
-        return 'UnionPay';
-    }
-  }
-
-  String get type {
-    switch (this) {
-      case BankCardEnum.visa:
-        return 'Visa';
-      case BankCardEnum.mastercard:
-        return 'MasterCard';
-      case BankCardEnum.amex:
-        return 'American Express';
-      case BankCardEnum.discover:
-        return 'Discover';
-      case BankCardEnum.diners:
-        return 'Diners Club';
-      case BankCardEnum.jcb:
-        return 'JCB';
-      case BankCardEnum.unionPay:
-        return 'UnionPay';
-    }
-  }
-
-  String get brand {
-    switch (this) {
-      case BankCardEnum.visa:
-        return 'Visa';
-      case BankCardEnum.mastercard:
-        return 'MasterCard';
-      case BankCardEnum.amex:
-        return 'American Express';
-      case BankCardEnum.discover:
-        return 'Discover';
-      case BankCardEnum.diners:
-        return 'Diners Club';
-      case BankCardEnum.jcb:
-        return 'JCB';
-      case BankCardEnum.unionPay:
-        return 'UnionPay';
+      case BankCardEnum.debit:
+        return "Debit Card";
+      case BankCardEnum.credit:
+        return "Credit Card";
+      case BankCardEnum.prepaid:
+        return "Prepaid Card";
+      case BankCardEnum.charge:
+        return "Charge Card";
+      case BankCardEnum.atm:
+        return "ATM Card";
+      case BankCardEnum.virtual:
+        return "Virtual Card";
+      case BankCardEnum.business:
+        return "Business Card";
+      case BankCardEnum.securedCredit:
+        return "Secured Credit Card";
     }
   }
 
   String get description {
     switch (this) {
-      case BankCardEnum.visa:
-        return 'visa';
-      case BankCardEnum.mastercard:
-        return 'mastercard';
-      case BankCardEnum.amex:
-        return 'amex';
-      case BankCardEnum.discover:
-        return 'discover';
-      case BankCardEnum.diners:
-        return 'diners';
-      case BankCardEnum.jcb:
-        return 'jcb';
-      case BankCardEnum.unionPay:
-        return 'unionPay';
+      case BankCardEnum.debit:
+        return "Debit Card Description";
+      case BankCardEnum.credit:
+        return "Credit Card Description";
+      case BankCardEnum.prepaid:
+        return "Prepaid Card Description";
+      case BankCardEnum.charge:
+        return "Charge Card Description";
+      case BankCardEnum.atm:
+        return "ATM Card Description";
+      case BankCardEnum.virtual:
+        return "Virtual Card Description";
+      case BankCardEnum.business:
+        return "Business Card Description";
+      case BankCardEnum.securedCredit:
+        return "Secured Credit Card Description";
     }
   }
 
   IconData get icon {
     switch (this) {
-      case BankCardEnum.visa:
-        return FontAwesomeIcons.ccVisa;
-      case BankCardEnum.mastercard:
-        return FontAwesomeIcons.ccMastercard;
-      case BankCardEnum.amex:
-        return FontAwesomeIcons.ccAmex;
-      case BankCardEnum.discover:
-        return FontAwesomeIcons.ccDiscover;
-      case BankCardEnum.diners:
-        return FontAwesomeIcons.ccDinersClub;
-      case BankCardEnum.jcb:
-        return FontAwesomeIcons.ccJcb;
-      case BankCardEnum.unionPay:
-        return FontAwesomeIcons.ccVisa;
+      case BankCardEnum.debit:
+        return Icons.credit_card;
+      case BankCardEnum.credit:
+        return Icons.credit_card;
+      case BankCardEnum.prepaid:
+        return Icons.card_giftcard;
+      case BankCardEnum.charge:
+        return Icons.account_balance_wallet;
+      case BankCardEnum.atm:
+        return Icons.atm;
+      case BankCardEnum.virtual:
+        return Icons.computer;
+      case BankCardEnum.business:
+        return Icons.business;
+      case BankCardEnum.securedCredit:
+        return Icons.lock;
     }
   }
 }
