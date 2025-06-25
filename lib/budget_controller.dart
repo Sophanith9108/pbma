@@ -29,7 +29,7 @@ class BudgetController extends GetxController {
   }
 
   Future<void> setData() async {
-    budgets = await budgetFirebaseRepository.gets() ?? [];
+    budgets = await budgetFirebaseRepository.reads();
   }
 
   Future<void> onRefreshing() async {

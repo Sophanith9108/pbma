@@ -51,7 +51,7 @@ class CreateMemberController extends MainController {
     );
 
     AppUtils.showLoading();
-    await memberFirebaseRepository.save(member);
+    await memberFirebaseRepository.create(member);
     await memberRepository.save(member).then((response) async {
       await Future.delayed(const Duration(seconds: 3));
       AppUtils.hideLoading();

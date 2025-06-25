@@ -1,31 +1,42 @@
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
-class BudgetFirebaseRepository extends AppRemoteRepository<BudgetModel> {
+class BudgetFirebaseRepository
+    extends AppFirebaseStorageRepository<BudgetModel> {
   final BudgetFirebaseService _service = Get.put(BudgetFirebaseService());
 
   @override
-  Future<void> delete(String key) async {
-    return _service.delete(key);
+  Future<BudgetModel> create(BudgetModel data) async {
+    return await _service.create(data).catchError((error) {
+      throw Exception("Failed to create budget: $error");
+    });
   }
 
   @override
-  Future<BudgetModel> get(String key) async {
-    return _service.read(key);
+  Future<void> delete(String id) async {
+    return await _service.delete(id).catchError((error) {
+      throw Exception("Failed to delete budget: $error");
+    });
   }
 
   @override
-  Future<List<BudgetModel>?> gets() async {
-    return _service.reads();
+  Future<BudgetModel> read(String id) async {
+    return await _service.read(id).catchError((error) {
+      throw Exception("Failed to read budget: $error");
+    });
   }
 
   @override
-  Future<void> save(BudgetModel value) async {
-    return _service.add(value);
+  Future<List<BudgetModel>> reads() async {
+    return await _service.reads().catchError((error) {
+      throw Exception("Failed to read budgets: $error");
+    });
   }
 
   @override
-  Future<void> update(BudgetModel value) async {
-    return _service.update(value);
+  Future<BudgetModel> update(BudgetModel data) async {
+    return await _service.update(data).catchError((error) {
+      throw Exception("Failed to update budget: $error");
+    });
   }
 }

@@ -43,10 +43,10 @@ class LoginController extends MainController {
       FocusScope.of(Get.context!).unfocus();
 
       AppUtils.showLoading();
-      await userFirebaseRepository.gets().then((users) async {
+      await userFirebaseRepository.reads().then((users) async {
         AppUtils.hideLoading();
 
-        if (users == null || users.isEmpty) {
+        if (users.isEmpty) {
           showDialog(
             context: Get.context!,
             builder: (_) {

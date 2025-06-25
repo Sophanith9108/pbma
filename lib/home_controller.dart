@@ -96,16 +96,14 @@ class HomeController extends GetxController {
   }
 
   Future<void> calculateTotalAmount() async {
-    var transactions = await transactionFirebaseRepository.gets();
+    var transactions = await transactionFirebaseRepository.reads();
 
     currentAmount = 0.0;
 
-    if (transactions != null) {
-      for (var transaction in transactions) {
-        if (transaction.date.isAfter(startDate.add(Duration(days: -1))) &&
-            transaction.date.isBefore(endDate.add(Duration(days: 1)))) {
-          currentAmount += transaction.amount;
-        }
+    for (var transaction in transactions) {
+      if (transaction.date.isAfter(startDate.add(Duration(days: -1))) &&
+          transaction.date.isBefore(endDate.add(Duration(days: 1)))) {
+        currentAmount += transaction.amount;
       }
     }
 

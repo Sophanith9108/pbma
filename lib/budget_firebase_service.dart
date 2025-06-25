@@ -1,50 +1,76 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:pbma/core.dart';
 
-class BudgetFirebaseService extends AppRemoteService<BudgetModel> {
+class BudgetFirebaseService extends AppFirebaseStorageService<BudgetModel> {
   final DatabaseReference _database = FirebaseDatabase.instance
       .ref()
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.budget);
 
   @override
-  Future<void> add(BudgetModel value) async {
-    return _database.child(value.id).set(BudgetModel.toJson(model: value));
+  Future<BudgetModel> create(BudgetModel data) async {
+    return await _database
+        .push()
+        .child(data.id)
+        .set(BudgetModel.toJson(model: data))
+        .then((_) => data)
+        .catchError((error) {
+          throw Exception("Failed to create budget: $error");
+        });
   }
 
   @override
-  Future<void> delete(String key) async {
-    return _database.child(key).remove();
+  Future<void> delete(String id) async {
+    return await _database.child(id).remove().catchError((error) {
+      throw Exception("Failed to delete budget: $error");
+    });
   }
 
   @override
-  Future<BudgetModel> read(String key) async {
-    return _database
-        .child(key)
+  Future<BudgetModel> read(String id) async {
+    return await _database
+        .child(id)
         .get()
-        .then(
-          (snapshot) => BudgetModel.fromJson(
-            json: snapshot.value as Map<dynamic, dynamic>,
-          ),
-        );
+        .then((snapshot) {
+          if (snapshot.exists) {
+            return BudgetModel.fromJson(
+              json: snapshot.value as Map<dynamic, dynamic>,
+            );
+          } else {
+            throw Exception("Budget not found");
+          }
+        })
+        .catchError((error) {
+          throw Exception("Failed to read budget: $error");
+        });
   }
 
   @override
-  Future<List<BudgetModel>?> reads() async {
-    return _database.get().then(
-      (snapshot) =>
-          snapshot.children
-              .map(
-                (e) => BudgetModel.fromJson(
-                  json: e.value as Map<dynamic, dynamic>,
-                ),
-              )
-              .toList(),
-    );
+  Future<List<BudgetModel>> reads() async {
+    return await _database
+        .get()
+        .then((snapshot) {
+          if (snapshot.exists) {
+            return (snapshot.value as List<dynamic>)
+                .map((item) => BudgetModel.fromJson(json: item))
+                .toList();
+          } else {
+            throw Exception("No budgets found");
+          }
+        })
+        .catchError((error) {
+          throw Exception("Failed to read budgets: $error");
+        });
   }
 
   @override
-  Future<void> update(BudgetModel value) async {
-    return _database.child(value.id).update(BudgetModel.toJson(model: value));
+  Future<BudgetModel> update(BudgetModel data) async {
+    return await _database
+        .child(data.id)
+        .set(BudgetModel.toJson(model: data))
+        .then((_) => data)
+        .catchError((error) {
+          throw Exception("Failed to update budget: $error");
+        });
   }
 }

@@ -39,7 +39,7 @@ class MemberController extends GetxController {
   }
 
   Future<void> setData() async {
-    members = await memberFirebaseRepository.gets() ?? [];
+    members = await memberFirebaseRepository.reads();
     members = members.reversed.toList();
   }
 

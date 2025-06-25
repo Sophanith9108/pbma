@@ -83,19 +83,17 @@ class HistoryController extends GetxController {
   }
 
   Future<void> onRetrieveTransactionFromFirebase() async {
-    await transactionFirebaseRepository.gets().then((value) async {
-      if (value != null) {
-        transactions = value
-            .groupListsBy((element) {
-              return element.createdAt.format(pattern: AppConstants.dateFormat);
-            })
-            .map((key, value) {
-              return MapEntry(key, value.reversed.toList());
-            });
+    await transactionFirebaseRepository.reads().then((value) async {
+      transactions = value
+          .groupListsBy((element) {
+            return element.createdAt.format(pattern: AppConstants.dateFormat);
+          })
+          .map((key, value) {
+            return MapEntry(key, value.reversed.toList());
+          });
 
-        var result = transactions.entries.toList().reversed.toList();
-        transactions = Map.fromEntries(result);
-      }
+      var result = transactions.entries.toList().reversed.toList();
+      transactions = Map.fromEntries(result);
     });
   }
 }

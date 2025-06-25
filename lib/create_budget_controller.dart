@@ -56,7 +56,7 @@ class CreateBudgetController extends MainController {
         updatedBy: user,
       );
 
-      await budgetFirebaseRepository.save(budget).then((value) {
+      await budgetFirebaseRepository.create(budget).then((value) {
         AppUtils.hideLoading();
 
         _onClear();

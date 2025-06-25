@@ -2,33 +2,64 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class TransactionFirebaseRepository
-    extends AppRemoteRepository<TransactionModel> {
-  final TransactionFirebaseService _firebaseService = Get.put(
+    extends AppFirebaseStorageRepository<TransactionModel> {
+  final TransactionFirebaseService _service = Get.put(
     TransactionFirebaseService(),
   );
 
   @override
-  Future<void> save(TransactionModel value) async {
-    return _firebaseService.add(value);
+  Future<TransactionModel> create(TransactionModel data) async {
+    return await _service
+        .create(data)
+        .then(
+          (value) => value,
+          onError:
+              (error) =>
+                  throw Exception("Failed to create transaction: $error"),
+        );
   }
 
   @override
-  Future<void> delete(String key) async {
-    return _firebaseService.delete(key);
+  Future<void> delete(String id) async {
+    return await _service
+        .delete(id)
+        .then(
+          (value) => value,
+          onError:
+              (error) =>
+                  throw Exception("Failed to delete transaction: $error"),
+        );
   }
 
   @override
-  Future<TransactionModel> get(String key) async {
-    return _firebaseService.read(key);
+  Future<TransactionModel> read(String id) async {
+    return await _service
+        .read(id)
+        .then(
+          (value) => value,
+          onError:
+              (error) => throw Exception("Failed to read transaction: $error"),
+        );
   }
 
   @override
-  Future<List<TransactionModel>?> gets() async {
-    return _firebaseService.reads();
+  Future<List<TransactionModel>> reads() async {
+    return await _service.reads().then(
+      (value) => value,
+      onError:
+          (error) => throw Exception("Failed to read transactions: $error"),
+    );
   }
 
   @override
-  Future<void> update(TransactionModel value) async {
-    return _firebaseService.update(value);
+  Future<TransactionModel> update(TransactionModel data) async {
+    return await _service
+        .update(data)
+        .then(
+          (value) => value,
+          onError:
+              (error) =>
+                  throw Exception("Failed to update transaction: $error"),
+        );
   }
 }

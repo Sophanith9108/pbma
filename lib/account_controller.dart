@@ -12,6 +12,9 @@ class AccountController extends GetxController {
   final UserFirebaseRepository userFirebaseRepository = Get.put(
     UserFirebaseRepository(),
   );
+  final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
+    TransactionFirebaseRepository(),
+  );
 
   final _banks = <Widget>[].obs;
   List<Widget> get banks => _banks;
@@ -30,6 +33,10 @@ class AccountController extends GetxController {
   int get selectedPage => _selectedPage.value;
   set selectedPage(int value) => _selectedPage.value = value;
 
+  final _transactions = <TransactionModel>[].obs;
+  List<TransactionModel> get transactions => _transactions;
+  set transactions(List<TransactionModel> value) => _transactions.value = value;
+
   @override
   void onInit() async {
     await setData();
@@ -47,6 +54,11 @@ class AccountController extends GetxController {
   }
 
   Future<void> setData() async {
+    await _retrieveBankCards();
+    await _retrieveTransactions();
+  }
+
+  Future<void> _retrieveBankCards() async {
     await bankCardFirebaseRepository.reads().then((value) {
       value.sort((a, b) {
         return b.createdAt.compareTo(a.createdAt);
@@ -135,357 +147,6 @@ class AccountController extends GetxController {
             );
           }).toList();
     });
-
-    creditCards = [
-      Card(
-        elevation: AppDimensions.elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          side: BorderSide(
-            width: 1.5,
-            color: Colors.grey.withValues(alpha: .5),
-          ),
-        ),
-        child: InkWell(
-          onTap: () async {
-            await Future.delayed(Duration(milliseconds: 250));
-            Get.toNamed(AppRoutes.detailTransaction);
-          },
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: Colors.red.sweepGradient,
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  right: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Amex Card".toUpperCase(),
-                        style: AppTextStyles.title,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        "Credit Card".toUpperCase(),
-                        style: AppTextStyles.subtitle,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: IconButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 300));
-                      // _handleSettingOptions(bankCard: );
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.ellipsisVertical,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Due".tr, style: AppTextStyles.caption),
-                      const SizedBox(height: 4),
-                      Text(
-                        500.formatCurrency(sign: '\$'),
-                        style: AppTextStyles.title,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        DateTime.now().format(pattern: "dd.MMM.yyy"),
-                        style: AppTextStyles.caption,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Icon(FontAwesomeIcons.ccAmex),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      Card(
-        elevation: AppDimensions.elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          side: BorderSide(
-            width: 1.5,
-            color: Colors.grey.withValues(alpha: .5),
-          ),
-        ),
-        child: InkWell(
-          onTap: () async {
-            await Future.delayed(Duration(milliseconds: 250));
-            Get.toNamed(AppRoutes.detailTransaction);
-          },
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: Colors.lightGreen.sweepGradient,
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  right: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Discover".toUpperCase(),
-                        style: AppTextStyles.title,
-                      ),
-                      Text(
-                        "Credit Card".toUpperCase(),
-                        style: AppTextStyles.subtitle,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: IconButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 300));
-                      // _handleSettingOptions(bankCard: );
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.ellipsisVertical,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Due".tr, style: AppTextStyles.caption),
-                      const SizedBox(height: 4),
-                      Text(
-                        500.formatCurrency(sign: '\$'),
-                        style: AppTextStyles.title,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        DateTime.now().format(pattern: "dd.MMM.yyy"),
-                        style: AppTextStyles.caption,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Icon(FontAwesomeIcons.ccDiscover),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      Card(
-        elevation: AppDimensions.elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          side: BorderSide(
-            width: 1.5,
-            color: Colors.grey.withValues(alpha: .5),
-          ),
-        ),
-        child: InkWell(
-          onTap: () async {
-            await Future.delayed(Duration(milliseconds: 250));
-            Get.toNamed(AppRoutes.detailTransaction);
-          },
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: Colors.lightBlue.sweepGradient,
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  right: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "PayPay Card".toUpperCase(),
-                        style: AppTextStyles.title,
-                      ),
-                      Text(
-                        "Credit Card".toUpperCase(),
-                        style: AppTextStyles.subtitle,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: IconButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 300));
-                      // _handleSettingOptions(bankCard: );
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.ellipsisVertical,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Due".tr, style: AppTextStyles.caption),
-                      const SizedBox(height: 4),
-                      Text(
-                        500.formatCurrency(sign: '\$'),
-                        style: AppTextStyles.title,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        DateTime.now().format(pattern: "dd.MMM.yyy"),
-                        style: AppTextStyles.caption,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Icon(FontAwesomeIcons.ccPaypal),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-      Card(
-        elevation: AppDimensions.elevation,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          side: BorderSide(
-            width: 1.5,
-            color: Colors.grey.withValues(alpha: .5),
-          ),
-        ),
-        child: InkWell(
-          onTap: () async {
-            await Future.delayed(Duration(milliseconds: 250));
-            Get.toNamed(AppRoutes.detailTransaction);
-          },
-          borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: Colors.deepPurple.sweepGradient,
-              borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
-            ),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10,
-                  top: 10,
-                  right: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Stripe Card".toUpperCase(),
-                        style: AppTextStyles.title,
-                      ),
-                      Text(
-                        "Credit Card".toUpperCase(),
-                        style: AppTextStyles.subtitle,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: IconButton(
-                    onPressed: () async {
-                      await Future.delayed(Duration(milliseconds: 300));
-                      // _handleSettingOptions(bankCard: );
-                    },
-                    icon: Icon(
-                      FontAwesomeIcons.ellipsisVertical,
-                      size: 18,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 10,
-                  bottom: 10,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Previous Due".toUpperCase(),
-                        style: AppTextStyles.caption,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        500.formatCurrency(sign: '\$'),
-                        style: AppTextStyles.title,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        DateTime.now().format(pattern: "dd.MMM.yyy"),
-                        style: AppTextStyles.caption,
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: Icon(FontAwesomeIcons.ccStripe),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    ];
   }
 
   void _handleSettingOptions({required BankCardModel bankCard}) {
@@ -607,6 +268,15 @@ class AccountController extends GetxController {
       await setData();
 
       AppUtils.hideLoading();
+    });
+  }
+
+  Future<void> _retrieveTransactions() async {
+    await transactionFirebaseRepository.reads().then((value) {
+      value.sort((a, b) {
+        return b.createdAt.compareTo(a.createdAt);
+      });
+      transactions = value;
     });
   }
 }

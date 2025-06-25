@@ -94,13 +94,41 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimensions.padding),
-              Text("Credit Cards".tr, style: AppTextStyles.header1),
+              Text("Transactions".tr, style: AppTextStyles.header1),
               const SizedBox(height: 8),
-              GridView.count(
+              ListView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                crossAxisCount: 2,
-                children: controller.creditCards,
+                itemCount: controller.transactions.length,
+                itemBuilder: (context, index) {
+                  var transaction = controller.transactions[index];
+
+                  return ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor:
+                          transaction.transactionType ==
+                                  TransactionTypeEnums.income
+                              ? Colors.green
+                              : Colors.red,
+                      child: Icon(
+                        transaction.transactionType ==
+                                TransactionTypeEnums.income
+                            ? FontAwesomeIcons.arrowUp
+                            : FontAwesomeIcons.arrowDown,
+                        color: Colors.white,
+                      ),
+                    ),
+                    title: Text(transaction.reason, style: AppTextStyles.title),
+                    subtitle: Text(
+                      transaction.date.toString(),
+                      style: AppTextStyles.subtitle,
+                    ),
+                    trailing: Text(
+                      "${transaction.amount} ${transaction.currency}",
+                      style: AppTextStyles.label,
+                    ),
+                  );
+                },
               ),
             ],
           ),

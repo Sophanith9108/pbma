@@ -86,7 +86,7 @@ class RegisterController extends MainController {
         return;
       }
 
-      List<UserModel> userExist = await userFirebaseRepository.gets() ?? [];
+      List<UserModel> userExist = await userFirebaseRepository.reads();
       String phone = phoneController.text.trim();
       bool isAlreadyRegistered = userExist.any((user) => user.phone == phone);
       if (isAlreadyRegistered) {
@@ -126,7 +126,7 @@ class RegisterController extends MainController {
         AppUtils.hideLoading();
 
         await userFirebaseRepository
-            .save(user)
+            .create(user)
             .then((response) {
               _onClear();
               Get.offAllNamed(AppRoutes.main);
