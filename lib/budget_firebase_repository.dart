@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -28,9 +29,13 @@ class BudgetFirebaseRepository
 
   @override
   Future<List<BudgetModel>> reads() async {
-    return await _service.reads().catchError((error) {
-      throw Exception("Failed to read budgets: $error");
-    });
+    return await _service.reads().then(
+      (value) => value,
+      onError: (error) {
+        debugPrint("Failed to read budgets: $error");
+        return <BudgetModel>[];
+      },
+    );
   }
 
   @override

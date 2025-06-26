@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -46,8 +47,10 @@ class TransactionFirebaseRepository
   Future<List<TransactionModel>> reads() async {
     return await _service.reads().then(
       (value) => value,
-      onError:
-          (error) => throw Exception("Failed to read transactions: $error"),
+      onError: (error) {
+        debugPrint("Failed to read transactions: $error");
+        return <TransactionModel>[];
+      },
     );
   }
 

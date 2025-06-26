@@ -44,7 +44,7 @@ class LoginScreen extends StatelessWidget {
                   prefixStyle: AppTextStyles.label,
 
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
+                    icon: const Icon(FontAwesomeIcons.circleXmark),
                     onPressed: () {
                       controller.phoneController.clear();
                     },
@@ -59,7 +59,7 @@ class LoginScreen extends StatelessWidget {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(15),
+                  LengthLimitingTextInputFormatter(10),
                 ],
                 maxLines: 1,
                 textInputAction: TextInputAction.next,
@@ -74,10 +74,7 @@ class LoginScreen extends StatelessWidget {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number'.tr;
-                  }
-                  if (value.length < 8) {
-                    return 'Phone number must be at least 8 digits'.tr;
+                    return 'Please enter your phone number!'.tr;
                   }
                   return null;
                 },
@@ -98,7 +95,16 @@ class LoginScreen extends StatelessWidget {
                   hintStyle: AppTextStyles.hint,
                   hintText: '********'.tr,
                   suffixIcon: IconButton(
-                    icon: const Icon(Icons.clear),
+                    icon: IconButton(
+                      onPressed: () {
+                        controller.showPassword = !controller.showPassword;
+                      },
+                      icon: Icon(
+                        controller.showPassword
+                            ? FontAwesomeIcons.eye
+                            : FontAwesomeIcons.eyeSlash,
+                      ),
+                    ),
                     onPressed: () {
                       controller.passwordController.clear();
                     },
@@ -110,7 +116,7 @@ class LoginScreen extends StatelessWidget {
                     borderSide: BorderSide(color: AppColors.primary, width: 1),
                   ),
                 ),
-                obscureText: true,
+                obscureText: !controller.showPassword,
                 textInputAction: TextInputAction.done,
                 onFieldSubmitted: (value) {
                   FocusScope.of(context).unfocus();
@@ -177,7 +183,7 @@ class LoginScreen extends StatelessWidget {
                     controller.gotoForgotPassword();
                   },
                   child: Text(
-                    "Forgot Password".tr,
+                    "Forgot Password?".tr,
                     style: AppTextStyles.button,
                   ),
                 ),

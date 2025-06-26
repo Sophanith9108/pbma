@@ -273,26 +273,42 @@ class MainController extends GetxController {
     }
   }
 
-  Future<void> gotoProfile() async {
-    if (!isRegistered) {
-      Get.offAllNamed(AppRoutes.register)?.then((_) {
-        setData();
-      });
-      return;
+  Future<void> checkedUser() async {
+    var users = await userRepository.gets() ?? [];
+    if (users.isNotEmpty) {
+      user = users.first;
     }
 
-    if (!isLogin) {
-      Get.offAllNamed(AppRoutes.login);
-      return;
+    for (var element in users) {
+      debugPrint("$TAG: $element");
     }
 
+    isLogin = users.isNotEmpty && user.isLogin;
+  }
+
+  Future<void> gotoLogin() async {
     await Future.delayed(const Duration(milliseconds: 300), () {
-      Get.toNamed(AppRoutes.profile)?.then((value) {
+      Get.offAndToNamed(AppRoutes.login)?.then((value) {
         if (value != null && value) {
           setData();
         }
       });
     });
+  }
+
+  Future<void> gotoProfile() async {
+    await checkedUser();
+    if (isLogin) {
+      await Future.delayed(const Duration(milliseconds: 300), () {
+        Get.toNamed(AppRoutes.profile)?.then((value) {
+          if (value != null && value) {
+            setData();
+          }
+        });
+      });
+    } else {
+      await gotoLogin();
+    }
   }
 
   Future<void> showImagePicker(Function(XFile? file) handler) async {
@@ -331,10 +347,6 @@ class MainController extends GetxController {
         );
       },
     );
-  }
-
-  Future<void> gotoLogin() async {
-    Get.toNamed(AppRoutes.login);
   }
 
   Future<void> onResetTab() async {
@@ -395,12 +407,7 @@ class MainController extends GetxController {
   }
 
   Future<void> setData() async {
-    var users = await userRepository.gets() ?? [];
-    if (users.isNotEmpty) {
-      user = users.first;
-      isRegistered = true;
-      isLogin = true;
-    }
+    await checkedUser();
   }
 
   Future<void> biometricAuth() async {
@@ -428,5 +435,16 @@ class MainController extends GetxController {
     } catch (e) {
       AppUtils.hideLoading();
     }
+  }
+
+  Future<void> gotoCreateTransaction() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    await checkedUser();
+
+    Get.toNamed(AppRoutes.transaction)?.then((value) {
+      if (value != null && value) {
+        setData();
+      }
+    });
   }
 }

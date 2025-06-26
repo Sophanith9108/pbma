@@ -19,7 +19,7 @@ class MemberScreen extends StatelessWidget {
           onPressed: () {
             controller.gotoCreateMember();
           },
-          label: Text("Member".tr, style: AppTextStyles.button),
+          label: Text("Create Member".tr, style: AppTextStyles.button),
           icon: Icon(FontAwesomeIcons.personCirclePlus),
         ),
         body: RefreshIndicator(

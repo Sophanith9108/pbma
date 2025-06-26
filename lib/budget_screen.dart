@@ -16,8 +16,8 @@ class BudgetScreen extends StatelessWidget {
           onPressed: () {
             controller.gotoCreateBudget();
           },
-          label: Text("Budget".tr, style: AppTextStyles.button),
-          icon: Icon(FontAwesomeIcons.googleWallet),
+          label: Text("Create Budget".tr, style: AppTextStyles.button),
+          icon: Icon(FontAwesomeIcons.empire),
         ),
         body: RefreshIndicator(
           onRefresh: () => controller.onRefreshing(),

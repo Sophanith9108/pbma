@@ -96,4 +96,13 @@ class HistoryController extends GetxController {
       transactions = Map.fromEntries(result);
     });
   }
+
+  Future<void> gotoCreateTransaction() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    Get.toNamed(AppRoutes.transaction)?.then((result) {
+      if (result != null && result) {
+        setData();
+      }
+    });
+  }
 }

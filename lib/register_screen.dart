@@ -172,22 +172,12 @@ class RegisterScreen extends StatelessWidget {
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your phone number'.tr;
+                    return 'Please enter your phone number!'.tr;
                   }
-                  if (value.length < 8) {
-                    return 'Phone number must be at least 8 digits'.tr;
+                  if (value.length > 10) {
+                    return 'Phone number is invalid!'.tr;
                   }
                   return null;
-                },
-                onChanged: (value) {
-                  if (value.length > 8) {
-                    controller.phoneController.text = value.substring(0, 8);
-                  }
-                },
-                onFieldSubmitted: (value) {
-                  if (controller.formKey.currentState!.validate()) {
-                    controller.phoneController.text = value;
-                  }
                 },
                 decoration: InputDecoration(
                   labelStyle: AppTextStyles.label,
@@ -213,7 +203,7 @@ class RegisterScreen extends StatelessWidget {
                 keyboardType: TextInputType.phone,
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  LengthLimitingTextInputFormatter(15),
+                  LengthLimitingTextInputFormatter(10),
                 ],
                 maxLines: 1,
               ),
@@ -223,7 +213,7 @@ class RegisterScreen extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter your password'.tr;
+                    return 'Please enter your password!'.tr;
                   }
                   if (value.length < 8) {
                     return 'Password must be at least 8 characters'.tr;

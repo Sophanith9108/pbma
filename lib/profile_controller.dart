@@ -21,8 +21,8 @@ class ProfileController extends MainController {
       _addressController.value = value;
 
   @override
-  void onInit() {
-    setData();
+  void onInit() async {
+    await setData();
     super.onInit();
   }
 
@@ -152,8 +152,8 @@ class ProfileController extends MainController {
   }
 
   Future<void> handleLogout() async {
-    AppUtils.showLoading();
     user.isLogin = false;
+    AppUtils.showLoading();
     await userFirebaseRepository.update(user);
     await userRepository.update(user).then((_) {
       AppUtils.hideLoading();

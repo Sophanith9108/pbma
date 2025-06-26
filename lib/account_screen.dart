@@ -18,8 +18,8 @@ class AccountScreen extends StatelessWidget {
           onPressed: () {
             controller.gotoBankCard();
           },
-          label: Text("Add Account".tr, style: AppTextStyles.button),
-          icon: const Icon(FontAwesomeIcons.circlePlus),
+          label: Text("Link Account".tr, style: AppTextStyles.button),
+          icon: const Icon(FontAwesomeIcons.link),
         ),
         body: RefreshIndicator(
           onRefresh: () => controller.onRefreshing(),
@@ -96,40 +96,61 @@ class AccountScreen extends StatelessWidget {
               const SizedBox(height: AppDimensions.padding),
               Text("Transactions".tr, style: AppTextStyles.header1),
               const SizedBox(height: 8),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller.transactions.length,
-                itemBuilder: (context, index) {
-                  var transaction = controller.transactions[index];
-
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor:
-                          transaction.transactionType ==
-                                  TransactionTypeEnums.income
-                              ? Colors.green
-                              : Colors.red,
-                      child: Icon(
-                        transaction.transactionType ==
-                                TransactionTypeEnums.income
-                            ? FontAwesomeIcons.arrowUp
-                            : FontAwesomeIcons.arrowDown,
-                        color: Colors.white,
+              controller.transactions.isEmpty
+                  ? ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      SizedBox(height: Get.width * 0.3),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text("No Data".tr, style: AppTextStyles.title),
+                          Text(
+                            "You can pull to refresh".tr,
+                            style: AppTextStyles.subtitle,
+                          ),
+                        ],
                       ),
-                    ),
-                    title: Text(transaction.reason, style: AppTextStyles.title),
-                    subtitle: Text(
-                      transaction.date.toString(),
-                      style: AppTextStyles.subtitle,
-                    ),
-                    trailing: Text(
-                      "${transaction.amount} ${transaction.currency}",
-                      style: AppTextStyles.label,
-                    ),
-                  );
-                },
-              ),
+                    ],
+                  )
+                  : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: controller.transactions.length,
+                    itemBuilder: (context, index) {
+                      var transaction = controller.transactions[index];
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor:
+                              transaction.transactionType ==
+                                      TransactionTypeEnums.income
+                                  ? Colors.green
+                                  : Colors.red,
+                          child: Icon(
+                            transaction.transactionType ==
+                                    TransactionTypeEnums.income
+                                ? FontAwesomeIcons.arrowUp
+                                : FontAwesomeIcons.arrowDown,
+                            color: Colors.white,
+                          ),
+                        ),
+                        title: Text(
+                          transaction.reason,
+                          style: AppTextStyles.title,
+                        ),
+                        subtitle: Text(
+                          transaction.date.toString(),
+                          style: AppTextStyles.subtitle,
+                        ),
+                        trailing: Text(
+                          "${transaction.amount} ${transaction.currency}",
+                          style: AppTextStyles.label,
+                        ),
+                      );
+                    },
+                  ),
             ],
           ),
         ),

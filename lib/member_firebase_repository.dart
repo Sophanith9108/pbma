@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -38,7 +39,10 @@ class MemberFirebaseRepository extends AppFirebaseStorageRepository<UserModel> {
   Future<List<UserModel>> reads() async {
     return await _service.reads().then(
       (value) => value,
-      onError: (error) => throw Exception("Failed to read users: $error"),
+      onError: (error) {
+        debugPrint("Failed to read users: $error");
+        return <UserModel>[];
+      },
     );
   }
 

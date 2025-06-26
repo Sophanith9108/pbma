@@ -76,68 +76,66 @@ class RegisterController extends MainController {
   }
 
   Future<void> onRegister() async {
-    if (formKey.currentState!.validate()) {
-      FocusScope.of(Get.context!).unfocus();
+    if (!formKey.currentState!.validate()) return;
 
-      if (!isAgreedWithTerms) {
-        Fluttertoast.showToast(
-          msg: 'Please agree with terms and conditions'.tr,
-        );
-        return;
-      }
+    FocusScope.of(Get.context!).unfocus();
 
-      List<UserModel> userExist = await userFirebaseRepository.reads();
-      String phone = phoneController.text.trim();
-      bool isAlreadyRegistered = userExist.any((user) => user.phone == phone);
-      if (isAlreadyRegistered) {
-        Fluttertoast.showToast(
-          msg: 'User with this phone number already exists!'.tr,
-        );
-        await Future.delayed(const Duration(seconds: 2), () {
-          Get.offAllNamed(AppRoutes.login);
-        });
-        return;
-      }
-      var profilePicture =
-          profile.path.isNotEmpty
-              ? base64Encode(profile.readAsBytesSync())
-              : "";
-
-      String deviceId = await AppUtils.getDeviceId();
-      String deviceToken = await AppUtils.getDeviceToken();
-
-      var user = UserModel.create(
-        name: nameController.text.trim(),
-        email: emailController.text.trim(),
-        phone: phoneController.text.trim(),
-        password: passwordController.text.trim(),
-        address: addressController.text.trim(),
-        profilePicture: profilePicture,
-        dateOfBirth: DateTime.now().format(pattern: AppConstants.dateFormat),
-        gender: selectedGender,
-        role: UserRoleEnums.user,
-        deviceId: deviceId,
-        deviceToken: deviceToken,
-        isLogin: true,
-      );
-
-      AppUtils.showLoading();
-      await Future.delayed(const Duration(seconds: 1), () async {
-        AppUtils.hideLoading();
-
-        await userFirebaseRepository
-            .create(user)
-            .then((response) {
-              _onClear();
-              Get.offAllNamed(AppRoutes.main);
-            })
-            .catchError((error) {
-              Fluttertoast.showToast(
-                msg: 'Registration failed: ${error.toString()}',
-              );
-            });
-      });
+    if (!isAgreedWithTerms) {
+      Fluttertoast.showToast(msg: 'Please agree with terms and conditions'.tr);
+      return;
     }
+
+    List<UserModel> userExist = await userFirebaseRepository.reads();
+    String phone = phoneController.text.trim();
+    bool isAlreadyRegistered = userExist.any((user) => user.phone == phone);
+    if (isAlreadyRegistered) {
+      Fluttertoast.showToast(
+        msg: 'User with this phone number already exists!'.tr,
+      );
+      await Future.delayed(const Duration(seconds: 2), () {
+        Get.offAllNamed(AppRoutes.login);
+      });
+      return;
+    }
+
+    var profilePicture =
+        profile.path.isNotEmpty ? base64Encode(profile.readAsBytesSync()) : "";
+
+    String deviceId = await AppUtils.getDeviceId();
+    String deviceToken = await AppUtils.getDeviceToken();
+
+    var user = UserModel.create(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      phone: phoneController.text.trim(),
+      password: passwordController.text.trim(),
+      address: addressController.text.trim(),
+      profilePicture: profilePicture,
+      dateOfBirth: DateTime.now().format(pattern: AppConstants.dateFormat),
+      gender: selectedGender,
+      role: UserRoleEnums.user,
+      deviceId: deviceId,
+      deviceToken: deviceToken,
+      isLogin: true,
+    );
+
+    AppUtils.showLoading();
+    await userRepository.save(user);
+    await userFirebaseRepository
+        .create(user)
+        .then((response) {
+          AppUtils.hideLoading();
+
+          _onClear();
+          Get.offAllNamed(AppRoutes.main, arguments: response);
+        })
+        .catchError((error) {
+          AppUtils.hideLoading();
+
+          Fluttertoast.showToast(
+            msg: 'Registration failed: ${error.toString()}',
+          );
+        });
   }
 
   Future<void> onAgreeWithTerms() async {

@@ -14,6 +14,13 @@ class HistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => AppNavigation(
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            controller.gotoCreateTransaction();
+          },
+          label: Text("Create Payment".tr, style: AppTextStyles.button),
+          icon: Icon(FontAwesomeIcons.shuffle),
+        ),
         body: RefreshIndicator(
           onRefresh: () => controller.onRefreshing(),
           child:

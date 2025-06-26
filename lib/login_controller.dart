@@ -22,9 +22,13 @@ class LoginController extends MainController {
   bool get showBiometric => _showBiometric.value;
   set showBiometric(bool value) => _showBiometric.value = value;
 
+  final _showPassword = false.obs;
+  bool get showPassword => _showPassword.value;
+  set showPassword(bool value) => _showPassword.value = value;
+
   @override
-  void onInit() {
-    checkIfBiometricAvialable();
+  void onInit() async {
+    await checkIfBiometricAvialable();
     super.onInit();
   }
 
@@ -39,100 +43,56 @@ class LoginController extends MainController {
   }
 
   Future<void> onLogin() async {
-    if (formKey.currentState!.validate()) {
-      FocusScope.of(Get.context!).unfocus();
+    if (!formKey.currentState!.validate()) return;
 
-      AppUtils.showLoading();
-      await userFirebaseRepository.reads().then((users) async {
-        AppUtils.hideLoading();
+    FocusScope.of(Get.context!).unfocus();
 
-        if (users.isEmpty) {
-          showDialog(
-            context: Get.context!,
-            builder: (_) {
-              return AlertDialog(
-                title: Text('Attention!'.tr),
-                content: Text(
-                  'There is no user found, Do you want to register?'.tr,
-                  style: AppTextStyles.title,
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Get.back(),
-                    child: Text('Cancel'.tr, style: AppTextStyles.button),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      Get.offAllNamed(AppRoutes.register);
-                      Get.back();
-                    },
-                    child: Text('Ok'.tr, style: AppTextStyles.budget),
-                  ),
-                ],
-              );
-            },
-          );
-          return;
-        }
-
-        String phone = phoneController.text.trim();
-        if (users.firstWhereOrNull((user) => user.phone == phone) == null) {
-          AppUtils.showError('User not found with this phone number'.tr);
-          return;
-        }
-
-        String password = passwordController.text.trim();
-        if (users.firstWhereOrNull((user) => user.password == password) ==
-            null) {
-          AppUtils.showError('Wrong password'.tr);
-          return;
-        }
-      });
-
-      var users = await userRepository.gets() ?? [];
-      if (users.isEmpty) {
-        AppUtils.showWarning("User is not yet register!".tr);
-        return;
-      }
+    AppUtils.showLoading();
+    await userFirebaseRepository.reads().then((users) async {
+      AppUtils.hideLoading();
 
       String phone = phoneController.text.trim();
-      if (users.firstWhereOrNull((user) => user.phone == phone) == null) {
-        AppUtils.showError('User not found with this phone number'.tr);
+      var foundUser = users.firstWhereOrNull((user) => user.phone == phone);
+      if (foundUser == null) {
+        AppUtils.showError('User not found'.tr);
         return;
       }
 
-      String password = passwordController.text.trim();
-      if (users.firstWhereOrNull((user) => user.password == password) == null) {
-        AppUtils.showError('Wrong password'.tr);
-        return;
-      }
+      // String password = passwordController.text.trim();
+      // if (!password.verifyPassword(user.password)) {
+      //   AppUtils.showError('Phone number or password is incorrect!'.tr);
+      //   return;
+      // }
 
-      AppUtils.showLoading();
+      await _handleCreateUser();
+    });
+  }
 
-      var currentUser = users.first;
-      var user = UserModel.create(
-        phone: phoneController.text.trim(),
-        password: passwordController.text.trim(),
-        name: currentUser.name.trim(),
-        email: currentUser.email.trim(),
-        address: currentUser.address.trim(),
-        gender: currentUser.gender,
-        profilePicture: currentUser.profilePicture,
-        role: currentUser.role,
-        dateOfBirth: currentUser.dateOfBirth,
-        updatedAt: DateTime.now(),
-        isLogin: true,
-        deviceId: currentUser.deviceId,
-        deviceToken: currentUser.deviceToken,
-      );
+  Future<void> _handleCreateUser() async {
+    var currentUser = user;
+    var _user = UserModel.create(
+      phone: phoneController.text.trim(),
+      password: passwordController.text.trim(),
+      name: currentUser.name.trim(),
+      email: currentUser.email.trim(),
+      address: currentUser.address.trim(),
+      gender: currentUser.gender,
+      profilePicture: currentUser.profilePicture,
+      role: currentUser.role,
+      dateOfBirth: currentUser.dateOfBirth,
+      updatedAt: DateTime.now(),
+      isLogin: true,
+      deviceId: currentUser.deviceId,
+      deviceToken: currentUser.deviceToken,
+    );
 
-      userRepository.update(user).then((response) async {
-        AppUtils.hideLoading();
+    await userRepository.update(_user);
+    
+    await userFirebaseRepository.update(_user).then((value) {
+      _onClear();
 
-        await _onClear();
-        Get.offAllNamed(AppRoutes.main);
-      });
-    }
+      Get.offAllNamed(AppRoutes.main);
+    });
   }
 
   Future<void> _onClear() async {
@@ -151,18 +111,6 @@ class LoginController extends MainController {
 
   Future<void> loginWithBiometrics() async {
     await Future.delayed(Duration(milliseconds: 300));
-
-    var users = await userRepository.gets() ?? [];
-    if (users.isEmpty) {
-      AppUtils.showWarning("User is not yet register!".tr);
-      return;
-    }
-
-    if (!showBiometric) {
-      AppUtils.showWarning('Biometric authentication is not available'.tr);
-      return;
-    }
-
     await biometricAuth();
   }
 
@@ -174,8 +122,8 @@ class LoginController extends MainController {
     showBiometric = isAvailable && availableBiometrics.isNotEmpty;
   }
 
-  void gotoRegister() async {
-    await Future.delayed(Duration(milliseconds: 300));
+  Future<void> gotoRegister() async {
     Get.offAllNamed(AppRoutes.register);
+    _onClear();
   }
 }

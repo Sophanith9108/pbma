@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bcrypt/bcrypt.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -64,9 +65,11 @@ extension NumberFormatExtension on num {
 
 extension StringExtension on String {
   String hashPassword() {
-    var bytes = utf8.encode(this);
-    var digest = sha256.convert(bytes);
-    return digest.toString();
+    return BCrypt.hashpw(this, BCrypt.gensalt());
+  }
+
+  bool verifyPassword(String hashed) {
+    return BCrypt.checkpw(this, hashed);
   }
 }
 

@@ -22,7 +22,7 @@ class MainScreen extends StatelessWidget {
           onPressed: () => mainController.gotoProfile(),
           icon: CircleAvatar(
             child:
-                mainController.isRegistered
+                mainController.isLogin
                     ? ClipRRect(
                       borderRadius: BorderRadius.circular(Get.width),
                       child: Image.memory(
@@ -69,13 +69,7 @@ class MainScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () {
-              Get.toNamed(AppRoutes.transaction)?.then((value) {
-                if (value != null && value) {
-                  mainController.onResetTab();
-                  homeController.onRefreshing();
-                  historyController.onRefreshing();
-                }
-              });
+              mainController.gotoCreateTransaction();
             },
             icon: const Icon(FontAwesomeIcons.plus),
           ),
