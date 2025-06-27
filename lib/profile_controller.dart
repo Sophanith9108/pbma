@@ -157,7 +157,7 @@ class ProfileController extends MainController {
     await userFirebaseRepository.update(user);
     await userRepository.update(user).then((_) {
       AppUtils.hideLoading();
-      Get.offAllNamed(AppRoutes.login);
+      Get.offAllNamed(AppRoutes.main);
     });
   }
 }

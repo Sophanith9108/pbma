@@ -12,6 +12,8 @@ class HistoryController extends GetxController {
     TransactionFirebaseRepository(),
   );
 
+  final UserRepository userRepository = Get.put(UserRepository());
+
   final _transactions = <String, List<TransactionModel>>{}.obs;
   Map<String, List<TransactionModel>> get transactions => _transactions;
   set transactions(Map<String, List<TransactionModel>> value) =>
@@ -99,10 +101,18 @@ class HistoryController extends GetxController {
 
   Future<void> gotoCreateTransaction() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    Get.toNamed(AppRoutes.transaction)?.then((result) {
-      if (result != null && result) {
-        setData();
+
+    await userRepository.gets().then((value) {
+      if (value == null || value.isEmpty || !value.first.isLogin) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
       }
+
+      Get.toNamed(AppRoutes.transaction)?.then((result) {
+        if (result != null && result) {
+          setData();
+        }
+      });
     });
   }
 }

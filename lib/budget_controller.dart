@@ -7,14 +7,15 @@ class BudgetController extends GetxController {
   final BudgetFirebaseRepository budgetFirebaseRepository = Get.put(
     BudgetFirebaseRepository(),
   );
+  final UserRepository userRepository = Get.put(UserRepository());
 
   final _budgets = <BudgetModel>[].obs;
   List<BudgetModel> get budgets => _budgets;
   set budgets(List<BudgetModel> value) => _budgets.value = value;
 
   @override
-  void onInit() {
-    setData();
+  void onInit() async {
+    await setData();
     super.onInit();
   }
 
@@ -41,10 +42,18 @@ class BudgetController extends GetxController {
 
   Future<void> gotoCreateBudget() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    Get.toNamed(AppRoutes.createBudget)?.then((result) {
-      if (result != null && result) {
-        setData();
+
+    await userRepository.gets().then((value) {
+      if (value == null || value.isEmpty || !value.first.isLogin) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
       }
+
+      Get.toNamed(AppRoutes.createBudget)?.then((result) {
+        if (result != null && result) {
+          setData();
+        }
+      });
     });
   }
 

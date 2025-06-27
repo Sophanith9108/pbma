@@ -15,6 +15,7 @@ class AccountController extends GetxController {
   final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
     TransactionFirebaseRepository(),
   );
+  final UserRepository userRepository = Get.put(UserRepository());
 
   final _banks = <Widget>[].obs;
   List<Widget> get banks => _banks;
@@ -75,8 +76,7 @@ class AccountController extends GetxController {
               ),
               child: InkWell(
                 onTap: () async {
-                  await Future.delayed(Duration(milliseconds: 300));
-                  Get.toNamed(AppRoutes.detailTransaction);
+                  await gotoTransactionDetail();
                 },
                 borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                 child: Container(
@@ -149,6 +149,12 @@ class AccountController extends GetxController {
     });
   }
 
+  Future<void> gotoTransactionDetail() async {
+    await Future.delayed(Duration(milliseconds: 300));
+
+    Get.toNamed(AppRoutes.detailTransaction);
+  }
+
   void _handleSettingOptions({required BankCardModel bankCard}) {
     showModalBottomSheet(
       context: Get.context!,
@@ -210,14 +216,21 @@ class AccountController extends GetxController {
 
   Future<void> gotoBankCard() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
-      if (value != null && value) {
-        await setData();
-        if (banks.isNotEmpty && selectedPage > 1) {
-          selectedPage = 0;
-          carouselController.animateToPage(selectedPage);
-        }
+    await userRepository.gets().then((value) {
+      if (value == null || value.isEmpty || !value.first.isLogin) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
       }
+
+      Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
+        if (value != null && value) {
+          await setData();
+          if (banks.isNotEmpty && selectedPage > 1) {
+            selectedPage = 0;
+            carouselController.animateToPage(selectedPage);
+          }
+        }
+      });
     });
   }
 

@@ -441,6 +441,11 @@ class MainController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 300));
     await checkedUser();
 
+    if (!isLogin) {
+      await gotoLogin();
+      return;
+    }
+
     Get.toNamed(AppRoutes.transaction)?.then((value) {
       if (value != null && value) {
         setData();

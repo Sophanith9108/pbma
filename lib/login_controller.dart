@@ -71,6 +71,7 @@ class LoginController extends MainController {
   Future<void> _handleCreateUser() async {
     var currentUser = user;
     var _user = UserModel.create(
+      id: currentUser.id,
       phone: phoneController.text.trim(),
       password: passwordController.text.trim(),
       name: currentUser.name.trim(),
