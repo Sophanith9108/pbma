@@ -136,66 +136,14 @@ class HomeController extends GetxController {
   }
 
   Future<void> onTargetUpdated() async {
-    String updatedTarget = "";
-
-    bool isRegistered = await checkIfUserIsRegister();
-    if (!isRegistered) {
-      await showConfirmDialog();
-      return;
-    }
-
     await Future.delayed(Duration(milliseconds: 300));
-    showDialog(
-      context: Get.context!,
-      builder: (_) {
-        return AlertDialog(
-          title: Text("Update Target Amount".tr, style: AppTextStyles.title),
-          content: TextFormField(
-            controller: targetAmountController,
-            keyboardType: TextInputType.numberWithOptions(decimal: true),
-            inputFormatters: [
-              FilteringTextInputFormatter.allow(
-                RegExp(r'^(?!0\d)\d*(\.\d{0,2})?$'),
-              ),
-              LengthLimitingTextInputFormatter(10),
-            ],
-            onChanged: (value) => updatedTarget = value,
-            textInputAction: TextInputAction.done,
-            decoration: InputDecoration(
-              labelStyle: AppTextStyles.label,
-              hintStyle: AppTextStyles.hint,
-              labelText: "Target Amount".tr,
-              hintText: "Target Amount".tr,
-              prefixIcon: const Icon(Icons.attach_money),
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                color: Colors.grey,
-                onPressed: () => targetAmountController.clear(),
-              ),
-              border: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(AppDimensions.borderRadius),
-                ),
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text("Cancel".tr, style: AppTextStyles.button),
-            ),
-            TextButton(
-              onPressed: () async {
-                Get.back();
 
-                handleUpdateTarget(updatedTarget);
-              },
-              child: Text("Update".tr, style: AppTextStyles.title),
-            ),
-          ],
-        );
-      },
-    );
+    await userRepository.gets().then((value) {
+      if (value == null || value.isEmpty || !value.first.isLogin) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
+      }
+    });
   }
 
   Future<void> handleSavingTarget() async {
