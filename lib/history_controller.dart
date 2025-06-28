@@ -21,13 +21,13 @@ class HistoryController extends GetxController {
 
   @override
   void onInit() async {
+    await setData();
     super.onInit();
   }
 
   @override
   void onReady() {
     super.onReady();
-    setData();
   }
 
   @override
@@ -108,7 +108,7 @@ class HistoryController extends GetxController {
         return;
       }
 
-      Get.toNamed(AppRoutes.transaction)?.then((result) {
+      Get.toNamed(AppRoutes.createTransaction)?.then((result) {
         if (result != null && result) {
           setData();
         }

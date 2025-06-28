@@ -446,7 +446,7 @@ class MainController extends GetxController {
       return;
     }
 
-    Get.toNamed(AppRoutes.transaction)?.then((value) {
+    Get.toNamed(AppRoutes.createTransaction)?.then((value) {
       if (value != null && value) {
         setData();
       }

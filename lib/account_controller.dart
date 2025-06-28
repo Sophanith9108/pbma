@@ -76,7 +76,7 @@ class AccountController extends GetxController {
               ),
               child: InkWell(
                 onTap: () async {
-                  await gotoTransactionDetail();
+                  await gotoBankCardDetail();
                 },
                 borderRadius: BorderRadius.circular(AppDimensions.borderRadius),
                 child: Container(
@@ -149,10 +149,8 @@ class AccountController extends GetxController {
     });
   }
 
-  Future<void> gotoTransactionDetail() async {
+  Future<void> gotoTransactionDetail(int index) async {
     await Future.delayed(Duration(milliseconds: 300));
-
-    Get.toNamed(AppRoutes.detailTransaction);
   }
 
   void _handleSettingOptions({required BankCardModel bankCard}) {
@@ -291,5 +289,9 @@ class AccountController extends GetxController {
       });
       transactions = value;
     });
+  }
+
+  Future<void> gotoBankCardDetail() async {
+    await Future.delayed(const Duration(milliseconds: 300));
   }
 }

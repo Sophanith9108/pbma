@@ -11,7 +11,6 @@ class TransactionFirebaseService
   @override
   Future<TransactionModel> create(TransactionModel data) async {
     return await database
-        .push()
         .child(data.id)
         .set(TransactionModel.toJson(model: data))
         .then((_) => data)
@@ -52,7 +51,8 @@ class TransactionFirebaseService
         .get()
         .then((snapshot) {
           if (snapshot.exists) {
-            return (snapshot.value as List<dynamic>)
+            final dataMap = snapshot.value as Map<dynamic, dynamic>;
+            return dataMap.values
                 .map((item) => TransactionModel.fromJson(json: item))
                 .toList();
           } else {

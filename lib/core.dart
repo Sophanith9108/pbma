@@ -28,8 +28,6 @@ export 'create_transaction_screen.dart';
 export 'create_transaction_controller.dart';
 export 'account_screen.dart';
 export 'account_controller.dart';
-export 'detail_transaction_screen.dart';
-export 'detail_transaction_controller.dart';
 export 'currency_enums.dart';
 export 'expense_type_enums.dart';
 export 'payment_method_enums.dart';

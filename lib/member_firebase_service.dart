@@ -10,7 +10,6 @@ class MemberFirebaseService extends AppFirebaseStorageService<UserModel> {
   @override
   Future<UserModel> create(UserModel data) async {
     return await _database
-        .push()
         .child(data.id)
         .set(UserModel.toJson(model: data))
         .then((_) => data)
@@ -51,7 +50,8 @@ class MemberFirebaseService extends AppFirebaseStorageService<UserModel> {
         .get()
         .then((snapshot) {
           if (snapshot.exists) {
-            return (snapshot.value as List<dynamic>)
+            final dataMap = snapshot.value as Map<dynamic, dynamic>;
+            return dataMap.values
                 .map((item) => UserModel.fromJson(json: item))
                 .toList();
           } else {

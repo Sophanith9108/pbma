@@ -10,7 +10,6 @@ class BudgetFirebaseService extends AppFirebaseStorageService<BudgetModel> {
   @override
   Future<BudgetModel> create(BudgetModel data) async {
     return await _database
-        .push()
         .child(data.id)
         .set(BudgetModel.toJson(model: data))
         .then((_) => data)
@@ -51,7 +50,8 @@ class BudgetFirebaseService extends AppFirebaseStorageService<BudgetModel> {
         .get()
         .then((snapshot) {
           if (snapshot.exists) {
-            return (snapshot.value as List<dynamic>)
+            final data = snapshot.value as Map<dynamic, dynamic>;
+            return data.values
                 .map((item) => BudgetModel.fromJson(json: item))
                 .toList();
           } else {

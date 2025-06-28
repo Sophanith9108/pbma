@@ -88,18 +88,23 @@ class BudgetModel extends Equatable {
 
   static BudgetModel fromJson({required Map<dynamic, dynamic> json}) {
     return BudgetModel()
-      ..id = json["id"].toString()
-      ..name = json["name"].toString()
-      ..amount = double.parse(json["amount"].toString())
+      ..id = json['id'] as String
+      ..name = json['name'] as String
+      ..amount = double.tryParse(json['amount'])?.toDouble() ?? 0.0
       ..currency = CurrencyEnums.values.firstWhere(
-        (element) => element.name == json["currency"].toString(),
+        (e) => e.name == json['currency'],
+        orElse: () => CurrencyEnums.USD,
       )
-      ..purpose = json["purpose"].toString()
-      ..createdBy = UserModel.fromJson(json: json["createdBy"])
-      ..updatedBy = UserModel.fromJson(json: json["updatedBy"])
-      ..date = DateTime.parse(json["date"].toString())
-      ..createdAt = DateTime.parse(json["createdAt"].toString())
-      ..updatedAt = DateTime.parse(json["updatedAt"].toString());
+      ..purpose = json['purpose'] as String
+      ..createdBy = UserModel.fromJson(
+        json: json['createdBy'] as Map<dynamic, dynamic>,
+      )
+      ..updatedBy = UserModel.fromJson(
+        json: json['updatedBy'] as Map<dynamic, dynamic>,
+      )
+      ..date = DateTime.parse(json['date'] as String)
+      ..createdAt = DateTime.parse(json['createdAt'] as String)
+      ..updatedAt = DateTime.parse(json['updatedAt'] as String);
   }
 
   static BudgetEntity toEntity({required BudgetModel model}) {

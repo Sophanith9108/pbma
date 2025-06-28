@@ -122,6 +122,14 @@ class AccountScreen extends StatelessWidget {
                       var transaction = controller.transactions[index];
 
                       return ListTile(
+                        onTap: () {
+                          controller.gotoTransactionDetail(index);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                            AppDimensions.borderRadius,
+                          ),
+                        ),
                         leading: CircleAvatar(
                           backgroundColor:
                               transaction.transactionType ==
@@ -141,12 +149,14 @@ class AccountScreen extends StatelessWidget {
                           style: AppTextStyles.title,
                         ),
                         subtitle: Text(
-                          transaction.date.toString(),
+                          transaction.date.format(
+                            pattern: AppConstants.budgetDateTimeFormat,
+                          ),
                           style: AppTextStyles.subtitle,
                         ),
                         trailing: Text(
-                          "${transaction.amount} ${transaction.currency}",
-                          style: AppTextStyles.label,
+                          "-${transaction.amount} ${transaction.currency.name}",
+                          style: AppTextStyles.amountNegative,
                         ),
                       );
                     },

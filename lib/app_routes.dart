@@ -14,8 +14,7 @@ class AppRoutes {
   static const String help = '/help';
   static const String feedback = '/feedback';
   static const String notifications = '/notifications';
-  static const String transaction = '/transaction';
-  static const String detailTransaction = '/detail_transaction';
+  static const String createTransaction = '/create_transaction';
   static const String createMember = "/create_member";
   static const String createBudget = "/create_budget";
   static const String createBankCard = "/create_bankcard";
@@ -27,8 +26,7 @@ class AppRoutes {
     history: (context) => HistoryScreen(),
     category: (context) => CategoryScreen(),
     notifications: (context) => NotificationScreen(),
-    transaction: (context) => CreateTransactionScreen(),
-    detailTransaction: (context) => DetailTransactionScreen(),
+    createTransaction: (context) => CreateTransactionScreen(),
     profile: (context) => ProfileScreen(),
     login: (context) => LoginScreen(),
     register: (context) => RegisterScreen(),

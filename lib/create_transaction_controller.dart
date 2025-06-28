@@ -118,8 +118,8 @@ class CreateTransactionController extends MainController {
   static const double zoomLevel = 12;
 
   @override
-  void onInit() {
-    _setData();
+  void onInit() async {
+    await _setData();
     super.onInit();
   }
 

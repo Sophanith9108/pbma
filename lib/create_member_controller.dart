@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -45,16 +46,18 @@ class CreateMemberController extends MainController {
       password: "",
       address: addressController.text.trim(),
 
-      profilePicture: profile.path.isNotEmpty ? profile.path : "",
+      profilePicture:
+          profile.path.isNotEmpty
+              ? base64Encode(profile.readAsBytesSync())
+              : "",
       deviceId: '',
       deviceToken: '',
     );
 
     AppUtils.showLoading();
-    await memberFirebaseRepository.create(member);
-    await memberRepository.save(member).then((response) async {
-      await Future.delayed(const Duration(seconds: 3));
+    await memberFirebaseRepository.create(member).then((value) async {
       AppUtils.hideLoading();
+
       Get.back(result: true);
       _onClear();
     });
