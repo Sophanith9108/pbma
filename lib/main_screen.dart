@@ -23,33 +23,9 @@ class MainScreen extends StatelessWidget {
           icon: CircleAvatar(
             child:
                 mainController.isLogin
-                    ? ClipRRect(
-                      borderRadius: BorderRadius.circular(Get.width),
-                      child: Image.memory(
+                    ? CircleAvatar(
+                      backgroundImage: MemoryImage(
                         base64Decode(mainController.user.profilePicture),
-                        fit: BoxFit.cover,
-                        filterQuality: FilterQuality.high,
-                        width: 90,
-                        height: 90,
-                        frameBuilder: (
-                          context,
-                          child,
-                          frame,
-                          wasSynchronouslyLoaded,
-                        ) {
-                          if (wasSynchronouslyLoaded) {
-                            return child;
-                          }
-                          return AnimatedOpacity(
-                            opacity: frame == null ? 0.0 : 1.0,
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.easeOut,
-                            child: child,
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.person);
-                        },
                       ),
                     )
                     : Icon(Icons.person),
