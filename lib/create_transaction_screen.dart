@@ -291,6 +291,12 @@ class CreateTransactionScreen extends StatelessWidget {
                 controller: controller.bankCardController,
                 readOnly: true,
                 onTap: () {
+                  controller.setData();
+
+                  if (controller.bankCards.isEmpty) {
+                    return;
+                  }
+
                   showModalBottomSheet(
                     context: Get.context!,
                     showDragHandle: true,

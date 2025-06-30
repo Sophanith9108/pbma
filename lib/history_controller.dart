@@ -19,6 +19,10 @@ class HistoryController extends GetxController {
   set transactions(Map<String, List<TransactionModel>> value) =>
       _transactions.value = value;
 
+  final _user = UserModel().obs;
+  UserModel get user => _user.value;
+  set user(UserModel value) => _user.value = value;
+
   @override
   void onInit() async {
     await setData();
@@ -87,6 +91,7 @@ class HistoryController extends GetxController {
   Future<void> onRetrieveTransactionFromFirebase() async {
     await transactionFirebaseRepository.reads().then((value) async {
       transactions = value
+          .where((element) => element.createdBy == user)
           .groupListsBy((element) {
             return element.createdAt.format(pattern: AppConstants.dateFormat);
           })
@@ -107,6 +112,8 @@ class HistoryController extends GetxController {
         Get.offAllNamed(AppRoutes.login);
         return;
       }
+
+      user = value.first;
 
       Get.toNamed(AppRoutes.createTransaction)?.then((result) {
         if (result != null && result) {

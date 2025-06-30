@@ -119,7 +119,7 @@ class CreateTransactionController extends MainController {
 
   @override
   void onInit() async {
-    await _setData();
+    await setData();
     super.onInit();
   }
 
@@ -228,7 +228,7 @@ class CreateTransactionController extends MainController {
     });
   }
 
-  Future<void> _setData() async {
+  Future<void> setData() async {
     await bankCardFirebaseRepository.reads().then((value) {
       bankCards = value;
     });
