@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -59,7 +58,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
-    setData();
+    await _setData();
     super.onInit();
   }
 
@@ -83,7 +82,7 @@ class HomeController extends GetxController {
     });
   }
 
-  Future<void> setData() async {
+  Future<void> _setData() async {
     startDate = DateTime(startDate.year, startDate.month, 1);
     endDate = DateTime(endDate.year, endDate.month + 1, 0);
 

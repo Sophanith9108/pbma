@@ -294,6 +294,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   controller.setData();
 
                   if (controller.bankCards.isEmpty) {
+                    controller.gotoCreateBankCard();
                     return;
                   }
 
@@ -319,12 +320,7 @@ class CreateTransactionScreen extends StatelessWidget {
                                   style: AppTextStyles.subtitle,
                                 ),
                                 onTap: () async {
-                                  await Future.delayed(
-                                    const Duration(milliseconds: 300),
-                                  );
-                                  controller.bankCardController.text =
-                                      element.bankName;
-                                  controller.selectedBankCard = element;
+                                  await onBankSelected(element);
                                   Get.back();
                                 },
                               );
@@ -541,5 +537,11 @@ class CreateTransactionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> onBankSelected(BankCardModel element) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    controller.selectedBankCard = element;
+    controller.bankCardController.text = element.bankName;
   }
 }

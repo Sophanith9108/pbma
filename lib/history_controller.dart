@@ -40,9 +40,8 @@ class HistoryController extends GetxController {
   }
 
   Future<void> setData() async {
-    await Future.delayed(const Duration(seconds: 1), () async {
-      await onRetrieveTransactionFromFirebase();
-    });
+    await _checkedUser();
+    await onRetrieveTransactionFromFirebase();
   }
 
   Future<void> onRefreshing() async {
@@ -91,7 +90,9 @@ class HistoryController extends GetxController {
   Future<void> onRetrieveTransactionFromFirebase() async {
     await transactionFirebaseRepository.reads().then((value) async {
       transactions = value
-          .where((element) => element.createdBy == user)
+          .where((element) {
+            return element.createdBy.id == user.id;
+          })
           .groupListsBy((element) {
             return element.createdAt.format(pattern: AppConstants.dateFormat);
           })
@@ -101,6 +102,12 @@ class HistoryController extends GetxController {
 
       var result = transactions.entries.toList().reversed.toList();
       transactions = Map.fromEntries(result);
+    });
+  }
+
+  Future<void> _checkedUser() async {
+    await userRepository.gets().then((value) {
+      user = value!.first;
     });
   }
 

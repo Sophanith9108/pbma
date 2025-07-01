@@ -119,7 +119,7 @@ class CreateTransactionController extends MainController {
 
   @override
   void onInit() async {
-    await setData();
+    await _setData();
     super.onInit();
   }
 
@@ -228,9 +228,18 @@ class CreateTransactionController extends MainController {
     });
   }
 
-  Future<void> setData() async {
+  Future<void> _setData() async {
     await bankCardFirebaseRepository.reads().then((value) {
       bankCards = value;
+    });
+  }
+
+  Future<void> gotoCreateBankCard() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
+      if (value != null && value) {
+        await _setData();
+      }
     });
   }
 }
