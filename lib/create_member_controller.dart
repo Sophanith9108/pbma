@@ -39,7 +39,7 @@ class CreateMemberController extends MainController {
 
     FocusScope.of(Get.context!).unfocus();
 
-    var member = UserModel.create(
+    var user = UserModel.create(
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       phone: phoneController.text.trim(),
@@ -53,6 +53,8 @@ class CreateMemberController extends MainController {
       deviceId: '',
       deviceToken: '',
     );
+
+    var member = MemberModel.create(user: user);
 
     AppUtils.showLoading();
     await memberFirebaseRepository.create(member).then((value) async {

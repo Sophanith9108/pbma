@@ -1,4 +1,5 @@
 class AppDimensions {
+  static const double xspadding = 4.0;
   static const double spadding = 8.0;
   static const double mpadding = 10.0;
   static const double padding = 16.0;

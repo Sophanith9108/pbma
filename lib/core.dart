@@ -94,3 +94,4 @@ export 'create_bankcard_controller.dart';
 export 'bankcard_enum.dart';
 export 'bank_model.dart';
 export 'payment_network_enum.dart';
+export 'member_model.dart';

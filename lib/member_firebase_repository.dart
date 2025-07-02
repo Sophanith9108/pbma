@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
-class MemberFirebaseRepository extends AppFirebaseStorageRepository<UserModel> {
+class MemberFirebaseRepository
+    extends AppFirebaseStorageRepository<MemberModel> {
   final MemberFirebaseService _service = Get.put(MemberFirebaseService());
 
   @override
-  Future<UserModel> create(UserModel data) async {
+  Future<MemberModel> create(MemberModel data) async {
     return await _service
         .create(data)
         .then(
@@ -26,7 +27,7 @@ class MemberFirebaseRepository extends AppFirebaseStorageRepository<UserModel> {
   }
 
   @override
-  Future<UserModel> read(String id) async {
+  Future<MemberModel> read(String id) async {
     return await _service
         .read(id)
         .then(
@@ -36,18 +37,18 @@ class MemberFirebaseRepository extends AppFirebaseStorageRepository<UserModel> {
   }
 
   @override
-  Future<List<UserModel>> reads() async {
+  Future<List<MemberModel>> reads() async {
     return await _service.reads().then(
       (value) => value,
       onError: (error) {
-        debugPrint("Failed to read users: $error");
-        return <UserModel>[];
+        debugPrint("Failed to read members: $error");
+        return <MemberModel>[];
       },
     );
   }
 
   @override
-  Future<UserModel> update(UserModel data) async {
+  Future<MemberModel> update(MemberModel data) async {
     return await _service
         .update(data)
         .then(

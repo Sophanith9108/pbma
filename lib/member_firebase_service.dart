@@ -1,17 +1,17 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:pbma/core.dart';
 
-class MemberFirebaseService extends AppFirebaseStorageService<UserModel> {
+class MemberFirebaseService extends AppFirebaseStorageService<MemberModel> {
   final _database = FirebaseDatabase.instance
       .ref()
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.member);
 
   @override
-  Future<UserModel> create(UserModel data) async {
+  Future<MemberModel> create(MemberModel data) async {
     return await _database
         .child(data.id)
-        .set(UserModel.toJson(model: data))
+        .set(MemberModel.toJson(member: data))
         .then((_) => data)
         .catchError((error) {
           throw Exception("Failed to create user: $error");
@@ -26,51 +26,51 @@ class MemberFirebaseService extends AppFirebaseStorageService<UserModel> {
   }
 
   @override
-  Future<UserModel> read(String id) async {
+  Future<MemberModel> read(String id) async {
     return await _database
         .child(id)
         .get()
         .then((snapshot) {
           if (snapshot.exists) {
-            return UserModel.fromJson(
+            return MemberModel.fromJson(
               json: snapshot.value as Map<dynamic, dynamic>,
             );
           } else {
-            throw Exception("User not found");
+            throw Exception("Member not found");
           }
         })
         .catchError((error) {
-          throw Exception("Failed to read user: $error");
+          throw Exception("Failed to read member: $error");
         });
   }
 
   @override
-  Future<List<UserModel>> reads() async {
+  Future<List<MemberModel>> reads() async {
     return await _database
         .get()
         .then((snapshot) {
           if (snapshot.exists) {
             final dataMap = snapshot.value as Map<dynamic, dynamic>;
             return dataMap.values
-                .map((item) => UserModel.fromJson(json: item))
+                .map((item) => MemberModel.fromJson(json: item))
                 .toList();
           } else {
-            throw Exception("No users found");
+            throw Exception("No member found");
           }
         })
         .catchError((error) {
-          throw Exception("Failed to read users: $error");
+          throw Exception("Failed to read members: $error");
         });
   }
 
   @override
-  Future<UserModel> update(UserModel data) async {
+  Future<MemberModel> update(MemberModel data) async {
     return await _database
         .child(data.id)
-        .set(UserModel.toJson(model: data))
+        .set(MemberModel.toJson(member: data))
         .then((_) => data)
         .catchError((error) {
-          throw Exception("Failed to update user: $error");
+          throw Exception("Failed to update member: $error");
         });
   }
 }

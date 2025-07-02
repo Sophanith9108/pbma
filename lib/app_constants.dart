@@ -15,6 +15,7 @@ class AppConstants {
   static const String dateFormat = 'dd.MMM.yyyy';
   static const String timeFormat = 'hh:mm a';
   static const String budgetDateTimeFormat = 'dd.MM.yy hh:mm a';
+  static const double zoomLevel = 12.0;
 }
 
 class AppStorageBox {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,7 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class MemberController extends GetxController {
-  final MemberRepository _memberRepository = Get.put(MemberRepository());
+  final MemberRepository memberRepository = Get.put(MemberRepository());
   final MemberFirebaseRepository memberFirebaseRepository = Get.put(
     MemberFirebaseRepository(),
   );
@@ -18,45 +17,51 @@ class MemberController extends GetxController {
   List<UserModel> get members => _members;
   set members(List<UserModel> value) => _members.value = value;
 
+  final _user = UserModel().obs;
+  UserModel get user => _user.value;
+  set user(UserModel value) => _user.value = value;
+
+  Future<void> setData() async {
+    members = await memberFirebaseRepository.reads();
+    members =
+        members.where((element) {
+          return element.isLogin;
+        }).toList();
+  }
+
   Future<void> onRefreshing() async {
     await Future.delayed(const Duration(seconds: 3), () async {
       Fluttertoast.showToast(msg: "Done refreshing!".tr);
 
-      setData();
+      await setData();
     });
   }
 
   Future<void> onRemoveMember(int index) async {
     var member = members[index];
-    await _memberRepository.delete(member.id);
-    onRefreshing();
+    await memberRepository.delete(member.id);
+    await setData();
+  }
+
+  Future<void> checkedUser() async {
+    await userRepository.gets().then((value) {
+      user = value!.first;
+    });
   }
 
   Future<void> gotoCreateMember() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    await userRepository.gets().then((value) {
-      if (value == null || value.isEmpty || !value.first.isLogin) {
-        Get.offAllNamed(AppRoutes.login);
-        return;
+    Get.toNamed(AppRoutes.createMember)?.then((result) async {
+      if (result != null && result) {
+        await setData();
       }
-
-      Get.toNamed(AppRoutes.createMember)?.then((value) {
-        if (value != null && value) {
-          onRefreshing();
-        }
-      });
     });
   }
 
-  Future<void> setData() async {
-    members = await memberFirebaseRepository.reads();
-    members = members.reversed.toList();
-  }
-
   @override
-  void onInit() {
-    setData();
+  void onInit() async {
+    await setData();
     super.onInit();
   }
 
