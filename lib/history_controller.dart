@@ -107,7 +107,9 @@ class HistoryController extends GetxController {
 
   Future<void> _checkedUser() async {
     await userRepository.gets().then((value) {
-      user = value!.first;
+      if (value != null && value.isNotEmpty) {
+        user = value.first;
+      }
     });
   }
 

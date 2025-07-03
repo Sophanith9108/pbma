@@ -171,9 +171,18 @@ class AccountController extends GetxController {
                 children: [
                   SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      'Detail Transaction'.tr,
-                      style: AppTextStyles.title,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Detail Transaction'.tr,
+                          style: AppTextStyles.title,
+                        ),
+                        Text(
+                          transaction.purpose,
+                          style: AppTextStyles.subtitle,
+                        ),
+                      ],
                     ),
                   ),
                   IconButton.outlined(
@@ -184,286 +193,273 @@ class AccountController extends GetxController {
               ),
             ),
             Divider(),
-            Expanded(
-              flex: 3,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppDimensions.padding,
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text("ID".tr, style: AppTextStyles.label),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: AppDimensions.padding),
+              child: Column(
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("ID".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.id,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.id,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "Transaction".tr,
+                          style: AppTextStyles.label,
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.createdAt.format(pattern: "dd.MMM.yyy"),
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text("Amount".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.amount.formatCurrency(
+                            symbol: transaction.currency.name,
                           ),
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Transaction".tr,
-                            style: AppTextStyles.label,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "Created At".tr,
+                          style: AppTextStyles.label,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.createdAt.format(pattern: "dd.MMM.yyy"),
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          "${transaction.date.format(pattern: AppConstants.dateFormat)} ${transaction.time}",
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text("Amount".tr, style: AppTextStyles.label),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "Created By".tr,
+                          style: AppTextStyles.label,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.amount.formatCurrency(
-                              symbol: transaction.currency.name,
-                            ),
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.createdBy.name,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Created At".tr,
-                            style: AppTextStyles.label,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Purpose".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.purpose,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            "${transaction.date.format(pattern: AppConstants.dateFormat)} ${transaction.time}",
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Bank".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.bankCard.bankName,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Created By".tr,
-                            style: AppTextStyles.label,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text("Spent On".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.expenseType.name,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.createdBy.name,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "Payment Method".tr,
+                          style: AppTextStyles.label,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text("Purpose".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.paymentMethod.name,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.purpose,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "Transaction Type".tr,
+                          style: AppTextStyles.label,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text("Bank".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.transactionType.name,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.bankCard.bankName,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Status".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.status.name,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Spent On".tr,
-                            style: AppTextStyles.label,
-                          ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppDimensions.padding),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: Text("Location".tr, style: AppTextStyles.label),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          transaction.location,
+                          style: AppTextStyles.title,
+                          textAlign: TextAlign.right,
                         ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.expenseType.name,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Payment Method".tr,
-                            style: AppTextStyles.label,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.paymentMethod.name,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: Text(
-                            "Transaction Type".tr,
-                            style: AppTextStyles.label,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.transactionType.name,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text("Status".tr, style: AppTextStyles.label),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.status.name,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: AppDimensions.padding),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: Text(
-                            "Location".tr,
-                            style: AppTextStyles.label,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Text(
-                            transaction.location,
-                            style: AppTextStyles.title,
-                            textAlign: TextAlign.right,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
+
             Divider(),
             Expanded(
               flex: 2,
-              child: SizedBox(
-                height: Get.width * .55,
-                child: GoogleMap(
-                  zoomControlsEnabled: false,
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  zoomGesturesEnabled: false,
-                  mapType: MapType.hybrid,
-                  initialCameraPosition: CameraPosition(
-                    zoom: AppConstants.zoomLevel,
-                    target: LatLng(transaction.latitude, transaction.longitude),
-                  ),
-                  markers: {
-                    Marker(
-                      markerId: MarkerId(transaction.id),
-                      position: LatLng(
-                        transaction.latitude,
-                        transaction.longitude,
-                      ),
-                      icon: BitmapDescriptor.defaultMarkerWithHue(
-                        BitmapDescriptor.hueRed,
-                      ),
-                    ),
-                  },
+              child: GoogleMap(
+                zoomControlsEnabled: false,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+                zoomGesturesEnabled: false,
+                mapType: MapType.hybrid,
+                initialCameraPosition: CameraPosition(
+                  zoom: AppConstants.zoomLevel,
+                  target: LatLng(transaction.latitude, transaction.longitude),
                 ),
+                markers: {
+                  Marker(
+                    markerId: MarkerId(transaction.id),
+                    position: LatLng(
+                      transaction.latitude,
+                      transaction.longitude,
+                    ),
+                    icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueRed,
+                    ),
+                  ),
+                },
               ),
             ),
           ],
