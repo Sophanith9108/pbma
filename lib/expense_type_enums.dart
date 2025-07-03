@@ -37,7 +37,7 @@ extension ExpenseTypeEnumsExtension on ExpenseTypeEnums {
   String get name {
     switch (this) {
       case ExpenseTypeEnums.food:
-        return 'Food';
+        return 'Food & Drink';
       case ExpenseTypeEnums.transport:
         return 'Transport';
       case ExpenseTypeEnums.entertainment:
