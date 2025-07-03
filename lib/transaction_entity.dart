@@ -144,6 +144,8 @@ class TransactionEntity extends HiveObject {
                 address: '',
                 deviceId: '',
                 deviceToken: '',
+                deviceInfo: '',
+                profilePicture: '',
               ),
             )
             .toList() ??

@@ -85,10 +85,11 @@ class LoginController extends MainController {
       isLogin: true,
       deviceId: currentUser.deviceId,
       deviceToken: currentUser.deviceToken,
+      deviceInfo: currentUser.deviceInfo,
     );
 
     await userRepository.update(_user);
-    
+
     await userFirebaseRepository.update(_user).then((value) {
       _onClear();
 

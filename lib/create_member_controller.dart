@@ -52,6 +52,7 @@ class CreateMemberController extends MainController {
               : "",
       deviceId: '',
       deviceToken: '',
+      deviceInfo: '',
     );
 
     var member = MemberModel.create(user: user);

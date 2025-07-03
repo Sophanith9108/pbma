@@ -104,6 +104,13 @@ class RegisterController extends MainController {
     String deviceId = await AppUtils.getDeviceId();
     String deviceToken = await AppUtils.getDeviceToken();
 
+    String deviceInfo = jsonEncode({
+      "device_name": await AppUtils.getDeviceName(),
+      "device_model": await AppUtils.getDeviceModel(),
+      "device_os": await AppUtils.getDeviceOS(),
+      "device_version": await AppUtils.getDeviceVersion(),
+    });
+
     var user = UserModel.create(
       name: nameController.text.trim(),
       email: emailController.text.trim(),
@@ -116,6 +123,7 @@ class RegisterController extends MainController {
       role: UserRoleEnums.user,
       deviceId: deviceId,
       deviceToken: deviceToken,
+      deviceInfo: deviceInfo,
       isLogin: true,
     );
 

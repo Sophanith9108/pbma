@@ -85,4 +85,52 @@ class AppUtils {
     }
     return '';
   }
+
+  static Future<String> getDeviceName() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.name;
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.model;
+    }
+    return '';
+  }
+
+  static Future<String> getDeviceModel() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.model;
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.model;
+    }
+    return '';
+  }
+
+  static Future<String> getDeviceOS() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.systemName;
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.version.baseOS ?? '';
+    }
+    return '';
+  }
+
+  static Future<String> getDeviceVersion() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.systemVersion;
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.version.release;
+    }
+    return '';
+  }
 }

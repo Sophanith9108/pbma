@@ -56,6 +56,10 @@ class UserModel extends Equatable {
   String get deviceToken => _deviceToken.value;
   set deviceToken(String value) => _deviceToken.value = value;
 
+  final _deviceInfo = "".obs;
+  String get deviceInfo => _deviceInfo.value;
+  set deviceInfo(String value) => _deviceInfo.value = value;
+
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -75,6 +79,7 @@ class UserModel extends Equatable {
     required String address,
     required String deviceId,
     required String deviceToken,
+    required String deviceInfo,
     String? profilePicture,
     String? dateOfBirth,
     GenderEnums? gender,
@@ -94,6 +99,7 @@ class UserModel extends Equatable {
       ..gender = gender ?? GenderEnums.other
       ..deviceId = deviceId
       ..deviceToken = deviceToken
+      ..deviceInfo = deviceInfo
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now()
       ..role = role ?? UserRoleEnums.user
@@ -117,6 +123,7 @@ class UserModel extends Equatable {
       "isLogin": model.isLogin.toString(),
       "deviceId": model.deviceId.toString(),
       "deviceToken": model.deviceToken.toString(),
+      "deviceInfo": model.deviceInfo.toString(),
     };
   }
 
@@ -136,6 +143,7 @@ class UserModel extends Equatable {
       ..role = UserRoleEnums.values.byName(json['role'])
       ..deviceId = json['deviceId']
       ..deviceToken = json['deviceToken']
+      ..deviceInfo = json['deviceInfo']
       ..isLogin = json['isLogin'] == 'true';
   }
 
@@ -173,5 +181,6 @@ class UserModel extends Equatable {
     isLogin,
     deviceId,
     deviceToken,
+    deviceInfo,
   ];
 }

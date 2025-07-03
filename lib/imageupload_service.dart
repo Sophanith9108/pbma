@@ -1,9 +1,15 @@
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pbma/core.dart';
 
 class ImageUploadService extends AppFirebaseStorageService<String> {
   final Reference _storage = FirebaseStorage.instance
       .ref()
+      .child(
+        kDebugMode
+            ? AppFirebaseReference.devNode
+            : AppFirebaseReference.preNode,
+      )
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.image);
 

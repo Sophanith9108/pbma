@@ -1,9 +1,15 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:pbma/core.dart';
 
 class MemberFirebaseService extends AppFirebaseStorageService<MemberModel> {
   final _database = FirebaseDatabase.instance
       .ref()
+      .child(
+        kDebugMode
+            ? AppFirebaseReference.devNode
+            : AppFirebaseReference.preNode,
+      )
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.member);
 
