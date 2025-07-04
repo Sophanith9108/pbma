@@ -128,6 +128,7 @@ class RegisterController extends MainController {
     );
 
     AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3));
     await userRepository.save(user);
     await userFirebaseRepository
         .create(user)

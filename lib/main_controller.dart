@@ -434,25 +434,6 @@ class MainController extends GetxController {
   Future<void> setData() async {
     await checkedUser();
     await sayHi();
-    Map<String, String> keys = await PGPUtil.generateKeyPair(
-      name: "Sophanit KONG",
-      email: "sophanit.9108@mail.com",
-    );
-
-    debugPrint("$TAG: ${keys['publicKey']}");
-    debugPrint("$TAG: ${keys['privateKey']}");
-
-    await PGPUtil.sign(
-      plainText: "plainText",
-      privateKey: keys['privateKey']!,
-      passphrase: "passphrase",
-    );
-
-    await PGPUtil.verify(
-      plainText: "plainText",
-      signature: "signature",
-      publicKey: keys['publicKey']!,
-    );
   }
 
   Future<void> biometricAuth() async {

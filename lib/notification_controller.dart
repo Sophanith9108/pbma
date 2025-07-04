@@ -9,8 +9,8 @@ class NotificationController extends MainController {
       _notifications.value = value;
 
   @override
-  void onInit() {
-    retrieveData();
+  void onInit() async {
+    await retrieveData();
     super.onInit();
   }
 
