@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -42,7 +43,7 @@ class MainController extends GetxController {
   int get currentIndex => _currentIndex.value;
   set currentIndex(int index) => _currentIndex.value = index;
 
-  final _title = 'Home'.obs;
+  final _title = 'Good'.obs;
   String get title => _title.value;
   set title(String title) => _title.value = title;
 
@@ -61,6 +62,10 @@ class MainController extends GetxController {
   final _currentLocation = LatLng(0, 0).obs;
   LatLng get currentLocation => _currentLocation.value;
   set currentLocation(LatLng value) => _currentLocation.value = value;
+
+  final _isLoading = true.obs;
+  bool get isLoading => _isLoading.value;
+  set isLoading(bool value) => _isLoading.value = value;
 
   late GoogleMapController mapController;
 
@@ -88,27 +93,20 @@ class MainController extends GetxController {
     super.onClose();
   }
 
+  Future<void> sayHi() async {
+    var now = DateTime.now();
+    var hour = now.hour;
+    if (hour < 12) {
+      title = 'Good Morning!'.tr;
+    } else if (hour < 17) {
+      title = 'Good Afternoon!'.tr;
+    } else {
+      title = 'Good Evening!'.tr;
+    }
+  }
+
   Future onTabSelected(int index) async {
     currentIndex = index;
-    switch (index) {
-      case 0:
-        title = 'Home'.tr;
-        break;
-      case 1:
-        title = 'Transactions'.tr;
-        break;
-      case 2:
-        title = 'Members'.tr;
-        break;
-      case 3:
-        title = 'Budgets'.tr;
-        break;
-      case 4:
-        title = 'Payments'.tr;
-        break;
-      default:
-        title = 'Home'.tr;
-    }
   }
 
   Future<void> showMapSelectAddress(Function(String address) handler) async {
@@ -142,45 +140,64 @@ class MainController extends GetxController {
               Expanded(
                 child: Stack(
                   children: [
-                    GoogleMap(
-                      zoomControlsEnabled: false,
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                      zoomGesturesEnabled: false,
-                      mapType: MapType.hybrid,
-                      onMapCreated: (GoogleMapController controller) {
-                        mapController = controller;
-
-                        AppUtils.showLoading();
-                        Future.delayed(Duration(seconds: 3), () async {
-                          await AppUtils.hideLoading();
-
-                          await _handleRetrieveCurrentLocation();
-                        });
-                      },
-                      onTap: (LatLng latLng) async {
-                        currentLocation = latLng;
-
-                        mapController.animateCamera(
-                          CameraUpdate.newCameraPosition(
-                            CameraPosition(target: latLng, zoom: 12),
+                    Positioned(
+                      left: 16,
+                      top: 16,
+                      right: 16,
+                      bottom: 16,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          labelText: 'Search Location'.tr,
+                          labelStyle: AppTextStyles.label,
+                          hintText: 'Phnom Penh, Cambodia',
+                          hintStyle: AppTextStyles.hint,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(AppDimensions.padding),
+                            ),
                           ),
-                        );
-                      },
-                      markers: Set<Marker>.of(<Marker>{
-                        Marker(
-                          markerId: MarkerId('marker'),
-                          position: currentLocation,
-                          icon: BitmapDescriptor.defaultMarkerWithHue(
-                            BitmapDescriptor.hueBlue,
+                          suffixIcon: IconButton(
+                            onPressed: () {},
+                            icon: Icon(FontAwesomeIcons.magnifyingGlass),
                           ),
                         ),
-                      }),
-                      initialCameraPosition: CameraPosition(
-                        target: currentLocation,
-                        zoom: 12,
                       ),
                     ),
+                    Positioned.fill(
+                      child: GoogleMap(
+                        zoomControlsEnabled: false,
+                        myLocationEnabled: true,
+                        myLocationButtonEnabled: true,
+                        zoomGesturesEnabled: false,
+                        mapType: MapType.hybrid,
+                        onMapCreated: (GoogleMapController controller) async {
+                          await onMapCreated(controller);
+                        },
+                        onTap: (LatLng latLng) async {
+                          currentLocation = latLng;
+
+                          mapController.animateCamera(
+                            CameraUpdate.newCameraPosition(
+                              CameraPosition(target: latLng, zoom: 12),
+                            ),
+                          );
+                        },
+                        markers: Set<Marker>.of(<Marker>{
+                          Marker(
+                            markerId: MarkerId('marker'),
+                            position: currentLocation,
+                            icon: BitmapDescriptor.defaultMarkerWithHue(
+                              BitmapDescriptor.hueBlue,
+                            ),
+                          ),
+                        }),
+                        initialCameraPosition: CameraPosition(
+                          target: currentLocation,
+                          zoom: 12,
+                        ),
+                      ),
+                    ),
+
                     Positioned(
                       bottom: Get.width * .2,
                       left: 32,
@@ -212,13 +229,21 @@ class MainController extends GetxController {
     );
   }
 
+  Future<void> onMapCreated(GoogleMapController controller) async {
+    mapController = controller;
+
+    isLoading = false;
+
+    await _handleRetrieveCurrentLocation();
+  }
+
   Future<void> _handleRetrieveCurrentLocation() async {
     await getCurrentLocation().then((value) {
       mapController.animateCamera(
         CameraUpdate.newCameraPosition(
           CameraPosition(
             target: LatLng(value.latitude, value.longitude),
-            zoom: 12,
+            zoom: AppConstants.zoomLevel,
           ),
         ),
       );
@@ -408,6 +433,26 @@ class MainController extends GetxController {
 
   Future<void> setData() async {
     await checkedUser();
+    await sayHi();
+    Map<String, String> keys = await PGPUtil.generateKeyPair(
+      name: "Sophanit KONG",
+      email: "sophanit.9108@mail.com",
+    );
+
+    debugPrint("$TAG: ${keys['publicKey']}");
+    debugPrint("$TAG: ${keys['privateKey']}");
+
+    await PGPUtil.sign(
+      plainText: "plainText",
+      privateKey: keys['privateKey']!,
+      passphrase: "passphrase",
+    );
+
+    await PGPUtil.verify(
+      plainText: "plainText",
+      signature: "signature",
+      publicKey: keys['publicKey']!,
+    );
   }
 
   Future<void> biometricAuth() async {

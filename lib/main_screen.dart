@@ -32,6 +32,8 @@ class MainScreen extends StatelessWidget {
           ),
         ),
         title: mainController.title.tr,
+        subtitle:
+            "Login at: ${DateTime.now().format(pattern: AppConstants.dateFormat)}",
         actions: [
           IconButton(
             onPressed: () {},

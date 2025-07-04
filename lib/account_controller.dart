@@ -222,10 +222,7 @@ class AccountController extends GetxController {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: Text(
-                          "Transaction".tr,
-                          style: AppTextStyles.label,
-                        ),
+                        child: Text("Date".tr, style: AppTextStyles.label),
                       ),
                       Expanded(
                         flex: 3,

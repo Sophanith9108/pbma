@@ -5,6 +5,7 @@ class AppNavigation extends StatelessWidget {
   const AppNavigation({
     super.key,
     this.title,
+    this.subtitle,
     this.body,
     this.floatingActionButton,
     this.bottomNavigationBar,
@@ -13,6 +14,7 @@ class AppNavigation extends StatelessWidget {
   });
 
   final String? title;
+  final String? subtitle;
   final Widget? body;
   final Widget? floatingActionButton;
   final Widget? bottomNavigationBar;
@@ -31,7 +33,20 @@ class AppNavigation extends StatelessWidget {
                 ? null
                 : AppBar(
                   leading: leading,
-                  title: Text(title!, style: AppTextStyles.header),
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(title!, style: AppTextStyles.header),
+                      Visibility(
+                        visible: subtitle != null,
+                        child: Text(
+                          subtitle ?? "",
+                          style: AppTextStyles.subtitle,
+                        ),
+                      ),
+                    ],
+                  ),
                   actions: actions,
                   elevation: AppDimensions.elevation,
                 ),

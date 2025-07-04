@@ -166,13 +166,12 @@ class CreateTransactionController extends MainController {
     );
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 1), () async {
+    await Future.delayed(const Duration(seconds: 3), () async {
       await transactionRepository.save(transaction);
       await transactionFirebaseRepository.create(transaction);
       AppUtils.hideLoading();
 
       _onClear();
-      await Future.delayed(Duration(seconds: 1));
       Get.back(result: true);
     });
   }
