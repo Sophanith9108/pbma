@@ -117,11 +117,16 @@ class LoginController extends MainController {
   }
 
   Future<void> checkIfBiometricAvialable() async {
+    await Future.delayed(Duration(milliseconds: 300));
+
+    await checkedUser();
+
     var availableBiometrics =
         await LocalAuthentication().getAvailableBiometrics();
     var isAvailable = await LocalAuthentication().canCheckBiometrics;
 
-    showBiometric = isAvailable && availableBiometrics.isNotEmpty;
+    showBiometric =
+        user.isLogin && isAvailable && availableBiometrics.isNotEmpty;
   }
 
   Future<void> gotoRegister() async {

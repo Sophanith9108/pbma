@@ -308,10 +308,6 @@ class MainController extends GetxController {
       user = users.first;
     }
 
-    for (var element in users) {
-      debugPrint("$TAG: $element");
-    }
-
     isLogin = users.isNotEmpty && user.isLogin;
   }
 
