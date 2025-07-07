@@ -8,7 +8,9 @@ class BankCardFirebaseService extends AppFirebaseStorageService<BankCardModel> {
       .child(
         kDebugMode
             ? AppFirebaseReference.devNode
-            : AppFirebaseReference.preNode,
+            : kProfileMode
+            ? AppFirebaseReference.preNode
+            : AppFirebaseReference.proNode,
       )
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.bankCard);

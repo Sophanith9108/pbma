@@ -34,30 +34,32 @@ class CreateMemberController extends MainController {
   set addressController(TextEditingController value) =>
       _addressController.value = value;
 
-  Future<void> onCreateMember() async {
+  Future<void> onCreateMemeber() async {
     if (!formKey.currentState!.validate()) return;
 
     FocusScope.of(Get.context!).unfocus();
 
-    var user = UserModel.create(
+    var profilePicture =
+        profile.path.isNotEmpty ? base64Encode(profile.readAsBytesSync()) : "";
+
+    String deviceId = await AppUtils.getDeviceId();
+    String deviceToken = await AppUtils.getDeviceToken();
+    String deviceInfo = await AppUtils.getDeviceInfo();
+
+    var member = MemberModel.create(
+      user: user,
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       phone: phoneController.text.trim(),
-      password: "",
       address: addressController.text.trim(),
-
-      profilePicture:
-          profile.path.isNotEmpty
-              ? base64Encode(profile.readAsBytesSync())
-              : "",
-      deviceId: '',
-      deviceToken: '',
-      deviceInfo: '',
+      profile: profilePicture,
+      deviceId: deviceId,
+      deviceToken: deviceToken,
+      deviceInfo: deviceInfo,
     );
 
-    var member = MemberModel.create(user: user);
-
     AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 1));
     await memberFirebaseRepository.create(member).then((value) async {
       AppUtils.hideLoading();
 

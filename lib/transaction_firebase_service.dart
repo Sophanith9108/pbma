@@ -9,7 +9,9 @@ class TransactionFirebaseService
       .child(
         kDebugMode
             ? AppFirebaseReference.devNode
-            : AppFirebaseReference.preNode,
+            : kProfileMode
+            ? AppFirebaseReference.preNode
+            : AppFirebaseReference.proNode,
       )
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.transaction);

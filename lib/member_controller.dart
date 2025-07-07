@@ -13,20 +13,21 @@ class MemberController extends GetxController {
   );
   final UserRepository userRepository = Get.put(UserRepository());
 
-  final _members = <UserModel>[].obs;
-  List<UserModel> get members => _members;
-  set members(List<UserModel> value) => _members.value = value;
+  final _members = <MemberModel>[].obs;
+  List<MemberModel> get members => _members;
+  set members(List<MemberModel> value) => _members.value = value;
 
   final _user = UserModel().obs;
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
 
   Future<void> setData() async {
+    await checkedUser();
+
     members = await memberFirebaseRepository.reads();
-    members =
-        members.where((element) {
-          return element.isLogin;
-        }).toList();
+    members.where((member) {
+      return member.user.id == user.id;
+    }).toList();
   }
 
   Future<void> onRefreshing() async {
@@ -45,7 +46,9 @@ class MemberController extends GetxController {
 
   Future<void> checkedUser() async {
     await userRepository.gets().then((value) {
-      user = value!.first;
+      if (value != null && value.isNotEmpty) {
+        user = value.first;
+      }
     });
   }
 

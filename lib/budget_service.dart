@@ -1,11 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pbma/core.dart';
 
 class BudgetService extends AppStorageService<BudgetEntity> {
-  final Box<BudgetEntity> _budgetBox = Get.put(
-    Hive.box<BudgetEntity>(AppStorageBox.budgetBox),
-  );
+  Box<BudgetEntity> get _budgetBox {
+    final boxName =
+        kDebugMode
+            ? 'debug_${AppStorageBox.budgetBox}'
+            : kProfileMode
+            ? 'profile_${AppStorageBox.budgetBox}'
+            : AppStorageBox.budgetBox;
+    return Get.put(Hive.box<BudgetEntity>(boxName));
+  }
 
   @override
   Future<void> create(BudgetEntity value) async {

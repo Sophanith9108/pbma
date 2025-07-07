@@ -94,7 +94,30 @@ class AccountScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: AppDimensions.padding),
-              Text("Transactions".tr, style: AppTextStyles.header1),
+              Row(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Transactions".tr, style: AppTextStyles.header),
+                      Text(
+                        "${controller.transactions.length} transactions".tr,
+                        style: AppTextStyles.subtitle,
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  IconButton.outlined(
+                    onPressed: () {
+                      controller.gotoTransactions();
+                    },
+                    icon: Icon(
+                      FontAwesomeIcons.chevronRight,
+                      size: AppDimensions.miconSize,
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 8),
               controller.transactions.isEmpty
                   ? ListView(
@@ -145,7 +168,7 @@ class AccountScreen extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          transaction.reason,
+                          transaction.purpose,
                           style: AppTextStyles.title,
                         ),
                         subtitle: Text(
@@ -154,10 +177,17 @@ class AccountScreen extends StatelessWidget {
                           ),
                           style: AppTextStyles.subtitle,
                         ),
-                        trailing: Text(
-                          "-${transaction.amount} ${transaction.currency.name}",
-                          style: AppTextStyles.amountNegative,
-                        ),
+                        trailing:
+                            transaction.transactionType ==
+                                    TransactionTypeEnums.income
+                                ? Text(
+                                  "+${transaction.amount} ${transaction.currency.name}",
+                                  style: AppTextStyles.amountPositive,
+                                )
+                                : Text(
+                                  "-${transaction.amount} ${transaction.currency.name}",
+                                  style: AppTextStyles.amountNegative,
+                                ),
                       );
                     },
                   ),

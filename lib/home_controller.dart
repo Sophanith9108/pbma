@@ -9,6 +9,10 @@ class HomeController extends GetxController {
     TransactionFirebaseRepository(),
   );
 
+  final _user = UserModel().obs;
+  UserModel get user => _user.value;
+  set user(UserModel value) => _user.value = value;
+
   final _startDate = DateTime.now().obs;
   DateTime get startDate => _startDate.value;
   set startDate(DateTime value) => _startDate.value = value;
@@ -58,7 +62,7 @@ class HomeController extends GetxController {
 
   @override
   void onInit() async {
-    await _setData();
+    await setData();
     super.onInit();
   }
 
@@ -72,30 +76,37 @@ class HomeController extends GetxController {
     super.onClose();
   }
 
+  Future<void> checkedUser() async {
+    await userRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        user = value.first;
+      }
+    });
+  }
+
   Future<void> onRefreshing() async {
     await Future.delayed(const Duration(seconds: 1), () async {
-      AppUtils.showSuccess('Successfully refresing...');
-
-      await calculateTotalAmount();
+      await setData();
 
       return true;
     });
   }
 
-  Future<void> _setData() async {
+  Future<void> setData() async {
+    await checkedUser();
+
     startDate = DateTime(startDate.year, startDate.month, 1);
     endDate = DateTime(endDate.year, endDate.month + 1, 0);
-
-    var targets = await targetRepository.gets() ?? [];
-    if (targets.isNotEmpty && targets.first.amount > 0.0) {
-      targetAmount = targets.first.amount;
-    }
 
     await calculateTotalAmount();
   }
 
   Future<void> calculateTotalAmount() async {
-    var transactions = await transactionFirebaseRepository.reads();
+    List<TransactionModel> transactions =
+        await transactionFirebaseRepository.reads();
+    transactions.where((element) {
+      return element.createdBy.id == user.id;
+    });
 
     currentAmount = 0.0;
 
@@ -106,17 +117,17 @@ class HomeController extends GetxController {
       }
     }
 
-    showMessageBaseOnProgress();
+    await showMessageBaseOnProgress();
 
-    calculateRemainBalance();
+    await calculateRemainBalance();
   }
 
-  void calculateRemainBalance() {
+  Future<void> calculateRemainBalance() async {
     remainingBalance = targetAmount - currentAmount;
     remainingBalancePercent = (remainingBalance / targetAmount) * 100;
   }
 
-  void showMessageBaseOnProgress() {
+  Future<void> showMessageBaseOnProgress() async {
     progress = (currentAmount / targetAmount);
 
     if (progress > 1) {

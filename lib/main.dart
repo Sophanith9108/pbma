@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -28,11 +29,46 @@ Future<void> initializeStorage() async {
   Hive.registerAdapter(TransactionTypeEnumsAdapter());
   Hive.registerAdapter(TransactionStatusEnumsAdapter());
 
-  await Hive.openBox<UserEntity>(AppStorageBox.userBox);
-  await Hive.openBox<UserEntity>(AppStorageBox.memberBox);
-  await Hive.openBox<TargetEntity>(AppStorageBox.targetBox);
-  await Hive.openBox<BudgetEntity>(AppStorageBox.budgetBox);
-  await Hive.openBox<TransactionEntity>(AppStorageBox.transactionBox);
+  final userBox =
+      kDebugMode
+          ? 'debug_${AppStorageBox.userBox}'
+          : kProfileMode
+          ? 'profile_${AppStorageBox.userBox}'
+          : AppStorageBox.userBox;
+
+  final memberBox =
+      kDebugMode
+          ? 'debug_${AppStorageBox.memberBox}'
+          : kProfileMode
+          ? 'profile_${AppStorageBox.memberBox}'
+          : AppStorageBox.memberBox;
+
+  final targetBox =
+      kDebugMode
+          ? 'debug_${AppStorageBox.targetBox}'
+          : kProfileMode
+          ? 'profile_${AppStorageBox.targetBox}'
+          : AppStorageBox.targetBox;
+
+  final budgetBox =
+      kDebugMode
+          ? 'debug_${AppStorageBox.budgetBox}'
+          : kProfileMode
+          ? 'profile_${AppStorageBox.budgetBox}'
+          : AppStorageBox.budgetBox;
+
+  final transactionBox =
+      kDebugMode
+          ? 'debug_${AppStorageBox.transactionBox}'
+          : kProfileMode
+          ? 'profile_${AppStorageBox.transactionBox}'
+          : AppStorageBox.transactionBox;
+
+  await Hive.openBox<UserEntity>(userBox);
+  await Hive.openBox<UserEntity>(memberBox);
+  await Hive.openBox<TargetEntity>(targetBox);
+  await Hive.openBox<BudgetEntity>(budgetBox);
+  await Hive.openBox<TransactionEntity>(transactionBox);
 }
 
 void setControllers() {

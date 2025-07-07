@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -130,6 +131,28 @@ class AppUtils {
     } else if (GetPlatform.isAndroid) {
       var androidInfo = await deviceInfo.androidInfo;
       return androidInfo.version.release;
+    }
+    return '';
+  }
+
+  static Future<String> getDeviceInfo() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (GetPlatform.isIOS) {
+      var iosInfo = await deviceInfo.iosInfo;
+      return jsonEncode({
+        "deviceName": iosInfo.name,
+        "deviceModel": iosInfo.model,
+        "deviceOS": iosInfo.systemName,
+        "deviceVersion": iosInfo.systemVersion,
+      });
+    } else if (GetPlatform.isAndroid) {
+      var androidInfo = await deviceInfo.androidInfo;
+      return jsonEncode({
+        "deviceName": androidInfo.model,
+        "deviceModel": androidInfo.model,
+        "deviceOS": androidInfo.version.baseOS ?? '',
+        "deviceVersion": androidInfo.version.release,
+      });
     }
     return '';
   }

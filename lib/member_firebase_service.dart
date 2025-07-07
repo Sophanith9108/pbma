@@ -8,7 +8,9 @@ class MemberFirebaseService extends AppFirebaseStorageService<MemberModel> {
       .child(
         kDebugMode
             ? AppFirebaseReference.devNode
-            : AppFirebaseReference.preNode,
+            : kProfileMode
+            ? AppFirebaseReference.preNode
+            : AppFirebaseReference.proNode,
       )
       .child(AppFirebaseReference.root)
       .child(AppFirebaseReference.member);

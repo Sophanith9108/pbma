@@ -1,11 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/instance_manager.dart';
 import 'package:hive/hive.dart';
 import 'package:pbma/core.dart';
 
 class MemberService extends AppStorageService<UserEntity> {
-  final Box<UserEntity> _memberBox = Get.put(
-    Hive.box<UserEntity>(AppStorageBox.memberBox),
-  );
+  Box<UserEntity> get _memberBox {
+    final boxName =
+        kDebugMode
+            ? 'debug_${AppStorageBox.memberBox}'
+            : kProfileMode
+            ? 'profile_${AppStorageBox.memberBox}'
+            : AppStorageBox.memberBox;
+    return Get.put(Hive.box<UserEntity>(boxName));
+  }
 
   @override
   Future<void> create(UserEntity value) async {

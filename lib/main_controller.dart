@@ -47,6 +47,10 @@ class MainController extends GetxController {
   String get title => _title.value;
   set title(String title) => _title.value = title;
 
+  final _message = "".obs;
+  String get message => _message.value;
+  set message(String message) => _message.value = message;
+
   final _user = UserModel().obs;
   UserModel get user => _user.value;
   set user(UserModel user) => _user.value = user;
@@ -434,6 +438,7 @@ class MainController extends GetxController {
   Future<void> setData() async {
     await checkedUser();
     await sayHi();
+    await showMessage();
   }
 
   Future<void> biometricAuth() async {
@@ -477,5 +482,13 @@ class MainController extends GetxController {
         setData();
       }
     });
+  }
+
+  Future<void> showMessage() async {
+    if (user.isLogin) {
+      message = "Welcome back, ${user.name}!";
+    } else {
+      message = "Please login to continue.";
+    }
   }
 }

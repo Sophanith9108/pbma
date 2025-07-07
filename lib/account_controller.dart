@@ -18,6 +18,10 @@ class AccountController extends GetxController {
   );
   final UserRepository userRepository = Get.put(UserRepository());
 
+  final _user = UserModel().obs;
+  UserModel get user => _user.value;
+  set user(UserModel value) => _user.value = value;
+
   final _banks = <Widget>[].obs;
   List<Widget> get banks => _banks;
   set banks(List<Widget> value) => _banks.value = value;
@@ -524,23 +528,28 @@ class AccountController extends GetxController {
     });
   }
 
+  Future<void> checkedUser() async {
+    await userFirebaseRepository.reads().then((value) {
+      user = value.first;
+      if (value.isEmpty) {
+        Get.offAllNamed(AppRoutes.login);
+      }
+    });
+  }
+
   Future<void> gotoBankCard() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    await userRepository.gets().then((value) {
-      if (value == null || value.isEmpty || !value.first.isLogin) {
-        Get.offAllNamed(AppRoutes.login);
-        return;
-      }
 
-      Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
-        if (value != null && value) {
-          await setData();
-          if (banks.isNotEmpty && selectedPage > 1) {
-            selectedPage = 0;
-            carouselController.animateToPage(selectedPage);
-          }
+    await checkedUser();
+
+    Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
+      if (value != null && value) {
+        await setData();
+        if (banks.isNotEmpty && selectedPage > 1) {
+          selectedPage = 0;
+          carouselController.animateToPage(selectedPage);
         }
-      });
+      }
     });
   }
 
@@ -596,14 +605,22 @@ class AccountController extends GetxController {
 
   Future<void> _retrieveTransactions() async {
     await transactionFirebaseRepository.reads().then((value) {
-      value.sort((a, b) {
-        return b.createdAt.compareTo(a.createdAt);
-      });
-      transactions = value;
+      transactions = value.take(10).toList();
+
+      transactions
+          .where((transaction) {
+            return transaction.createdBy.id == user.id;
+          })
+          .toList()
+          .reversed;
     });
   }
 
   Future<void> gotoBankCardDetail() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+  }
+
+  Future<void> gotoTransactions() async {
     await Future.delayed(const Duration(milliseconds: 300));
   }
 }
