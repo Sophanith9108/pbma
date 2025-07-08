@@ -85,7 +85,7 @@ class RegisterScreen extends StatelessWidget {
                     borderSide: BorderSide(color: AppColors.primary, width: 1),
                   ),
                 ),
-                keyboardType: TextInputType.name,
+                keyboardType: TextInputType.text,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z ]')),
                   LengthLimitingTextInputFormatter(50),

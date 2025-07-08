@@ -61,13 +61,13 @@ class RegisterController extends MainController {
   set selectedGender(GenderEnums value) => _selectedGender.value = value;
 
   @override
-  void onReady() {
-    super.onReady();
+  void onInit() {
+    super.onInit();
   }
 
   @override
-  void onInit() {
-    super.onInit();
+  void onReady() {
+    super.onReady();
   }
 
   @override
@@ -109,7 +109,7 @@ class RegisterController extends MainController {
       name: nameController.text.trim(),
       email: emailController.text.trim(),
       phone: phoneController.text.trim(),
-      password: passwordController.text.trim(),
+      password: passwordController.text.trim().hashPassword(),
       address: addressController.text.trim(),
       profilePicture: profilePicture,
       dateOfBirth: DateTime.now().format(pattern: AppConstants.dateFormat),
@@ -129,8 +129,10 @@ class RegisterController extends MainController {
         .then((response) {
           AppUtils.hideLoading();
 
+          user = response;
+
           _onClear();
-          Get.offAllNamed(AppRoutes.main, arguments: response);
+          Get.offAllNamed(AppRoutes.main);
         })
         .catchError((error) {
           AppUtils.hideLoading();

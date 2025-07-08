@@ -119,7 +119,7 @@ class CreateTransactionController extends MainController {
 
   @override
   void onInit() async {
-    await _setData();
+    await onRetrievedBankList();
     super.onInit();
   }
 
@@ -128,20 +128,19 @@ class CreateTransactionController extends MainController {
     super.onReady();
   }
 
-  Future onCreateTransaction() async {
-    var currentUsers = await userRepository.gets() ?? [];
+  Future<void> onRetrievedBankList() async {
+    await bankCardFirebaseRepository.reads().then((value) {
+      bankCards = value;
+    });
+  }
 
-    if (currentUsers.isEmpty) {
-      Fluttertoast.showToast(msg: 'Please register first'.tr);
-      await Future.delayed(const Duration(seconds: 1));
-      Get.offAllNamed(AppRoutes.register);
-      return;
-    }
+  Future onCreateTransaction() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    await checkedUser();
 
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
-
-    var createdBy = currentUsers.first;
 
     var transaction = TransactionModel.create(
       purpose: purposeController.text.trim(),
@@ -158,8 +157,8 @@ class CreateTransactionController extends MainController {
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
       othersInvolved: isOthersInvolved ? [] : [],
-      createdBy: createdBy,
-      updatedBy: createdBy,
+      createdBy: user,
+      updatedBy: user,
       updatedAt: DateTime.now(),
       status: TransactionStatusEnums.success,
       transactionType: TransactionTypeEnums.expense,
@@ -227,18 +226,47 @@ class CreateTransactionController extends MainController {
     });
   }
 
-  Future<void> _setData() async {
-    await bankCardFirebaseRepository.reads().then((value) {
-      bankCards = value;
-    });
-  }
-
   Future<void> gotoCreateBankCard() async {
     await Future.delayed(const Duration(milliseconds: 300));
     Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
       if (value != null && value) {
-        await _setData();
+        await onRetrievedBankList();
       }
     });
+  }
+
+  Future<void> onBankCardsSelected() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    await onRetrievedBankList();
+
+    await showModalBottomSheet(
+      context: Get.context!,
+      showDragHandle: true,
+      useSafeArea: true,
+      isScrollControlled: true,
+      isDismissible: true,
+      builder: (_) {
+        return ListView(
+          shrinkWrap: true,
+          children:
+              bankCards.map((element) {
+                return ListTile(
+                  leading: Icon(element.paymentNetwork.icon),
+                  title: Text(element.bankName, style: AppTextStyles.title),
+                  subtitle: Text(
+                    element.cardType.name,
+                    style: AppTextStyles.subtitle,
+                  ),
+                  onTap: () async {
+                    await Future.delayed(const Duration(milliseconds: 300));
+                    selectedBankCard = element;
+                    bankCardController.text = element.bankName;
+                    Get.back();
+                  },
+                );
+              }).toList(),
+        );
+      },
+    );
   }
 }

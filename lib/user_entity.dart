@@ -45,6 +45,18 @@ class UserEntity extends HiveObject {
   @HiveField(12)
   late bool isLogin;
 
+  @HiveField(13)
+  late String? deviceId;
+
+  @HiveField(14)
+  late String? deviceToken;
+
+  @HiveField(15)
+  late String? deviceInfo;
+
+  @HiveField(16)
+  late bool enableBiometric;
+
   UserEntity();
 
   UserEntity.create({
@@ -61,6 +73,10 @@ class UserEntity extends HiveObject {
     DateTime? updatedAt,
     UserRoleEnums? role,
     bool? isLogin,
+    String? deviceId,
+    String? deviceToken,
+    String? deviceInfo,
+    bool? enableBiometric,
   }) {
     UserEntity()
       ..id = Uuid().v8()
@@ -75,7 +91,11 @@ class UserEntity extends HiveObject {
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now()
       ..role = role ?? UserRoleEnums.user
-      ..isLogin = isLogin ?? false;
+      ..isLogin = isLogin ?? false
+      ..deviceId = deviceId
+      ..deviceToken = deviceToken
+      ..deviceInfo = deviceInfo
+      ..enableBiometric = enableBiometric ?? false;
   }
 
   static UserModel toModel(UserEntity entity) {
@@ -92,6 +112,10 @@ class UserEntity extends HiveObject {
       ..createdAt = entity.createdAt ?? DateTime.now()
       ..updatedAt = entity.updatedAt ?? DateTime.now()
       ..role = entity.role
-      ..isLogin = entity.isLogin;
+      ..isLogin = entity.isLogin
+      ..deviceId = entity.deviceId ?? ""
+      ..deviceToken = entity.deviceToken ?? ""
+      ..deviceInfo = entity.deviceInfo ?? ""
+      ..enableBiometric = entity.enableBiometric;
   }
 }

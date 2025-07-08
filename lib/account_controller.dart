@@ -60,12 +60,18 @@ class AccountController extends GetxController {
   }
 
   Future<void> setData() async {
+    await checkedUser();
     await _retrieveBankCards();
     await _retrieveTransactions();
   }
 
   Future<void> _retrieveBankCards() async {
     await bankCardFirebaseRepository.reads().then((value) {
+      value =
+          value.where((bank) {
+            return bank.user.id == user.id;
+          }).toList();
+
       value.sort((a, b) {
         return b.createdAt.compareTo(a.createdAt);
       });
@@ -529,19 +535,17 @@ class AccountController extends GetxController {
   }
 
   Future<void> checkedUser() async {
-    await userFirebaseRepository.reads().then((value) {
-      user = value.first;
-      if (value.isEmpty) {
-        Get.offAllNamed(AppRoutes.login);
+    await userRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        user = value.first;
       }
     });
   }
 
   Future<void> gotoBankCard() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-
     await checkedUser();
 
+    await Future.delayed(const Duration(milliseconds: 300));
     Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
       if (value != null && value) {
         await setData();
@@ -605,14 +609,15 @@ class AccountController extends GetxController {
 
   Future<void> _retrieveTransactions() async {
     await transactionFirebaseRepository.reads().then((value) {
-      transactions = value.take(10).toList();
-
-      transactions
-          .where((transaction) {
-            return transaction.createdBy.id == user.id;
-          })
-          .toList()
-          .reversed;
+      transactions =
+          value
+              .where((element) {
+                return element.createdBy.id == user.id;
+              })
+              .take(10)
+              .toList()
+              .reversed
+              .toList();
     });
   }
 

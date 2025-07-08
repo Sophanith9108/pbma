@@ -59,8 +59,8 @@ class CreateBankCardController extends MainController {
   set banks(List<BankModel> value) => _banks.value = value;
 
   @override
-  void onInit() {
-    _onRetrievedBankList();
+  void onInit() async {
+    await onRetrievedBankList();
     super.onInit();
   }
 
@@ -152,7 +152,7 @@ class CreateBankCardController extends MainController {
     );
   }
 
-  Future<void> _onRetrievedBankList() async {
+  Future<void> onRetrievedBankList() async {
     try {
       final String jsonString = await rootBundle.loadString(AppAssets.banklist);
       final List<dynamic> jsonArray = jsonDecode(jsonString);

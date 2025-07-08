@@ -55,14 +55,6 @@ class MainController extends GetxController {
   UserModel get user => _user.value;
   set user(UserModel user) => _user.value = user;
 
-  final _isLogin = false.obs;
-  bool get isLogin => _isLogin.value;
-  set isLogin(bool isLogin) => _isLogin.value = isLogin;
-
-  final _isRegistered = false.obs;
-  bool get isRegistered => _isRegistered.value;
-  set isRegistered(bool isRegistered) => _isRegistered.value = isRegistered;
-
   final _currentLocation = LatLng(0, 0).obs;
   LatLng get currentLocation => _currentLocation.value;
   set currentLocation(LatLng value) => _currentLocation.value = value;
@@ -175,7 +167,7 @@ class MainController extends GetxController {
                         zoomGesturesEnabled: false,
                         mapType: MapType.hybrid,
                         onMapCreated: (GoogleMapController controller) async {
-                          await onMapCreated(controller);
+                          await onMapsCreated(controller);
                         },
                         onTap: (LatLng latLng) async {
                           currentLocation = latLng;
@@ -233,7 +225,7 @@ class MainController extends GetxController {
     );
   }
 
-  Future<void> onMapCreated(GoogleMapController controller) async {
+  Future<void> onMapsCreated(GoogleMapController controller) async {
     mapController = controller;
 
     isLoading = false;
@@ -307,8 +299,6 @@ class MainController extends GetxController {
     if (users.isNotEmpty) {
       user = users.first;
     }
-
-    isLogin = users.isNotEmpty && user.isLogin;
   }
 
   Future<void> gotoLogin() async {
@@ -323,7 +313,8 @@ class MainController extends GetxController {
 
   Future<void> gotoProfile() async {
     await checkedUser();
-    if (isLogin) {
+
+    if (user.isLogin) {
       await Future.delayed(const Duration(milliseconds: 300), () {
         Get.toNamed(AppRoutes.profile)?.then((value) {
           if (value != null && value) {
@@ -468,16 +459,16 @@ class MainController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 300));
     await checkedUser();
 
-    if (!isLogin) {
-      await gotoLogin();
+    if (user.isLogin) {
+      Get.toNamed(AppRoutes.createTransaction)?.then((value) {
+        if (value != null && value) {
+          setData();
+        }
+      });
       return;
+    } else {
+      await gotoLogin();
     }
-
-    Get.toNamed(AppRoutes.createTransaction)?.then((value) {
-      if (value != null && value) {
-        setData();
-      }
-    });
   }
 
   Future<void> showMessage() async {

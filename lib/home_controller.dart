@@ -104,9 +104,10 @@ class HomeController extends GetxController {
   Future<void> calculateTotalAmount() async {
     List<TransactionModel> transactions =
         await transactionFirebaseRepository.reads();
-    transactions.where((element) {
-      return element.createdBy.id == user.id;
-    });
+    transactions =
+        transactions.where((element) {
+          return element.createdBy.id == user.id;
+        }).toList();
 
     currentAmount = 0.0;
 

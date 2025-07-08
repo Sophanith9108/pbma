@@ -10,7 +10,7 @@ class NotificationController extends MainController {
 
   @override
   void onInit() async {
-    await retrieveData();
+    await onRetrievedNotifications();
     super.onInit();
   }
 
@@ -25,9 +25,9 @@ class NotificationController extends MainController {
   }
 
   Future onNotificationClick(int index) async {
-    var notification = notifications[index];
-
     await Future.delayed(const Duration(milliseconds: 300));
+
+    NotificationModel notification = notifications[index];
     await showModalBottomSheet(
       context: Get.context!,
       showDragHandle: true,
@@ -117,7 +117,7 @@ class NotificationController extends MainController {
     );
   }
 
-  Future<void> retrieveData() async {
+  Future<void> onRetrievedNotifications() async {
     await notificationFirebaseRepository
         .reads()
         .then((value) {
@@ -133,18 +133,8 @@ class NotificationController extends MainController {
   }
 
   Future<void> onMarkasRead() async {
-    if (notifications.isEmpty) {
-      for (int index = 0; index < 5; index++) {
-        var notification = NotificationModel.create(
-          title: "Mockup ${index + 1}",
-          message: "Mockup Message ${index + 1}",
-          createdBy: user,
-        );
-        await notificationFirebaseRepository.create(notification);
-        await retrieveData();
-      }
-    }
     await Future.delayed(const Duration(milliseconds: 300));
+
     await showDialog(
       context: Get.context!,
       builder: (_) {
@@ -176,9 +166,7 @@ class NotificationController extends MainController {
   }
 
   Future<void> onFreshing() async {
-    AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3));
-    AppUtils.hideLoading();
-    await retrieveData();
+    await onRetrievedNotifications();
   }
 }

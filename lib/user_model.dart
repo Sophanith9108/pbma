@@ -60,6 +60,10 @@ class UserModel extends Equatable {
   String get deviceInfo => _deviceInfo.value;
   set deviceInfo(String value) => _deviceInfo.value = value;
 
+  final _enableBiometric = false.obs;
+  bool get enableBiometric => _enableBiometric.value;
+  set enableBiometric(bool value) => _enableBiometric.value = value;
+
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -86,13 +90,14 @@ class UserModel extends Equatable {
     DateTime? updatedAt,
     UserRoleEnums? role,
     bool? isLogin,
+    bool? enableBiometric,
   }) {
     return UserModel()
       ..id = id ?? Uuid().v8()
       ..name = name
       ..email = email
       ..phone = phone
-      ..password = password.hashPassword()
+      ..password = password
       ..profilePicture = profilePicture ?? ""
       ..address = address
       ..dateOfBirth = dateOfBirth ?? ""
@@ -103,27 +108,29 @@ class UserModel extends Equatable {
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now()
       ..role = role ?? UserRoleEnums.user
-      ..isLogin = isLogin ?? false;
+      ..isLogin = isLogin ?? false
+      ..enableBiometric = enableBiometric ?? false;
   }
 
   static Map<String, dynamic> toJson({required UserModel model}) {
     return {
-      "id": model.id.toString(),
-      "name": model.name.toString(),
-      "email": model.email.toString(),
-      "phone": model.phone.toString(),
-      "password": model.password.toString(),
-      "profilePicture": model.profilePicture.toString(),
-      "address": model.address.toString(),
-      "dateOfBirth": model.dateOfBirth.toString(),
-      "gender": model.gender.name.toString(),
+      "id": model.id,
+      "name": model.name,
+      "email": model.email,
+      "phone": model.phone,
+      "password": model.password,
+      "profilePicture": model.profilePicture,
+      "address": model.address,
+      "dateOfBirth": model.dateOfBirth,
+      "gender": model.gender.name,
       "createdAt": model.createdAt.millisecondsSinceEpoch.toString(),
       "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
-      "role": model.role.name.toString(),
+      "role": model.role.name,
       "isLogin": model.isLogin.toString(),
-      "deviceId": model.deviceId.toString(),
-      "deviceToken": model.deviceToken.toString(),
-      "deviceInfo": model.deviceInfo.toString(),
+      "deviceId": model.deviceId,
+      "deviceToken": model.deviceToken,
+      "deviceInfo": model.deviceInfo,
+      "enableBiometric": model.enableBiometric.toString(),
     };
   }
 
@@ -144,7 +151,8 @@ class UserModel extends Equatable {
       ..deviceId = json['deviceId']
       ..deviceToken = json['deviceToken']
       ..deviceInfo = json['deviceInfo']
-      ..isLogin = json['isLogin'] == 'true';
+      ..isLogin = json['isLogin'] == 'true'
+      ..enableBiometric = json['enableBiometric'] == 'true';
   }
 
   static UserEntity toEntity(UserModel model) {
@@ -153,7 +161,7 @@ class UserModel extends Equatable {
       ..name = model.name
       ..email = model.email
       ..phone = model.phone
-      ..password = model.password.hashPassword()
+      ..password = model.password
       ..profilePicture = model.profilePicture
       ..address = model.address
       ..dateOfBirth = model.dateOfBirth
@@ -161,7 +169,11 @@ class UserModel extends Equatable {
       ..createdAt = model.createdAt
       ..updatedAt = model.updatedAt
       ..role = model.role
-      ..isLogin = model.isLogin;
+      ..isLogin = model.isLogin
+      ..deviceId = model.deviceId
+      ..deviceToken = model.deviceToken
+      ..deviceInfo = model.deviceInfo
+      ..enableBiometric = model.enableBiometric;
   }
 
   @override
@@ -182,5 +194,6 @@ class UserModel extends Equatable {
     deviceId,
     deviceToken,
     deviceInfo,
+    enableBiometric,
   ];
 }

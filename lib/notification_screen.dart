@@ -21,7 +21,7 @@ class NotificationScreen extends StatelessWidget {
             },
           ),
         ],
-        body: AppListview(
+        body: AppListView(
           onFreshing: () async {
             controller.onFreshing();
           },

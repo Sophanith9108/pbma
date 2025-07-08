@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-enum PaymentNetworkEnum {
-  visa,
-  mastercard,
-  amex,
-  discover,
-  unionPay,
-  jcb,
-  rupay,
-  dinersClub,
-}
+enum PaymentNetworkEnum { visa, mastercard, amex, discover, jcb, dinersClub }
 
 extension PaymentNetworkEnumExtension on PaymentNetworkEnum {
   String get name {
@@ -22,12 +14,8 @@ extension PaymentNetworkEnumExtension on PaymentNetworkEnum {
         return 'American Express';
       case PaymentNetworkEnum.discover:
         return 'Discover';
-      case PaymentNetworkEnum.unionPay:
-        return 'UnionPay';
       case PaymentNetworkEnum.jcb:
         return 'JCB';
-      case PaymentNetworkEnum.rupay:
-        return 'RuPay';
       case PaymentNetworkEnum.dinersClub:
         return 'Diners Club';
     }
@@ -43,12 +31,8 @@ extension PaymentNetworkEnumExtension on PaymentNetworkEnum {
         return 'American Express';
       case PaymentNetworkEnum.discover:
         return 'Discover';
-      case PaymentNetworkEnum.unionPay:
-        return 'UnionPay';
       case PaymentNetworkEnum.jcb:
         return 'JCB';
-      case PaymentNetworkEnum.rupay:
-        return 'RuPay';
       case PaymentNetworkEnum.dinersClub:
         return 'Diners Club';
     }
@@ -57,21 +41,17 @@ extension PaymentNetworkEnumExtension on PaymentNetworkEnum {
   IconData get icon {
     switch (this) {
       case PaymentNetworkEnum.visa:
-        return Icons.credit_card;
+        return FontAwesomeIcons.ccVisa;
       case PaymentNetworkEnum.mastercard:
-        return Icons.credit_card;
+        return FontAwesomeIcons.ccMastercard;
       case PaymentNetworkEnum.amex:
-        return Icons.credit_card;
+        return FontAwesomeIcons.ccAmex;
       case PaymentNetworkEnum.discover:
-        return Icons.credit_card;
-      case PaymentNetworkEnum.unionPay:
-        return Icons.credit_card;
+        return FontAwesomeIcons.ccDiscover;
       case PaymentNetworkEnum.jcb:
-        return Icons.credit_card;
-      case PaymentNetworkEnum.rupay:
-        return Icons.credit_card;
+        return FontAwesomeIcons.ccJcb;
       case PaymentNetworkEnum.dinersClub:
-        return Icons.credit_card;
+        return FontAwesomeIcons.ccDinersClub;
     }
   }
 
@@ -85,12 +65,8 @@ extension PaymentNetworkEnumExtension on PaymentNetworkEnum {
         return 'AMEX';
       case PaymentNetworkEnum.discover:
         return 'DISC';
-      case PaymentNetworkEnum.unionPay:
-        return 'UPI';
       case PaymentNetworkEnum.jcb:
         return 'JCB';
-      case PaymentNetworkEnum.rupay:
-        return 'RUPAY';
       case PaymentNetworkEnum.dinersClub:
         return 'DC';
     }

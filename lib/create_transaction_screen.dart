@@ -291,43 +291,7 @@ class CreateTransactionScreen extends StatelessWidget {
                 controller: controller.bankCardController,
                 readOnly: true,
                 onTap: () {
-                  controller.setData();
-
-                  if (controller.bankCards.isEmpty) {
-                    controller.gotoCreateBankCard();
-                    return;
-                  }
-
-                  showModalBottomSheet(
-                    context: Get.context!,
-                    showDragHandle: true,
-                    useSafeArea: true,
-                    isScrollControlled: true,
-                    isDismissible: true,
-                    builder: (_) {
-                      return ListView(
-                        shrinkWrap: true,
-                        children:
-                            controller.bankCards.map((element) {
-                              return ListTile(
-                                leading: Icon(element.paymentNetwork.icon),
-                                title: Text(
-                                  element.bankName,
-                                  style: AppTextStyles.title,
-                                ),
-                                subtitle: Text(
-                                  element.cardType.name,
-                                  style: AppTextStyles.subtitle,
-                                ),
-                                onTap: () async {
-                                  await onBankSelected(element);
-                                  Get.back();
-                                },
-                              );
-                            }).toList(),
-                      );
-                    },
-                  );
+                  controller.onBankCardsSelected();
                 },
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
@@ -537,11 +501,5 @@ class CreateTransactionScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Future<void> onBankSelected(BankCardModel element) async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    controller.selectedBankCard = element;
-    controller.bankCardController.text = element.bankName;
   }
 }

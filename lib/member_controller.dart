@@ -21,13 +21,30 @@ class MemberController extends GetxController {
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
 
+  @override
+  void onInit() async {
+    await setData();
+    super.onInit();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   Future<void> setData() async {
     await checkedUser();
 
     members = await memberFirebaseRepository.reads();
-    members.where((member) {
-      return member.user.id == user.id;
-    }).toList();
+    members =
+        members.where((member) {
+          return member.user.id == user.id;
+        }).toList();
   }
 
   Future<void> onRefreshing() async {
@@ -60,22 +77,6 @@ class MemberController extends GetxController {
         await setData();
       }
     });
-  }
-
-  @override
-  void onInit() async {
-    await setData();
-    super.onInit();
-  }
-
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 
   Future<void> onLongPress(int index) async {
