@@ -39,7 +39,7 @@ class MainScreen extends StatelessWidget {
             onPressed: () {
               mainController.gotoNotification();
             },
-            icon: const Icon(FontAwesomeIcons.bell),
+            icon: Badge(child: const Icon(FontAwesomeIcons.bell)),
           ),
           IconButton.outlined(
             onPressed: () {

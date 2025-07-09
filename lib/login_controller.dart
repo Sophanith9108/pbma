@@ -87,7 +87,7 @@ class LoginController extends MainController {
     String deviceToken = await AppUtils.getDeviceToken();
     String deviceInfo = await AppUtils.getDeviceInfo();
 
-    var _user = UserModel.create(
+    UserModel _user = UserModel.create(
       id: currentUser.id,
       phone: currentUser.phone,
       password: currentUser.password,
