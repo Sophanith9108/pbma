@@ -83,6 +83,10 @@ class LoginController extends MainController {
   }
 
   Future<void> _handleCreateUser() async {
+    String deviceId = await AppUtils.getDeviceId();
+    String deviceToken = await AppUtils.getDeviceToken();
+    String deviceInfo = await AppUtils.getDeviceInfo();
+
     var _user = UserModel.create(
       id: currentUser.id,
       phone: currentUser.phone,
@@ -96,9 +100,9 @@ class LoginController extends MainController {
       dateOfBirth: currentUser.dateOfBirth,
       updatedAt: DateTime.now(),
       isLogin: true,
-      deviceId: currentUser.deviceId,
-      deviceToken: currentUser.deviceToken,
-      deviceInfo: currentUser.deviceInfo,
+      deviceId: deviceId,
+      deviceToken: deviceToken,
+      deviceInfo: deviceInfo,
     );
 
     await userRepository.update(_user);
