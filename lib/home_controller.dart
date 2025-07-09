@@ -106,7 +106,7 @@ class HomeController extends GetxController {
         await transactionFirebaseRepository.reads();
     transactions =
         transactions.where((element) {
-          return element.createdBy.id == user.id;
+          return element.createdBy.id == user.id && user.isLogin;
         }).toList();
 
     currentAmount = 0.0;

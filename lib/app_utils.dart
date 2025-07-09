@@ -156,4 +156,8 @@ class AppUtils {
     }
     return '';
   }
+
+  static Future<void> delay({int milliseconds = 300}) async {
+    await Future.delayed(Duration(milliseconds: milliseconds));
+  }
 }

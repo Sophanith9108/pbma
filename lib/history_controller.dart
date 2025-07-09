@@ -40,8 +40,8 @@ class HistoryController extends GetxController {
   }
 
   Future<void> setData() async {
-    await _checkedUser();
-    await onRetrieveTransactionFromFirebase();
+    await checkedUser();
+    await onRetrivedTransactions();
   }
 
   Future<void> onRefreshing() async {
@@ -73,10 +73,11 @@ class HistoryController extends GetxController {
 
                 AppUtils.showLoading();
                 await Future.delayed(const Duration(seconds: 3), () async {
+                  AppUtils.hideLoading();
+
                   await transactionRepository.delete(transaction.id);
                   await transactionFirebaseRepository.delete(transaction.id);
-                  await onRetrieveTransactionFromFirebase();
-                  AppUtils.hideLoading();
+                  await onRetrivedTransactions();
                 });
               },
               child: Text("Delete".tr, style: AppTextStyles.title),
@@ -87,11 +88,11 @@ class HistoryController extends GetxController {
     );
   }
 
-  Future<void> onRetrieveTransactionFromFirebase() async {
+  Future<void> onRetrivedTransactions() async {
     await transactionFirebaseRepository.reads().then((value) async {
       transactions = value
           .where((element) {
-            return element.createdBy.id == user.id;
+            return element.createdBy.id == user.id && user.isLogin;
           })
           .groupListsBy((element) {
             return element.createdAt.format(pattern: AppConstants.dateFormat);
@@ -102,14 +103,6 @@ class HistoryController extends GetxController {
 
       var result = transactions.entries.toList().reversed.toList();
       transactions = Map.fromEntries(result);
-    });
-  }
-
-  Future<void> _checkedUser() async {
-    await userRepository.gets().then((value) {
-      if (value != null && value.isNotEmpty) {
-        user = value.first;
-      }
     });
   }
 
@@ -124,11 +117,18 @@ class HistoryController extends GetxController {
 
       user = value.first;
 
-      Get.toNamed(AppRoutes.createTransaction)?.then((result) {
+      Get.toNamed(AppRoutes.createTransaction)?.then((result) async {
         if (result != null && result) {
-          setData();
+          await setData();
         }
       });
     });
+  }
+
+  Future<void> checkedUser() async {
+    var users = await userRepository.gets() ?? [];
+    if (users.isNotEmpty) {
+      user = users.first;
+    }
   }
 }

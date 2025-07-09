@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
@@ -26,8 +27,13 @@ class LoginController extends MainController {
   bool get showPassword => _showPassword.value;
   set showPassword(bool value) => _showPassword.value = value;
 
+  final _currentUser = UserModel().obs;
+  UserModel get currentUser => _currentUser.value;
+  set currentUser(UserModel value) => _currentUser.value = value;
+
   @override
   void onInit() async {
+    await checkedUser();
     await checkedBiometric();
     super.onInit();
   }
@@ -50,24 +56,24 @@ class LoginController extends MainController {
     await Future.delayed(const Duration(milliseconds: 500));
     FocusScope.of(Get.context!).unfocus();
 
-    await checkedUser();
-
     await userFirebaseRepository.reads().then((users) async {
       AppUtils.hideLoading();
 
-      String deviceId = await AppUtils.getDeviceId();
       String phone = phoneController.text.trim();
-
-      var foundUser = users.firstWhereOrNull((user) {
-        return user.phone == phone && user.deviceId == deviceId;
-      });
+      UserModel? foundUser = users.firstWhereOrNull(
+        (user) => user.phone == phone,
+      );
       if (foundUser == null) {
         AppUtils.showError('User not found'.tr);
+        await AppUtils.delay();
+        await _onClear();
         return;
       }
 
+      currentUser = foundUser;
+
       String password = passwordController.text.trim();
-      if (!password.verifyPassword(user.password)) {
+      if (!password.verifyPassword(currentUser.password)) {
         AppUtils.showError('Phone number or password is incorrect!'.tr);
         return;
       }
@@ -77,7 +83,6 @@ class LoginController extends MainController {
   }
 
   Future<void> _handleCreateUser() async {
-    var currentUser = user;
     var _user = UserModel.create(
       id: currentUser.id,
       phone: currentUser.phone,
@@ -100,8 +105,9 @@ class LoginController extends MainController {
 
     await userFirebaseRepository.update(_user).then((value) async {
       await Future.delayed(const Duration(milliseconds: 500));
-      _onClear();
+      user = value;
 
+      _onClear();
       Get.offAllNamed(AppRoutes.main);
     });
   }
@@ -127,8 +133,6 @@ class LoginController extends MainController {
 
   Future<void> checkedBiometric() async {
     await Future.delayed(Duration(milliseconds: 300));
-
-    await checkedUser();
 
     var availableBiometrics =
         await LocalAuthentication().getAvailableBiometrics();

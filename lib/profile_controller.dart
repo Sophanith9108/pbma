@@ -23,6 +23,7 @@ class ProfileController extends MainController {
   @override
   void onInit() async {
     await setData();
+    await setView();
     super.onInit();
   }
 
@@ -36,7 +37,7 @@ class ProfileController extends MainController {
     super.onClose();
   }
 
-  void setView(UserModel user) {
+  Future<void> setView() async {
     genderController.text = user.gender.value.tr;
     addressController.text = user.address;
   }
@@ -124,7 +125,7 @@ class ProfileController extends MainController {
 
   Future<void> onLogout() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    showDialog(
+    await showDialog(
       context: Get.context!,
       builder: (_) {
         return AlertDialog(
@@ -139,9 +140,10 @@ class ProfileController extends MainController {
               child: Text("Cancel".tr, style: AppTextStyles.button),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
                 Get.back();
-                handleLogout();
+
+                await handleLogout();
               },
               child: Text("Logout".tr, style: AppTextStyles.button),
             ),
@@ -152,12 +154,20 @@ class ProfileController extends MainController {
   }
 
   Future<void> handleLogout() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
     user.isLogin = false;
+    print("tMain: $user");
+
     AppUtils.showLoading();
-    await userFirebaseRepository.update(user);
-    await userRepository.update(user).then((_) {
+    await userFirebaseRepository.update(user).then((value) {
       AppUtils.hideLoading();
+
+      user = value;
+
       Get.offAllNamed(AppRoutes.main);
     });
+
+    await userRepository.update(user);
   }
 }

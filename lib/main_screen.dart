@@ -18,7 +18,8 @@ class MainScreen extends StatelessWidget {
 
     return Obx(
       () => AppNavigation(
-        leading: IconButton(
+        leading: IconButton.outlined(
+          padding: EdgeInsets.zero,
           onPressed: () => mainController.gotoProfile(),
           icon: CircleAvatar(
             child:
@@ -35,16 +36,12 @@ class MainScreen extends StatelessWidget {
         subtitle: mainController.message,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(FontAwesomeIcons.magnifyingGlass),
-          ),
-          IconButton(
             onPressed: () {
-              Get.toNamed(AppRoutes.notifications);
+              mainController.gotoNotification();
             },
             icon: const Icon(FontAwesomeIcons.bell),
           ),
-          IconButton(
+          IconButton.outlined(
             onPressed: () {
               mainController.gotoCreateTransaction();
             },

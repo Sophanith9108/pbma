@@ -303,9 +303,9 @@ class MainController extends GetxController {
 
   Future<void> gotoLogin() async {
     await Future.delayed(const Duration(milliseconds: 300), () {
-      Get.offAndToNamed(AppRoutes.login)?.then((value) {
+      Get.offAndToNamed(AppRoutes.login)?.then((value) async {
         if (value != null && value) {
-          setData();
+          await setData();
         }
       });
     });
@@ -316,9 +316,9 @@ class MainController extends GetxController {
 
     if (user.isLogin) {
       await Future.delayed(const Duration(milliseconds: 300), () {
-        Get.toNamed(AppRoutes.profile)?.then((value) {
+        Get.toNamed(AppRoutes.profile)?.then((value) async {
           if (value != null && value) {
-            setData();
+            await setData();
           }
         });
       });
@@ -477,5 +477,10 @@ class MainController extends GetxController {
     } else {
       message = "Please login to continue.";
     }
+  }
+
+  Future<void> gotoNotification() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    Get.toNamed(AppRoutes.notifications);
   }
 }

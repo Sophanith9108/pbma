@@ -43,7 +43,7 @@ class MemberController extends GetxController {
     members = await memberFirebaseRepository.reads();
     members =
         members.where((member) {
-          return member.user.id == user.id;
+          return member.user.id == user.id && user.isLogin;
         }).toList();
   }
 

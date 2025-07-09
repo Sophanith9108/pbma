@@ -14,7 +14,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     controller.setData();
-    controller.setView(controller.user);
+    controller.setView();
 
     return Obx(
       () => AppNavigation(

@@ -69,7 +69,7 @@ class AccountController extends GetxController {
     await bankCardFirebaseRepository.reads().then((value) {
       value =
           value.where((bank) {
-            return bank.user.id == user.id;
+            return bank.user.id == user.id && user.isLogin;
           }).toList();
 
       value.sort((a, b) {
@@ -612,7 +612,7 @@ class AccountController extends GetxController {
       transactions =
           value
               .where((element) {
-                return element.createdBy.id == user.id;
+                return element.createdBy.id == user.id && user.isLogin;
               })
               .take(10)
               .toList()
