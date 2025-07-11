@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
 class LoginController extends MainController {
+  final AccountController accountController = Get.find<AccountController>();
+  final HistoryController transactionController = Get.find<HistoryController>();
+  final HomeController homeController = Get.find<HomeController>();
+
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -51,14 +54,10 @@ class LoginController extends MainController {
   Future<void> onLogin() async {
     if (!formKey.currentState!.validate()) return;
 
-    AppUtils.showLoading();
-
     await Future.delayed(const Duration(milliseconds: 500));
     FocusScope.of(Get.context!).unfocus();
 
     await userFirebaseRepository.reads().then((users) async {
-      AppUtils.hideLoading();
-
       String phone = phoneController.text.trim();
       UserModel? foundUser = users.firstWhereOrNull(
         (user) => user.phone == phone,
@@ -105,13 +104,20 @@ class LoginController extends MainController {
       deviceInfo: deviceInfo,
     );
 
+    AppUtils.showLoading();
     await userRepository.update(_user);
-
+    await Future.delayed(const Duration(seconds: 3));
     await userFirebaseRepository.update(_user).then((value) async {
-      await Future.delayed(const Duration(milliseconds: 500));
       user = value;
 
-      _onClear();
+      await accountController.onRefreshing();
+      await transactionController.onRefreshing();
+      await homeController.onRefreshing();
+
+      await _onClear();
+      
+      AppUtils.hideLoading();
+
       Get.offAllNamed(AppRoutes.main);
     });
   }

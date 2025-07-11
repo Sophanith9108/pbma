@@ -8,6 +8,8 @@ import 'package:pbma/core.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class CreateBankCardController extends MainController {
+  final AccountController accountController = Get.find<AccountController>();
+
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -91,10 +93,11 @@ class CreateBankCardController extends MainController {
     );
 
     AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3));
     await bankCardFirebaseRepository.create(bankCard).then((value) async {
-      await Future.delayed(const Duration(seconds: 3), () {
-        AppUtils.hideLoading();
-      });
+      AppUtils.hideLoading();
+
+      await accountController.retrieveBankCards();
 
       Get.back(result: true);
       _onClear();

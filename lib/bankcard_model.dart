@@ -31,6 +31,10 @@ class BankCardModel {
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
 
+  final _status = BankCardStatusEnum.active.obs;
+  BankCardStatusEnum get status => _status.value;
+  set status(BankCardStatusEnum value) => _status.value = value;
+
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -49,6 +53,7 @@ class BankCardModel {
     required double balance,
     required CurrencyEnums currency,
     required UserModel user,
+    BankCardStatusEnum? status,
     DateTime? updatedAt,
   }) {
     return BankCardModel()
@@ -59,6 +64,7 @@ class BankCardModel {
       ..balance = balance
       ..currency = currency
       ..user = user
+      ..status = status ?? BankCardStatusEnum.active
       ..createdAt = DateTime.now()
       ..updatedAt = updatedAt ?? DateTime.now();
   }
@@ -72,7 +78,7 @@ class BankCardModel {
         orElse: () => BankCardEnum.debit,
       )
       ..paymentNetwork = PaymentNetworkEnum.values.firstWhere(
-        (e) => e.name == json['cardBrand'],
+        (e) => e.name == json['paymentNetwork'],
         orElse: () => PaymentNetworkEnum.visa,
       )
       ..balance = (json['balance'] as num?)?.toDouble() ?? 0.0
@@ -81,6 +87,10 @@ class BankCardModel {
         orElse: () => CurrencyEnums.USD,
       )
       ..user = UserModel.fromJson(json: json['user'] as Map<dynamic, dynamic>)
+      ..status = BankCardStatusEnum.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => BankCardStatusEnum.active,
+      )
       ..createdAt = DateTime.fromMillisecondsSinceEpoch(
         int.parse(json['createdAt'] as String),
       )
@@ -98,6 +108,7 @@ class BankCardModel {
       'balance': model.balance,
       'currency': model.currency.name,
       'user': UserModel.toJson(model: model.user),
+      'status': model.status.name,
       'createdAt': model.createdAt.millisecondsSinceEpoch.toString(),
       'updatedAt': model.updatedAt.millisecondsSinceEpoch.toString(),
     };

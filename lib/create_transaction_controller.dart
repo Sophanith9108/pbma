@@ -6,6 +6,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionController extends MainController {
+  final HomeController homeController = Get.find<HomeController>();
+  final HistoryController historyController = Get.find<HistoryController>();
+  final AccountController accountController = Get.find<AccountController>();
+
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -169,6 +173,10 @@ class CreateTransactionController extends MainController {
       await transactionFirebaseRepository.create(transaction);
       AppUtils.hideLoading();
 
+      await homeController.calculateTotalAmount();
+      await historyController.onRetrivedTransactions();
+      await accountController.retrieveTransactions();
+
       _onClear();
       Get.back(result: true);
     });
@@ -237,6 +245,11 @@ class CreateTransactionController extends MainController {
   Future<void> onBankCardsSelected() async {
     await Future.delayed(const Duration(milliseconds: 300));
     await onRetrievedBankList();
+
+    if (bankCards.isEmpty) {
+      await gotoCreateBankCard();
+      return;
+    }
 
     await showModalBottomSheet(
       context: Get.context!,

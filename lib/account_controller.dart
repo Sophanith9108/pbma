@@ -61,11 +61,11 @@ class AccountController extends GetxController {
 
   Future<void> setData() async {
     await checkedUser();
-    await _retrieveBankCards();
-    await _retrieveTransactions();
+    await retrieveBankCards();
+    await retrieveTransactions();
   }
 
-  Future<void> _retrieveBankCards() async {
+  Future<void> retrieveBankCards() async {
     await bankCardFirebaseRepository.reads().then((value) {
       value =
           value.where((bank) {
@@ -475,14 +475,15 @@ class AccountController extends GetxController {
     );
   }
 
-  void _handleSettingOptions({required BankCardModel bankCard}) {
-    showModalBottomSheet(
+  Future<void> _handleSettingOptions({required BankCardModel bankCard}) async {
+    await showModalBottomSheet(
       context: Get.context!,
       showDragHandle: true,
       isDismissible: true,
       isScrollControlled: true,
       useRootNavigator: true,
       enableDrag: true,
+      useSafeArea: true,
       elevation: AppDimensions.elevation,
       builder: (_) {
         return SafeArea(
@@ -490,21 +491,32 @@ class AccountController extends GetxController {
             shrinkWrap: true,
             children: [
               ListTile(
-                leading: Icon(FontAwesomeIcons.pen, color: Colors.blue),
+                titleAlignment: ListTileTitleAlignment.top,
+                leading: Icon(FontAwesomeIcons.penToSquare),
                 title: Text('Edit'.tr, style: AppTextStyles.title),
+                subtitle: Text(
+                  "Edit the bank card details.".tr,
+                  style: AppTextStyles.subtitle,
+                ),
                 onTap: () async {
                   await Future.delayed(Duration(milliseconds: 300));
                   Get.back();
                 },
               ),
               ListTile(
-                leading: Icon(FontAwesomeIcons.trash, color: Colors.red),
-                title: Text('Delete'.tr, style: AppTextStyles.title),
+                titleAlignment: ListTileTitleAlignment.top,
+                leading: Icon(FontAwesomeIcons.solidSnowflake),
+                title: Text('Freeze'.tr, style: AppTextStyles.title),
+                subtitle: Text(
+                  "Freeze the bank card to prevent any transactions from being made."
+                      .tr,
+                  style: AppTextStyles.subtitle,
+                ),
                 onTap: () async {
                   await Future.delayed(Duration(milliseconds: 300));
                   Get.back();
 
-                  _showDeleteConfirmation(bankCard: bankCard);
+                  _showFreezeConfirmation(bankCard: bankCard);
                 },
               ),
             ],
@@ -557,15 +569,15 @@ class AccountController extends GetxController {
     });
   }
 
-  Future<void> _showDeleteConfirmation({
+  Future<void> _showFreezeConfirmation({
     required BankCardModel bankCard,
   }) async {
     await Get.dialog(
       AlertDialog(
-        title: Text('Delete Confirmation'.tr, style: AppTextStyles.header1),
+        title: Text('Freeze Confirmation'.tr, style: AppTextStyles.header1),
         content: Text.rich(
           TextSpan(
-            text: 'Are you sure you want to delete'.tr,
+            text: 'Are you sure you want to freeze'.tr,
             style: AppTextStyles.value,
             children: [
               TextSpan(text: " "),
@@ -587,7 +599,7 @@ class AccountController extends GetxController {
           TextButton(
             onPressed: () {
               Get.back();
-              _handleDeleteBankCard(bankCard: bankCard);
+              _handleFreezeBankCard(bankCard: bankCard);
             },
             child: Text('Delete'.tr, style: AppTextStyles.button),
           ),
@@ -596,18 +608,19 @@ class AccountController extends GetxController {
     );
   }
 
-  Future<void> _handleDeleteBankCard({required BankCardModel bankCard}) async {
+  Future<void> _handleFreezeBankCard({required BankCardModel bankCard}) async {
+    bankCard.status = BankCardStatusEnum.frozen;
+
     AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3), () async {
-      await bankCardFirebaseRepository.delete(bankCard.id);
-
+      await bankCardFirebaseRepository.update(bankCard);
       await setData();
 
       AppUtils.hideLoading();
     });
   }
 
-  Future<void> _retrieveTransactions() async {
+  Future<void> retrieveTransactions() async {
     await transactionFirebaseRepository.reads().then((value) {
       transactions =
           value

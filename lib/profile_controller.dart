@@ -6,6 +6,10 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class ProfileController extends MainController {
+  final AccountController accountController = Get.find<AccountController>();
+  final HistoryController transactionController = Get.find<HistoryController>();
+  final HomeController homeController = Get.find<HomeController>();
+
   final _profile = File("").obs;
   File get profile => _profile.value;
   set profile(File value) => _profile.value = value;
@@ -68,9 +72,8 @@ class ProfileController extends MainController {
 
   Future<void> onGenderSelected() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: Get.context!,
-      isScrollControlled: true,
       showDragHandle: true,
       useSafeArea: true,
       builder: (_) {
@@ -157,17 +160,20 @@ class ProfileController extends MainController {
     await Future.delayed(const Duration(milliseconds: 300));
 
     user.isLogin = false;
-    print("tMain: $user");
 
     AppUtils.showLoading();
-    await userFirebaseRepository.update(user).then((value) {
-      AppUtils.hideLoading();
-
+    await Future.delayed(const Duration(seconds: 3));
+    await userFirebaseRepository.update(user).then((value) async {
       user = value;
+
+      await userRepository.update(user);
+      await accountController.onRefreshing();
+      await transactionController.onRefreshing();
+      await homeController.onRefreshing();
+
+      AppUtils.hideLoading();
 
       Get.offAllNamed(AppRoutes.main);
     });
-
-    await userRepository.update(user);
   }
 }

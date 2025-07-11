@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoding/geocoding.dart';
@@ -90,14 +91,21 @@ class MainController extends GetxController {
   }
 
   Future<void> sayHi() async {
+    String env = "";
+    if (kDebugMode) {
+      env = "Debug";
+    } else if (kProfileMode) {
+      env = "Profile";
+    }
+
     var now = DateTime.now();
     var hour = now.hour;
     if (hour < 12) {
-      title = 'Good Morning!'.tr;
+      title = "${'Good Morning!'.tr} $env";
     } else if (hour < 17) {
-      title = 'Good Afternoon!'.tr;
+      title = "${'Good Afternoon!'.tr} $env";
     } else {
-      title = 'Good Evening!'.tr;
+      title = "${'Good Evening!'.tr} $env";
     }
   }
 
