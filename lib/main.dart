@@ -28,6 +28,7 @@ Future<void> initializeStorage() async {
   Hive.registerAdapter(PaymentMethodEnumsAdapter());
   Hive.registerAdapter(TransactionTypeEnumsAdapter());
   Hive.registerAdapter(TransactionStatusEnumsAdapter());
+  Hive.registerAdapter(UserStatusEnumsAdapter());
 
   final userBox =
       kDebugMode

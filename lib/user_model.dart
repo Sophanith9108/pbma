@@ -64,6 +64,10 @@ class UserModel extends Equatable {
   bool get enableBiometric => _enableBiometric.value;
   set enableBiometric(bool value) => _enableBiometric.value = value;
 
+  final _status = UserStatusEnums.active.obs;
+  UserStatusEnums get status => _status.value;
+  set status(UserStatusEnums value) => _status.value = value;
+
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
   set createdAt(DateTime value) => _createdAt.value = value;
@@ -91,6 +95,7 @@ class UserModel extends Equatable {
     UserRoleEnums? role,
     bool? isLogin,
     bool? enableBiometric,
+    UserStatusEnums? status,
   }) {
     return UserModel()
       ..id = id ?? Uuid().v8()
@@ -109,7 +114,8 @@ class UserModel extends Equatable {
       ..updatedAt = updatedAt ?? DateTime.now()
       ..role = role ?? UserRoleEnums.user
       ..isLogin = isLogin ?? false
-      ..enableBiometric = enableBiometric ?? false;
+      ..enableBiometric = enableBiometric ?? false
+      ..status = status ?? UserStatusEnums.active;
   }
 
   static Map<String, dynamic> toJson({required UserModel model}) {
@@ -131,6 +137,7 @@ class UserModel extends Equatable {
       "deviceToken": model.deviceToken,
       "deviceInfo": model.deviceInfo,
       "enableBiometric": model.enableBiometric.toString(),
+      "status": model.status.name,
     };
   }
 
@@ -152,7 +159,11 @@ class UserModel extends Equatable {
       ..deviceToken = json['deviceToken']
       ..deviceInfo = json['deviceInfo']
       ..isLogin = json['isLogin'] == 'true'
-      ..enableBiometric = json['enableBiometric'] == 'true';
+      ..enableBiometric = json['enableBiometric'] == 'true'
+      ..status = UserStatusEnums.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => UserStatusEnums.active,
+      );
   }
 
   static UserEntity toEntity(UserModel model) {
@@ -173,7 +184,8 @@ class UserModel extends Equatable {
       ..deviceId = model.deviceId
       ..deviceToken = model.deviceToken
       ..deviceInfo = model.deviceInfo
-      ..enableBiometric = model.enableBiometric;
+      ..enableBiometric = model.enableBiometric
+      ..status = model.status;
   }
 
   @override
@@ -195,5 +207,6 @@ class UserModel extends Equatable {
     deviceToken,
     deviceInfo,
     enableBiometric,
+    status,
   ];
 }

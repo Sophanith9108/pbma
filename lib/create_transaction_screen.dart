@@ -446,7 +446,6 @@ class CreateTransactionScreen extends StatelessWidget {
               SizedBox(height: AppDimensions.padding),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                 children: [
                   Text(
                     "Is there any people involve?".tr,
@@ -467,6 +466,8 @@ class CreateTransactionScreen extends StatelessWidget {
                     SizedBox(height: AppDimensions.padding),
                     TextFormField(
                       controller: controller.othersInvolvedController,
+                      readOnly: true,
+                      onTap: () => controller.onOthersInvolvedSelected(),
                       textInputAction: TextInputAction.done,
                       keyboardType: TextInputType.text,
                       textCapitalization: TextCapitalization.sentences,
@@ -495,7 +496,7 @@ class CreateTransactionScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: AppDimensions.padding * 6),
+              SizedBox(height: Get.width * 0.3),
             ],
           ),
         ),

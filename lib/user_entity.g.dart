@@ -33,13 +33,14 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
       ..deviceId = fields[13] as String?
       ..deviceToken = fields[14] as String?
       ..deviceInfo = fields[15] as String?
-      ..enableBiometric = fields[16] as bool;
+      ..enableBiometric = fields[16] as bool
+      ..status = fields[17] as UserStatusEnums;
   }
 
   @override
   void write(BinaryWriter writer, UserEntity obj) {
     writer
-      ..writeByte(17)
+      ..writeByte(18)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -73,7 +74,9 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
       ..writeByte(15)
       ..write(obj.deviceInfo)
       ..writeByte(16)
-      ..write(obj.enableBiometric);
+      ..write(obj.enableBiometric)
+      ..writeByte(17)
+      ..write(obj.status);
   }
 
   @override

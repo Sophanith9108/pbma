@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:pbma/core.dart';
@@ -116,13 +118,23 @@ class CreateTransactionController extends MainController {
   List<BankCardModel> get bankCards => _bankCards;
   set bankCards(List<BankCardModel> value) => _bankCards.value = value;
 
+  final _othersInvolved = <MemberModel>[].obs;
+  List<MemberModel> get othersInvolved => _othersInvolved;
+  set othersInvolved(List<MemberModel> value) => _othersInvolved.value = value;
+
+  final _selectedOthersInvolved = <MemberModel>[].obs;
+  List<MemberModel> get selectedOthersInvolved => _selectedOthersInvolved;
+  set selectedOthersInvolved(List<MemberModel> value) =>
+      _selectedOthersInvolved.value = value;
+
   late GoogleMapController mapController;
 
   static const double zoomLevel = 12;
 
   @override
   void onInit() async {
-    await onRetrievedBankList();
+    await onRetrievedBanks();
+    await onRetrievedMembers();
     super.onInit();
   }
 
@@ -131,13 +143,22 @@ class CreateTransactionController extends MainController {
     super.onReady();
   }
 
-  Future<void> onRetrievedBankList() async {
+  Future<void> onRetrievedBanks() async {
     await bankCardFirebaseRepository.reads().then((value) {
       bankCards = value;
     });
   }
 
-  Future onCreateTransaction() async {
+  Future<void> onRetrievedMembers() async {
+    await memberFirebaseRepository.reads().then((value) {
+      othersInvolved =
+          value.where((element) {
+            return element.id != user.id;
+          }).toList();
+    });
+  }
+
+  Future<void> onCreateTransaction() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
     await checkedUser();
@@ -171,11 +192,12 @@ class CreateTransactionController extends MainController {
     await Future.delayed(const Duration(seconds: 3), () async {
       await transactionRepository.save(transaction);
       await transactionFirebaseRepository.create(transaction);
-      AppUtils.hideLoading();
 
       await homeController.calculateTotalAmount();
       await historyController.onRetrivedTransactions();
       await accountController.retrieveTransactions();
+
+      AppUtils.hideLoading();
 
       _onClear();
       Get.back(result: true);
@@ -206,7 +228,7 @@ class CreateTransactionController extends MainController {
     });
   }
 
-  void _onClear() {
+  Future<void> _onClear() async {
     formKey.currentState!.reset();
     purposeController.clear();
     amountController.clear();
@@ -219,6 +241,8 @@ class CreateTransactionController extends MainController {
     locationController.clear();
     othersInvolvedController.clear();
     isOthersInvolved = false;
+    selectedBankCard = BankCardModel();
+    selectedOthersInvolved.clear();
   }
 
   void onDropLocation() {
@@ -237,14 +261,14 @@ class CreateTransactionController extends MainController {
     await Future.delayed(const Duration(milliseconds: 300));
     Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
       if (value != null && value) {
-        await onRetrievedBankList();
+        await onRetrievedBanks();
       }
     });
   }
 
   Future<void> onBankCardsSelected() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    await onRetrievedBankList();
+    await onRetrievedBanks();
 
     if (bankCards.isEmpty) {
       await gotoCreateBankCard();
@@ -277,6 +301,92 @@ class CreateTransactionController extends MainController {
                   },
                 );
               }).toList(),
+        );
+      },
+    );
+  }
+
+  Future<void> onOthersInvolvedSelected() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    if (othersInvolved.isEmpty) {
+      Get.toNamed(AppRoutes.createMember)?.then((value) async {
+        if (value != null && value) {
+          await onRetrievedMembers();
+        }
+      });
+      return;
+    }
+
+    await showModalBottomSheet(
+      context: Get.context!,
+      useSafeArea: true,
+      isDismissible: true,
+      builder: (_) {
+        return Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: ListTile(
+                    title: Text(
+                      "Choose whome involved!".tr,
+                      style: AppTextStyles.title,
+                    ),
+                    subtitle: Text(
+                      "Select the members you want to involve in the transaction."
+                          .tr,
+                      style: AppTextStyles.subtitle,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: IconButton.outlined(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: Icon(FontAwesomeIcons.xmark),
+                  ),
+                ),
+                SizedBox(width: AppDimensions.padding),
+              ],
+            ),
+            ListView(
+              shrinkWrap: true,
+              children:
+                  othersInvolved.map((member) {
+                    return ListTile(
+                      onTap: () {
+                        selectedOthersInvolved.add(member);
+                        othersInvolvedController.text = selectedOthersInvolved
+                            .map((e) {
+                              return e.name;
+                            })
+                            .join(', ');
+                        Get.back();
+                      },
+                      leading: CircleAvatar(
+                        backgroundColor: AppColors.primary,
+                        backgroundImage: MemoryImage(
+                          base64Decode(member.profilePicture),
+                        ),
+                      ),
+                      title: Text(member.name, style: AppTextStyles.title),
+                      subtitle: Text(
+                        member.phone,
+                        style: AppTextStyles.subtitle,
+                      ),
+                      trailing: Icon(
+                        FontAwesomeIcons.handPointUp,
+                        color: AppColors.primary,
+                      ),
+                    );
+                  }).toList(),
+            ),
+          ],
         );
       },
     );

@@ -49,8 +49,6 @@ class MemberController extends GetxController {
 
   Future<void> onRefreshing() async {
     await Future.delayed(const Duration(seconds: 3), () async {
-      Fluttertoast.showToast(msg: "Done refreshing!".tr);
-
       await setData();
     });
   }

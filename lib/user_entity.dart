@@ -57,6 +57,9 @@ class UserEntity extends HiveObject {
   @HiveField(16)
   late bool enableBiometric;
 
+  @HiveField(17)
+  late UserStatusEnums status;
+
   UserEntity();
 
   UserEntity.create({
@@ -77,6 +80,7 @@ class UserEntity extends HiveObject {
     String? deviceToken,
     String? deviceInfo,
     bool? enableBiometric,
+    UserStatusEnums? status,
   }) {
     UserEntity()
       ..id = Uuid().v8()
@@ -95,7 +99,8 @@ class UserEntity extends HiveObject {
       ..deviceId = deviceId
       ..deviceToken = deviceToken
       ..deviceInfo = deviceInfo
-      ..enableBiometric = enableBiometric ?? false;
+      ..enableBiometric = enableBiometric ?? false
+      ..status = status ?? UserStatusEnums.active;
   }
 
   static UserModel toModel(UserEntity entity) {
@@ -116,6 +121,7 @@ class UserEntity extends HiveObject {
       ..deviceId = entity.deviceId ?? ""
       ..deviceToken = entity.deviceToken ?? ""
       ..deviceInfo = entity.deviceInfo ?? ""
-      ..enableBiometric = entity.enableBiometric;
+      ..enableBiometric = entity.enableBiometric
+      ..status = entity.status;
   }
 }

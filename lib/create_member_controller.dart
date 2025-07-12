@@ -39,6 +39,8 @@ class CreateMemberController extends MainController {
 
     FocusScope.of(Get.context!).unfocus();
 
+    await checkedUser();
+
     var profilePicture =
         profile.path.isNotEmpty ? base64Encode(profile.readAsBytesSync()) : "";
 
@@ -59,7 +61,7 @@ class CreateMemberController extends MainController {
     );
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 3));
     await memberFirebaseRepository.create(member).then((value) async {
       AppUtils.hideLoading();
 
