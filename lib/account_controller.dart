@@ -540,7 +540,7 @@ class AccountController extends GetxController {
   }
 
   Future<void> onRefreshing() async {
-    await Future.delayed(const Duration(seconds: 3), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       await setData();
       return true;
     });

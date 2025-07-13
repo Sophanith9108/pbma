@@ -4,9 +4,11 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
 class LoginController extends MainController {
-  final AccountController accountController = Get.find<AccountController>();
-  final HistoryController transactionController = Get.find<HistoryController>();
   final HomeController homeController = Get.find<HomeController>();
+  final HistoryController transactionController = Get.find<HistoryController>();
+  final MemberController memberController = Get.find<MemberController>();
+  final BudgetController budgetController = Get.find<BudgetController>();
+  final AccountController accountController = Get.find<AccountController>();
 
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
@@ -110,13 +112,15 @@ class LoginController extends MainController {
     await userFirebaseRepository.update(_user).then((value) async {
       user = value;
 
+      await homeController.onRefreshing();
       await accountController.onRefreshing();
       await transactionController.onRefreshing();
-      await homeController.onRefreshing();
+      await memberController.onRefreshing();
+      await budgetController.onRefreshing();
+
+      AppUtils.hideLoading();
 
       await _onClear();
-      
-      AppUtils.hideLoading();
 
       Get.offAllNamed(AppRoutes.main);
     });

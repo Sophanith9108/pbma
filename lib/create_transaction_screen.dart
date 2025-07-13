@@ -329,8 +329,8 @@ class CreateTransactionScreen extends StatelessWidget {
                       keyboardType: TextInputType.datetime,
                       textCapitalization: TextCapitalization.sentences,
                       readOnly: true,
-                      onTap: () {
-                        showDatePicker(
+                      onTap: () async {
+                        await showDatePicker(
                           context: context,
                           initialDate: DateTime.now(),
                           firstDate: DateTime.now(),

@@ -6,9 +6,11 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class ProfileController extends MainController {
-  final AccountController accountController = Get.find<AccountController>();
-  final HistoryController transactionController = Get.find<HistoryController>();
   final HomeController homeController = Get.find<HomeController>();
+  final HistoryController transactionController = Get.find<HistoryController>();
+  final MemberController memberController = Get.find<MemberController>();
+  final BudgetController budgetController = Get.find<BudgetController>();
+  final AccountController accountController = Get.find<AccountController>();
 
   final _profile = File("").obs;
   File get profile => _profile.value;
@@ -167,9 +169,12 @@ class ProfileController extends MainController {
       user = value;
 
       await userRepository.update(user);
-      await accountController.onRefreshing();
-      await transactionController.onRefreshing();
+
       await homeController.onRefreshing();
+      await transactionController.onRefreshing();
+      await memberController.onRefreshing();
+      await budgetController.onRefreshing();
+      await accountController.onRefreshing();
 
       AppUtils.hideLoading();
 

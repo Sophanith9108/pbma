@@ -7,6 +7,10 @@ class MemberModel extends UserModel {
   UserModel get user => _user.value;
   set user(UserModel value) => _user.value = value;
 
+  final _isSelected = false.obs;
+  bool get isSelected => _isSelected.value;
+  set isSelected(bool value) => _isSelected.value = value;
+
   MemberModel();
 
   static MemberModel create({
@@ -77,6 +81,6 @@ class MemberModel extends UserModel {
     'updatedAt': member.updatedAt.millisecondsSinceEpoch.toString(),
     'role': member.role.name,
     'isLogin': member.isLogin.toString(),
-    'user': UserModel.toJson(model: member),
+    'user': UserModel.toJson(model: member.user),
   };
 }

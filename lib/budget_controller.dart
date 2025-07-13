@@ -78,7 +78,7 @@ class BudgetController extends GetxController {
     BudgetModel budget = budgets[index];
 
     await Future.delayed(const Duration(milliseconds: 300));
-    showModalBottomSheet(
+    await showModalBottomSheet(
       context: Get.context!,
       showDragHandle: true,
       isScrollControlled: true,
@@ -205,7 +205,7 @@ class BudgetController extends GetxController {
     var budget = budgets[index];
 
     await Future.delayed(const Duration(milliseconds: 300));
-    showDialog(
+    await showDialog(
       context: Get.context!,
       builder: (_) {
         return AlertDialog(

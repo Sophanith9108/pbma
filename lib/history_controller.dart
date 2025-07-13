@@ -109,19 +109,12 @@ class HistoryController extends GetxController {
   Future<void> gotoCreateTransaction() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    await userRepository.gets().then((value) {
-      if (value == null || value.isEmpty || !value.first.isLogin) {
-        Get.offAllNamed(AppRoutes.login);
-        return;
+    await checkedUser();
+
+    Get.toNamed(AppRoutes.createTransaction)?.then((result) async {
+      if (result != null && result) {
+        await setData();
       }
-
-      user = value.first;
-
-      Get.toNamed(AppRoutes.createTransaction)?.then((result) async {
-        if (result != null && result) {
-          await setData();
-        }
-      });
     });
   }
 

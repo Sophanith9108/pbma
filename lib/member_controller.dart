@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
@@ -45,6 +44,8 @@ class MemberController extends GetxController {
         members.where((member) {
           return member.user.id == user.id && user.isLogin;
         }).toList();
+
+    members.sort((a, b) => a.name.compareTo(b.name));
   }
 
   Future<void> onRefreshing() async {

@@ -10,6 +10,8 @@ class AppDimensions {
 
   static const double margin = 16.0;
   static const double elevation = 16.0;
+  static const double xsborderRadius = 5.0;
+  static const double sborderRadius = 8.0;
   static const double borderRadius = 16.0;
 
   static const double siconSize = 12.0;

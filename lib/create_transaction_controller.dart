@@ -9,7 +9,8 @@ import 'package:pbma/core.dart';
 
 class CreateTransactionController extends MainController {
   final HomeController homeController = Get.find<HomeController>();
-  final HistoryController historyController = Get.find<HistoryController>();
+  final HistoryController transactionController = Get.find<HistoryController>();
+  final MemberController memberController = Get.find<MemberController>();
   final AccountController accountController = Get.find<AccountController>();
 
   final _formKey = GlobalKey<FormState>().obs;
@@ -133,6 +134,7 @@ class CreateTransactionController extends MainController {
 
   @override
   void onInit() async {
+    await checkedUser();
     await onRetrievedBanks();
     await onRetrievedMembers();
     super.onInit();
@@ -153,7 +155,9 @@ class CreateTransactionController extends MainController {
     await memberFirebaseRepository.reads().then((value) {
       othersInvolved =
           value.where((element) {
-            return element.id != user.id;
+            return element.id != user.id &&
+                user.isLogin &&
+                element.status == UserStatusEnums.active;
           }).toList();
     });
   }
@@ -161,10 +165,10 @@ class CreateTransactionController extends MainController {
   Future<void> onCreateTransaction() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    await checkedUser();
-
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
+
+    await checkedUser();
 
     var transaction = TransactionModel.create(
       purpose: purposeController.text.trim(),
@@ -180,7 +184,7 @@ class CreateTransactionController extends MainController {
       location: address.trim(),
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
-      othersInvolved: isOthersInvolved ? [] : [],
+      othersInvolved: isOthersInvolved ? selectedOthersInvolved : [],
       createdBy: user,
       updatedBy: user,
       updatedAt: DateTime.now(),
@@ -193,9 +197,10 @@ class CreateTransactionController extends MainController {
       await transactionRepository.save(transaction);
       await transactionFirebaseRepository.create(transaction);
 
-      await homeController.calculateTotalAmount();
-      await historyController.onRetrivedTransactions();
-      await accountController.retrieveTransactions();
+      await homeController.onRefreshing();
+      await transactionController.onRefreshing();
+      await memberController.onRefreshing();
+      await accountController.onRefreshing();
 
       AppUtils.hideLoading();
 
@@ -240,9 +245,8 @@ class CreateTransactionController extends MainController {
     timeController.clear();
     locationController.clear();
     othersInvolvedController.clear();
-    isOthersInvolved = false;
-    selectedBankCard = BankCardModel();
     selectedOthersInvolved.clear();
+    isOthersInvolved = false;
   }
 
   void onDropLocation() {
@@ -354,37 +358,70 @@ class CreateTransactionController extends MainController {
                 SizedBox(width: AppDimensions.padding),
               ],
             ),
-            ListView(
+            const Divider(),
+            ListView.separated(
               shrinkWrap: true,
-              children:
-                  othersInvolved.map((member) {
-                    return ListTile(
-                      onTap: () {
+              itemCount: othersInvolved.length,
+              separatorBuilder: (context, index) => const Divider(),
+              itemBuilder: (context, index) {
+                final member = othersInvolved[index];
+
+                return ListTile(
+                  onTap: () async {
+                    await Future.delayed(const Duration(milliseconds: 300));
+
+                    member.isSelected = !member.isSelected;
+
+                    if (member.isSelected) {
+                      selectedOthersInvolved.add(member);
+                    } else {
+                      selectedOthersInvolved.remove(member);
+                    }
+
+                    othersInvolvedController.text = selectedOthersInvolved
+                        .map((e) {
+                          return e.name;
+                        })
+                        .join(', ');
+                    Get.back();
+                  },
+                  leading: CircleAvatar(
+                    backgroundColor: AppColors.primary,
+                    backgroundImage: MemoryImage(
+                      base64Decode(member.profilePicture),
+                    ),
+                  ),
+                  title: Text(member.name, style: AppTextStyles.title),
+                  subtitle: Text(member.phone, style: AppTextStyles.subtitle),
+                  trailing: Checkbox(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.xsborderRadius,
+                      ),
+                    ),
+                    activeColor: AppColors.primary,
+                    value: member.isSelected,
+                    onChanged: (value) async {
+                      await Future.delayed(const Duration(milliseconds: 300));
+
+                      member.isSelected = value!;
+
+                      if (value) {
                         selectedOthersInvolved.add(member);
-                        othersInvolvedController.text = selectedOthersInvolved
-                            .map((e) {
-                              return e.name;
-                            })
-                            .join(', ');
-                        Get.back();
-                      },
-                      leading: CircleAvatar(
-                        backgroundColor: AppColors.primary,
-                        backgroundImage: MemoryImage(
-                          base64Decode(member.profilePicture),
-                        ),
-                      ),
-                      title: Text(member.name, style: AppTextStyles.title),
-                      subtitle: Text(
-                        member.phone,
-                        style: AppTextStyles.subtitle,
-                      ),
-                      trailing: Icon(
-                        FontAwesomeIcons.handPointUp,
-                        color: AppColors.primary,
-                      ),
-                    );
-                  }).toList(),
+                      } else {
+                        selectedOthersInvolved.remove(member);
+                      }
+
+                      othersInvolvedController.text = selectedOthersInvolved
+                          .map((e) {
+                            return e.name;
+                          })
+                          .join(', ');
+                      Get.back();
+                    },
+                  ),
+                );
+              },
             ),
           ],
         );
