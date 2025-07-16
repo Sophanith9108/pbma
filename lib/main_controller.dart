@@ -39,6 +39,9 @@ class MainController extends GetxController {
   final BankCardFirebaseRepository bankCardFirebaseRepository = Get.put(
     BankCardFirebaseRepository(),
   );
+  final ForgetPasswordRepository forgetPasswordRepository = Get.put(
+    ForgetPasswordRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -487,8 +490,15 @@ class MainController extends GetxController {
     }
   }
 
-  Future<void> gotoNotification() async {
+  Future<void> gotoNotifications() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    Get.toNamed(AppRoutes.notifications);
+
+    await checkedUser();
+
+    if (user.isLogin) {
+      Get.toNamed(AppRoutes.notifications);
+    } else {
+      await gotoLogin();
+    }
   }
 }

@@ -60,17 +60,17 @@ class BudgetController extends GetxController {
   Future<void> gotoCreateBudget() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    await userRepository.gets().then((value) {
-      if (value == null || value.isEmpty || !value.first.isLogin) {
-        Get.offAllNamed(AppRoutes.login);
-        return;
-      }
+    await checkedUser();
 
-      Get.toNamed(AppRoutes.createBudget)?.then((result) async {
-        if (result != null && result) {
-          await setData();
-        }
-      });
+    if (!user.isLogin) {
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
+
+    Get.toNamed(AppRoutes.createBudget)?.then((result) async {
+      if (result != null && result) {
+        await setData();
+      }
     });
   }
 

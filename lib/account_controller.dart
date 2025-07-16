@@ -554,10 +554,15 @@ class AccountController extends GetxController {
     });
   }
 
-  Future<void> gotoBankCard() async {
+  Future<void> gotoCreateBankCard() async {
+    await Future.delayed(const Duration(milliseconds: 300));
     await checkedUser();
 
-    await Future.delayed(const Duration(milliseconds: 300));
+    if (!user.isLogin) {
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
+
     Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
       if (value != null && value) {
         await setData();

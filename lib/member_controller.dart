@@ -71,6 +71,13 @@ class MemberController extends GetxController {
   Future<void> gotoCreateMember() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
+    await checkedUser();
+
+    if (!user.isLogin) {
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
+
     Get.toNamed(AppRoutes.createMember)?.then((result) async {
       if (result != null && result) {
         await setData();

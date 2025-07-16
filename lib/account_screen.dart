@@ -16,7 +16,7 @@ class AccountScreen extends StatelessWidget {
       () => AppNavigation(
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
-            controller.gotoBankCard();
+            controller.gotoCreateBankCard();
           },
           label: Text("Link Account".tr, style: AppTextStyles.button),
           icon: const Icon(FontAwesomeIcons.link),
@@ -45,7 +45,7 @@ class AccountScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(
                         AppDimensions.borderRadius,
                       ),
-                      onTap: () => controller.gotoBankCard(),
+                      onTap: () => controller.gotoCreateBankCard(),
                       child: SizedBox(
                         height: Get.width * .5,
                         child: Center(

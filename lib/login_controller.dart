@@ -134,10 +134,7 @@ class LoginController extends MainController {
 
   Future<void> gotoForgotPassword() async {
     await Future.delayed(Duration(milliseconds: 300));
-    AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () {
-      AppUtils.hideLoading();
-    });
+    Get.offAllNamed(AppRoutes.forgetPassword);
   }
 
   Future<void> loginWithBiometrics() async {

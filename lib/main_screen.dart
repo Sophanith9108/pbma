@@ -37,7 +37,7 @@ class MainScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              mainController.gotoNotification();
+              mainController.gotoNotifications();
             },
             icon: Badge(child: const Icon(FontAwesomeIcons.bell)),
           ),

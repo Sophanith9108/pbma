@@ -111,6 +111,11 @@ class HistoryController extends GetxController {
 
     await checkedUser();
 
+    if (!user.isLogin) {
+      Get.offAllNamed(AppRoutes.login);
+      return;
+    }
+
     Get.toNamed(AppRoutes.createTransaction)?.then((result) async {
       if (result != null && result) {
         await setData();
