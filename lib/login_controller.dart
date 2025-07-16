@@ -122,7 +122,11 @@ class LoginController extends MainController {
 
       await _onClear();
 
-      Get.offAllNamed(AppRoutes.main);
+      if (!user.enableBiometric) {
+        await _showEnableBiometric();
+      } else {
+        Get.offAllNamed(AppRoutes.main);
+      }
     });
   }
 
@@ -156,5 +160,34 @@ class LoginController extends MainController {
   Future<void> gotoRegister() async {
     Get.offAllNamed(AppRoutes.register);
     _onClear();
+  }
+
+  Future<void> _showEnableBiometric() async {
+    await Future.delayed(Duration(milliseconds: 300));
+    Get.dialog(
+      AlertDialog(
+        title: Text('Enable Biometric'.tr, style: AppTextStyles.title),
+        content: Text(
+          'Enable biometric to login faster'.tr,
+          style: AppTextStyles.text,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Cancel'.tr, style: AppTextStyles.button),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await userFirebaseRepository.update(
+                user.copyWith(enableBiometric: true),
+              );
+              await Get.offAllNamed(AppRoutes.main);
+            },
+            child: Text('Enable'.tr, style: AppTextStyles.button),
+          ),
+        ],
+      ),
+    );
   }
 }
