@@ -23,7 +23,8 @@ class MainScreen extends StatelessWidget {
           onPressed: () => mainController.gotoProfile(),
           icon: CircleAvatar(
             child:
-                mainController.user.isLogin
+                mainController.user.isLogin &&
+                        mainController.user.profilePicture.isNotEmpty
                     ? CircleAvatar(
                       backgroundImage: MemoryImage(
                         base64Decode(mainController.user.profilePicture),

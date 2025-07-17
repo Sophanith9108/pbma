@@ -209,29 +209,4 @@ class UserModel extends Equatable {
     enableBiometric,
     status,
   ];
-
-  UserModel copyWith({required bool enableBiometric}) {
-    return UserModel()
-      ..id = id
-      ..name = name
-      ..email = email
-      ..phone = phone
-      ..password = password
-      ..profilePicture = profilePicture
-      ..address = address
-      ..dateOfBirth = dateOfBirth
-      ..gender = gender
-      ..createdAt = createdAt
-      ..updatedAt = updatedAt
-      ..role = role
-      ..isLogin = isLogin
-      ..deviceId = deviceId
-      ..deviceToken = deviceToken
-      ..deviceInfo = deviceInfo
-      ..enableBiometric = enableBiometric
-      ..deviceId = deviceId
-      ..deviceToken = deviceToken
-      ..deviceInfo = deviceInfo
-      ..status = status;
-  }
 }

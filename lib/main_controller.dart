@@ -8,7 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
 class MainController extends GetxController {
@@ -264,19 +263,19 @@ class MainController extends GetxController {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      return Future.error('Location services are disabled.'.tr);
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        return Future.error('Location permissions are denied'.tr);
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions are permanently denied.');
+      return Future.error('Location permissions are permanently denied.'.tr);
     }
 
     Position position = await Geolocator.getCurrentPosition(
@@ -306,10 +305,11 @@ class MainController extends GetxController {
   }
 
   Future<void> checkedUser() async {
-    var users = await userRepository.gets() ?? [];
-    if (users.isNotEmpty) {
-      user = users.first;
-    }
+    await userRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        user = value.first;
+      }
+    });
   }
 
   Future<void> gotoLogin() async {
@@ -439,41 +439,14 @@ class MainController extends GetxController {
     await showMessage();
   }
 
-  Future<void> biometricAuth() async {
-    final localAuth = LocalAuthentication();
-
-    try {
-      AppUtils.showLoading();
-
-      final isAuthenticated = await localAuth.authenticate(
-        localizedReason: 'Please authenticate to login'.tr,
-        options: const AuthenticationOptions(
-          useErrorDialogs: true,
-          stickyAuth: false,
-          biometricOnly: true,
-        ),
-      );
-
-      if (isAuthenticated) {
-        await setData();
-        AppUtils.hideLoading();
-        Get.offAllNamed(AppRoutes.main);
-      } else {
-        AppUtils.hideLoading();
-      }
-    } catch (e) {
-      AppUtils.hideLoading();
-    }
-  }
-
   Future<void> gotoCreateTransaction() async {
     await Future.delayed(const Duration(milliseconds: 300));
     await checkedUser();
 
     if (user.isLogin) {
-      Get.toNamed(AppRoutes.createTransaction)?.then((value) {
+      Get.toNamed(AppRoutes.createTransaction)?.then((value) async {
         if (value != null && value) {
-          setData();
+          await setData();
         }
       });
       return;
@@ -500,5 +473,46 @@ class MainController extends GetxController {
     } else {
       await gotoLogin();
     }
+  }
+
+  Future<void> showEnableBiometric({required UserModel user}) async {
+    await Future.delayed(Duration(milliseconds: 300));
+
+    await Get.dialog(
+      AlertDialog(
+        title: Text('Enable Biometric'.tr, style: AppTextStyles.title),
+        content: Text(
+          'Enable biometric to login faster'.tr,
+          style: AppTextStyles.text,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(),
+            child: Text('Cancel'.tr, style: AppTextStyles.button),
+          ),
+          TextButton(
+            onPressed: () async {
+              Get.back();
+              await _handleEnableBiometric();
+            },
+            child: Text('Enable'.tr, style: AppTextStyles.button),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _handleEnableBiometric() async {
+    await checkedUser();
+
+    user.enableBiometric = true;
+
+    AppUtils.showLoading();
+    await userRepository.update(user);
+    await userFirebaseRepository.update(user).then((_) async {
+      AppUtils.hideLoading();
+
+      Get.offAllNamed(AppRoutes.main);
+    });
   }
 }

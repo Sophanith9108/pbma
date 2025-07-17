@@ -49,8 +49,8 @@ class ProfileScreen extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(Get.width),
                         child: SizedBox(
-                          width: 190,
-                          height: 190,
+                          width: Get.width * .45,
+                          height: Get.width * .45,
                           child:
                               controller.user.profilePicture.isNotEmpty
                                   ? Image.memory(
@@ -80,16 +80,9 @@ class ProfileScreen extends StatelessWidget {
                                       return const Icon(Icons.person, size: 90);
                                     },
                                   )
-                                  : CachedNetworkImage(
-                                    imageUrl:
-                                        "https://picsum.photos/500?random=${DateTime.now().minute}",
-                                    placeholder:
-                                        (context, url) => Center(
-                                          child: CircularProgressIndicator(),
-                                        ),
-                                    errorWidget:
-                                        (context, url, error) =>
-                                            const Icon(Icons.person, size: 90),
+                                  : Icon(
+                                    FontAwesomeIcons.user,
+                                    size: Get.width * .1,
                                   ),
                         ),
                       ),

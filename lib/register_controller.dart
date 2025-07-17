@@ -126,20 +126,18 @@ class RegisterController extends MainController {
     await userRepository.save(user);
     await userFirebaseRepository
         .create(user)
-        .then((response) {
+        .then((response) async {
           AppUtils.hideLoading();
 
           user = response;
 
-          _onClear();
-          Get.offAllNamed(AppRoutes.main);
+          await showEnableBiometric(user: user);
+          await _onClear();
         })
         .catchError((error) {
           AppUtils.hideLoading();
 
-          Fluttertoast.showToast(
-            msg: 'Registration failed: ${error.toString()}',
-          );
+          AppUtils.showError(error.toString());
         });
   }
 
@@ -317,7 +315,9 @@ class RegisterController extends MainController {
     });
   }
 
-  void _onClear() {
+  Future<void> _onClear() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
     nameController.clear();
     phoneController.clear();
     emailController.clear();

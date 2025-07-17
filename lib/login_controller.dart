@@ -79,11 +79,11 @@ class LoginController extends MainController {
         return;
       }
 
-      await _handleCreateUser();
+      await _handleCreateUser(currentUser);
     });
   }
 
-  Future<void> _handleCreateUser() async {
+  Future<void> _handleCreateUser(UserModel currentUser) async {
     String deviceId = await AppUtils.getDeviceId();
     String deviceToken = await AppUtils.getDeviceToken();
     String deviceInfo = await AppUtils.getDeviceInfo();
@@ -104,11 +104,11 @@ class LoginController extends MainController {
       deviceId: deviceId,
       deviceToken: deviceToken,
       deviceInfo: deviceInfo,
+      enableBiometric: currentUser.enableBiometric,
     );
 
     AppUtils.showLoading();
     await userRepository.update(_user);
-    await Future.delayed(const Duration(seconds: 3));
     await userFirebaseRepository.update(_user).then((value) async {
       user = value;
 
@@ -120,13 +120,14 @@ class LoginController extends MainController {
 
       AppUtils.hideLoading();
 
-      await _onClear();
-
       if (!user.enableBiometric) {
-        await _showEnableBiometric();
+        await showEnableBiometric(user: user);
       } else {
+        await setData();
         Get.offAllNamed(AppRoutes.main);
       }
+
+      await _onClear();
     });
   }
 
@@ -143,11 +144,14 @@ class LoginController extends MainController {
 
   Future<void> loginWithBiometrics() async {
     await Future.delayed(Duration(milliseconds: 300));
+    await checkedUser();
     await biometricAuth();
   }
 
   Future<void> checkedBiometric() async {
     await Future.delayed(Duration(milliseconds: 300));
+
+    await checkedUser();
 
     var availableBiometrics =
         await LocalAuthentication().getAvailableBiometrics();
@@ -157,37 +161,37 @@ class LoginController extends MainController {
         user.enableBiometric && isAvailable && availableBiometrics.isNotEmpty;
   }
 
+  Future<void> biometricAuth() async {
+    final localAuth = LocalAuthentication();
+
+    try {
+      AppUtils.showLoading();
+
+      final isAuthenticated = await localAuth.authenticate(
+        localizedReason: 'Please authenticate to login'.tr,
+        options: const AuthenticationOptions(
+          useErrorDialogs: true,
+          stickyAuth: false,
+          biometricOnly: true,
+        ),
+      );
+
+      if (isAuthenticated) {
+        AppUtils.hideLoading();
+
+        await _handleCreateUser(user);
+      } else {
+        AppUtils.hideLoading();
+        AppUtils.showError('Authentication failed'.tr);
+      }
+    } catch (e) {
+      AppUtils.hideLoading();
+      AppUtils.showError('Authentication failed'.tr);
+    }
+  }
+
   Future<void> gotoRegister() async {
     Get.offAllNamed(AppRoutes.register);
     _onClear();
-  }
-
-  Future<void> _showEnableBiometric() async {
-    await Future.delayed(Duration(milliseconds: 300));
-    Get.dialog(
-      AlertDialog(
-        title: Text('Enable Biometric'.tr, style: AppTextStyles.title),
-        content: Text(
-          'Enable biometric to login faster'.tr,
-          style: AppTextStyles.text,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text('Cancel'.tr, style: AppTextStyles.button),
-          ),
-          TextButton(
-            onPressed: () async {
-              Get.back();
-              await userFirebaseRepository.update(
-                user.copyWith(enableBiometric: true),
-              );
-              await Get.offAllNamed(AppRoutes.main);
-            },
-            child: Text('Enable'.tr, style: AppTextStyles.button),
-          ),
-        ],
-      ),
-    );
   }
 }

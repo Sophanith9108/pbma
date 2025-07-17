@@ -12,6 +12,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.checkedBiometric();
+
     return Obx(
       () => AppNavigation(
         title: 'Login'.tr,
