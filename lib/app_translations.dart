@@ -1,11 +1,12 @@
 import 'package:get/get.dart';
+import 'package:pbma/core.dart';
 
 class AppTranslations extends Translations {
   @override
   Map<String, Map<String, String>> get keys => {
-    'en_US': {'welcome': 'Welcome to My App'},
-    'km_KH': {'welcome': 'សូមស្វាគមន៍មកកាន់កម្មវិធីរបស់ខ្ញុំ'},
-    'ja_JP': {'welcome': '私のアプリへようこそ'},
-    'zh_CN': {'welcome': '欢迎来到我的应用'},
+    'en_US': EnglishTranslation.translations,
+    'km_KH': KhmerTranslation.translations,
+    'ja_JP': JapaneseTranslation.translations,
+    'zh_CN': ChineseTranslation.translations,
   };
 }

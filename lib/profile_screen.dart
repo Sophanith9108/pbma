@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -13,9 +12,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.setData();
-    controller.setView();
-
     return Obx(
       () => AppNavigation(
         title: 'Profile'.tr,
@@ -26,8 +22,8 @@ class ProfileScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () => controller.onLogout(),
-            icon: const Icon(FontAwesomeIcons.rightFromBracket),
+            onPressed: () => controller.gotoSettings(),
+            icon: const Icon(FontAwesomeIcons.gear),
           ),
         ],
         body: ListView(

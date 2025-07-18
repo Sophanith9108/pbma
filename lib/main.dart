@@ -100,7 +100,9 @@ void setApplicationConfigs() {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final MainController controller = Get.put(MainController());
 
   @override
   Widget build(BuildContext context) {
@@ -113,8 +115,8 @@ class MainApp extends StatelessWidget {
       transitionDuration: Duration(milliseconds: 300),
       translations: AppTranslations(),
       defaultTransition: Transition.leftToRightWithFade,
-      locale: Get.deviceLocale,
-      fallbackLocale: const Locale('en', 'US'),
+      locale: controller.locale,
+      fallbackLocale: controller.locale,
       supportedLocales: const [
         Locale('en', 'US'),
         Locale('km', 'KH'),

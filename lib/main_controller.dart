@@ -13,6 +13,12 @@ import 'package:pbma/core.dart';
 class MainController extends GetxController {
   static final String TAG = "tMain";
 
+  final HomeController homeController = Get.put(HomeController());
+  final HistoryController transactionController = Get.put(HistoryController());
+  final MemberController memberController = Get.put(MemberController());
+  final BudgetController budgetController = Get.put(BudgetController());
+  final AccountController accountController = Get.put(AccountController());
+
   final UserRepository userRepository = Get.put(UserRepository());
   final TargetRepository targetRepository = Get.put(TargetRepository());
   final TransactionRepository transactionRepository = Get.put(
@@ -65,6 +71,14 @@ class MainController extends GetxController {
   final _isLoading = true.obs;
   bool get isLoading => _isLoading.value;
   set isLoading(bool value) => _isLoading.value = value;
+
+  final _themeMode = ThemeMode.system.obs;
+  ThemeMode get themeMode => _themeMode.value;
+  set themeMode(ThemeMode value) => _themeMode.value = value;
+
+  final _locale = const Locale('en_US').obs;
+  Locale get locale => _locale.value;
+  set locale(Locale value) => _locale.value = value;
 
   late GoogleMapController mapController;
 

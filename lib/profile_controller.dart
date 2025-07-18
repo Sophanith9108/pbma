@@ -6,12 +6,6 @@ import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class ProfileController extends MainController {
-  final HomeController homeController = Get.find<HomeController>();
-  final HistoryController transactionController = Get.find<HistoryController>();
-  final MemberController memberController = Get.find<MemberController>();
-  final BudgetController budgetController = Get.find<BudgetController>();
-  final AccountController accountController = Get.find<AccountController>();
-
   final _profile = File("").obs;
   File get profile => _profile.value;
   set profile(File value) => _profile.value = value;
@@ -34,8 +28,11 @@ class ProfileController extends MainController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+
+    await setData();
+    await setView();
   }
 
   @override
@@ -128,57 +125,10 @@ class ProfileController extends MainController {
     AppUtils.showWarning("Phone number cannot be changed!".tr);
   }
 
-  Future<void> onLogout() async {
+  
+
+  Future<void> gotoSettings() async {
     await Future.delayed(const Duration(milliseconds: 300));
-    await showDialog(
-      context: Get.context!,
-      builder: (_) {
-        return AlertDialog(
-          title: Text("Logout".tr, style: AppTextStyles.title),
-          content: Text(
-            "Are you sure you want to logout?".tr,
-            style: AppTextStyles.value,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: Text("Cancel".tr, style: AppTextStyles.button),
-            ),
-            TextButton(
-              onPressed: () async {
-                Get.back();
-
-                await handleLogout();
-              },
-              child: Text("Logout".tr, style: AppTextStyles.button),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> handleLogout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-
-    user.isLogin = false;
-
-    AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3));
-    await userFirebaseRepository.update(user).then((value) async {
-      user = value;
-
-      await userRepository.update(user);
-
-      await homeController.onRefreshing();
-      await transactionController.onRefreshing();
-      await memberController.onRefreshing();
-      await budgetController.onRefreshing();
-      await accountController.onRefreshing();
-
-      AppUtils.hideLoading();
-
-      Get.offAllNamed(AppRoutes.main);
-    });
+    Get.toNamed(AppRoutes.settings);
   }
 }

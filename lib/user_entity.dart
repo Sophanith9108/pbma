@@ -83,7 +83,7 @@ class UserEntity extends HiveObject {
     UserStatusEnums? status,
   }) {
     UserEntity()
-      ..id = Uuid().v8()
+      ..id = id ?? Uuid().v8()
       ..name = name
       ..email = email
       ..phone = phone
