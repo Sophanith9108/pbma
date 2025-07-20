@@ -103,8 +103,10 @@ class MainController extends GetxController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+
+    await setData();
   }
 
   @override
@@ -329,6 +331,10 @@ class MainController extends GetxController {
       if (value != null && value.isNotEmpty) {
         user = value.first;
       }
+    });
+
+    await userFirebaseRepository.read(user.id).then((value) {
+      user = value;
     });
   }
 

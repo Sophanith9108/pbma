@@ -1,18 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pbma/core.dart';
 
 class CreateTransactionController extends MainController {
-  final HomeController homeController = Get.find<HomeController>();
-  final HistoryController transactionController = Get.find<HistoryController>();
-  final MemberController memberController = Get.find<MemberController>();
-  final AccountController accountController = Get.find<AccountController>();
-
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -72,6 +69,11 @@ class CreateTransactionController extends MainController {
   set locationController(TextEditingController value) =>
       _locationController.value = value;
 
+  final _attachmentController = TextEditingController().obs;
+  TextEditingController get attachmentController => _attachmentController.value;
+  set attachmentController(TextEditingController value) =>
+      _attachmentController.value = value;
+
   final _othersInvolvedController = TextEditingController().obs;
   TextEditingController get othersInvolvedController =>
       _othersInvolvedController.value;
@@ -127,6 +129,10 @@ class CreateTransactionController extends MainController {
   List<MemberModel> get selectedOthersInvolved => _selectedOthersInvolved;
   set selectedOthersInvolved(List<MemberModel> value) =>
       _selectedOthersInvolved.value = value;
+
+  final _attachments = <File>[].obs;
+  List<File> get attachments => _attachments;
+  set attachments(List<File> value) => _attachments.value = value;
 
   late GoogleMapController mapController;
 
@@ -247,6 +253,8 @@ class CreateTransactionController extends MainController {
     othersInvolvedController.clear();
     selectedOthersInvolved.clear();
     isOthersInvolved = false;
+    attachments.clear();
+    attachmentController.clear();
   }
 
   void onDropLocation() {
@@ -427,5 +435,57 @@ class CreateTransactionController extends MainController {
         );
       },
     );
+  }
+
+  Future<void> onAttachmentSelected() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    await showModalBottomSheet(
+      context: Get.context!,
+      useSafeArea: true,
+      isDismissible: true,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return ListView(
+          shrinkWrap: true,
+          children:
+              ImageSource.values.map((element) {
+                return ListTile(
+                  onTap: () async {
+                    Get.back();
+                    await _handleAttachments(element);
+                  },
+                  leading: Icon(
+                    element == ImageSource.camera
+                        ? FontAwesomeIcons.camera
+                        : FontAwesomeIcons.image,
+                  ),
+                  title: Text(
+                    element.name.capitalizeFirst!.tr,
+                    style: AppTextStyles.title,
+                  ),
+                  subtitle: Text(
+                    "Select the photo you want to attach".tr,
+                    style: AppTextStyles.subtitle,
+                  ),
+                );
+              }).toList(),
+        );
+      },
+    );
+  }
+
+  Future<void> _handleAttachments(ImageSource element) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    final image = await ImagePicker().pickImage(source: element);
+    if (image != null) {
+      attachments.add(File(image.path));
+      attachmentController.text = attachments
+          .map((e) {
+            return "Attachment ${attachments.indexOf(e) + 1}";
+          })
+          .join(', ');
+    }
   }
 }

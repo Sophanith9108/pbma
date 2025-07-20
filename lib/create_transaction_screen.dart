@@ -444,6 +444,64 @@ class CreateTransactionScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: AppDimensions.padding),
+              TextFormField(
+                readOnly: true,
+                controller: controller.attachmentController,
+                onTap: () => controller.onAttachmentSelected(),
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.text,
+                textCapitalization: TextCapitalization.sentences,
+                decoration: InputDecoration(
+                  labelText: "Is there any attachment?".tr,
+                  labelStyle: AppTextStyles.label,
+                  hintText: "Attach a photo?".tr,
+                  hintStyle: AppTextStyles.hint,
+                  border: const OutlineInputBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(AppDimensions.borderRadius),
+                    ),
+                    borderSide: BorderSide(
+                      color: AppColors.primary,
+                      width: 1.0,
+                    ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: controller.attachments.isNotEmpty,
+                child: GridView.count(
+                  padding: EdgeInsets.only(top: AppDimensions.padding),
+                  mainAxisSpacing: AppDimensions.padding,
+                  crossAxisSpacing: AppDimensions.padding,
+                  childAspectRatio: 1,
+                  crossAxisCount: 2,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children:
+                      controller.attachments.map((e) {
+                        return Image.file(
+                          e,
+                          fit: BoxFit.cover,
+                          filterQuality: FilterQuality.high,
+                          frameBuilder: (
+                            context,
+                            child,
+                            frame,
+                            wasSynchronouslyLoaded,
+                          ) {
+                            if (!wasSynchronouslyLoaded) {
+                              return child;
+                            }
+                            return Center(child: CircularProgressIndicator());
+                          },
+                          errorBuilder:
+                              (context, error, stackTrace) =>
+                                  Icon(FontAwesomeIcons.image),
+                        );
+                      }).toList(),
+                ),
+              ),
+              SizedBox(height: AppDimensions.padding),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
