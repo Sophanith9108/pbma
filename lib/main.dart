@@ -83,17 +83,18 @@ Future<void> initializeStorage() async {
 }
 
 void setControllers() {
-  BindingsBuilder.put(() => MainController());
-  BindingsBuilder.put(() => HomeController());
-  BindingsBuilder.put(() => LoginController());
-  BindingsBuilder.put(() => ProfileController());
-  BindingsBuilder.put(() => HistoryController());
-  BindingsBuilder.put(() => SettingController());
-  BindingsBuilder.put(() => AccountController());
-  BindingsBuilder.put(() => RegisterController());
-  BindingsBuilder.put(() => CategoryController());
-  BindingsBuilder.put(() => NotificationController());
-  BindingsBuilder.put(() => CreateTransactionController());
+  Get.put(MainController());
+  Get.put(HomeController());
+  Get.put(LoginController());
+  Get.put(ProfileController());
+  Get.put(HistoryController());
+  Get.put(SettingController());
+  Get.put(AccountController());
+  Get.put(RegisterController());
+  Get.put(CategoryController());
+  Get.put(NotificationController());
+  Get.put(CreateTransactionController());
+  Get.put(CreateBudgetController());
 }
 
 Future<void> setApplicationConfigs() async {

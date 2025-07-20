@@ -31,7 +31,10 @@ class UserFirebaseRepository extends AppFirebaseStorageRepository<UserModel> {
         .read(id)
         .then(
           (value) => value,
-          onError: (error) => throw Exception("Failed to read user: $error"),
+          onError: (error) {
+            debugPrint("Failed to read user: $error");
+            return UserModel();
+          },
         );
   }
 

@@ -106,6 +106,7 @@ class MainController extends GetxController {
   void onReady() async {
     super.onReady();
 
+    await setupConfigs();
     await setData();
   }
 
@@ -333,9 +334,10 @@ class MainController extends GetxController {
       }
     });
 
-    await userFirebaseRepository.read(user.id).then((value) {
-      user = value;
-    });
+    // await userFirebaseRepository.read(user.id).then((value) {
+    //   user = value;
+    // });
+    print("tMain: $user");
   }
 
   Future<void> gotoLogin() async {
@@ -465,6 +467,23 @@ class MainController extends GetxController {
     await showMessage();
   }
 
+  Future<void> setupSettings() async {
+    await settingsRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        settings = value.firstWhere(
+          (element) => element.createdBy.id == user.id,
+        );
+      }
+    });
+    if (settings.id.isEmpty) settings = SettingsModel.create(createdBy: user);
+  }
+
+  Future<void> setupConfigs() async {
+    await setupSettings();
+    await handleSetupLanguage();
+    await handleSetupTheme();
+  }
+
   Future<void> gotoCreateTransaction() async {
     await Future.delayed(const Duration(milliseconds: 300));
     await checkedUser();
@@ -513,7 +532,10 @@ class MainController extends GetxController {
         ),
         actions: [
           TextButton(
-            onPressed: () => Get.back(),
+            onPressed: () {
+              Get.back();
+              Get.offAllNamed(AppRoutes.main);
+            },
             child: Text('Cancel'.tr, style: AppTextStyles.button),
           ),
           TextButton(
@@ -545,30 +567,27 @@ class MainController extends GetxController {
   Future<void> handleSetupLanguage() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    final settings = await settingsRepository.gets().then((value) {
-      return value?.firstWhere((element) => element.createdBy.id == user.id);
+    await settingsRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        var settings = value.firstWhere(
+          (element) => element.createdBy.id == user.id,
+        );
+        locale = Locale(settings.language.name);
+      }
     });
-
-    if (settings != null) {
-      locale = Locale(settings.language.name);
-    } else {
-      locale = const Locale('en_US');
-    }
   }
 
   Future<void> handleSetupTheme() async {
-    final settings = await settingsRepository.gets().then((value) {
-      return value?.firstWhere((element) => element.createdBy.id == user.id);
+    await settingsRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        var settings = value.firstWhere(
+          (element) => element.createdBy.id == user.id,
+        );
+        themeMode = ThemeMode.values.firstWhere(
+          (element) => element.name == settings.theme,
+        );
+        Get.changeThemeMode(themeMode);
+      }
     });
-
-    if (settings != null) {
-      themeMode = ThemeMode.values.firstWhere(
-        (element) => element.name == settings.theme,
-      );
-      Get.changeThemeMode(themeMode);
-    } else {
-      themeMode = ThemeMode.system;
-      Get.changeThemeMode(themeMode);
-    }
   }
 }

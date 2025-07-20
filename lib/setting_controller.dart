@@ -41,8 +41,6 @@ class SettingController extends MainController {
     await _handleCurrentVersion();
     await _handleEnableBiometric();
     await _handleEnableNotification();
-    await handleSetupTheme();
-    await handleSetupLanguage();
   }
 
   Future<void> _handleCurrentVersion() async {
