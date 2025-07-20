@@ -124,4 +124,26 @@ class UserEntity extends HiveObject {
       ..enableBiometric = entity.enableBiometric
       ..status = entity.status;
   }
+
+  static UserEntity toEntity(UserModel model) {
+    return UserEntity()
+      ..id = model.id
+      ..name = model.name
+      ..email = model.email
+      ..phone = model.phone
+      ..password = model.password
+      ..profilePicture = model.profilePicture
+      ..address = model.address
+      ..dateOfBirth = model.dateOfBirth
+      ..gender = model.gender
+      ..createdAt = model.createdAt
+      ..updatedAt = model.updatedAt
+      ..role = model.role
+      ..isLogin = model.isLogin
+      ..deviceId = model.deviceId
+      ..deviceToken = model.deviceToken
+      ..deviceInfo = model.deviceInfo
+      ..enableBiometric = model.enableBiometric
+      ..status = model.status;
+  }
 }

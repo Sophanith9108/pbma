@@ -47,6 +47,7 @@ class MainController extends GetxController {
   final ForgetPasswordRepository forgetPasswordRepository = Get.put(
     ForgetPasswordRepository(),
   );
+  final SettingsRepository settingsRepository = Get.put(SettingsRepository());
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -80,6 +81,10 @@ class MainController extends GetxController {
   Locale get locale => _locale.value;
   set locale(Locale value) => _locale.value = value;
 
+  final _settings = SettingsModel().obs;
+  SettingsModel get settings => _settings.value;
+  set settings(SettingsModel value) => _settings.value = value;
+
   late GoogleMapController mapController;
 
   final List<Widget> children = [
@@ -93,6 +98,7 @@ class MainController extends GetxController {
   @override
   void onInit() async {
     await setData();
+
     super.onInit();
   }
 
@@ -528,5 +534,35 @@ class MainController extends GetxController {
 
       Get.offAllNamed(AppRoutes.main);
     });
+  }
+
+  Future<void> handleSetupLanguage() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final settings = await settingsRepository.gets().then((value) {
+      return value?.firstWhere((element) => element.createdBy.id == user.id);
+    });
+
+    if (settings != null) {
+      locale = Locale(settings.language.name);
+    } else {
+      locale = const Locale('en_US');
+    }
+  }
+
+  Future<void> handleSetupTheme() async {
+    final settings = await settingsRepository.gets().then((value) {
+      return value?.firstWhere((element) => element.createdBy.id == user.id);
+    });
+
+    if (settings != null) {
+      themeMode = ThemeMode.values.firstWhere(
+        (element) => element.name == settings.theme,
+      );
+      Get.changeThemeMode(themeMode);
+    } else {
+      themeMode = ThemeMode.system;
+      Get.changeThemeMode(themeMode);
+    }
   }
 }

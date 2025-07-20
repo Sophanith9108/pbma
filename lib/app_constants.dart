@@ -22,11 +22,11 @@ class AppStorageBox {
   static const String transactionBox = 'transaction_box';
   static const String userBox = 'user_box';
   static const String categoryBox = 'category_box';
-  static const String settingBox = 'setting_box';
   static const String notificationBox = 'notification_box';
   static const String targetBox = 'target_box';
   static const String memberBox = "member_box";
   static const String budgetBox = "budget_box";
+  static const String settingsBox = "settings_box";
 }
 
 class AppFirebaseReference {

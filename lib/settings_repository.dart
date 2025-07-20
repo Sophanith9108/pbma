@@ -1,33 +1,35 @@
+import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
-class SettingsRepository extends AppStorageRepository<SettingsEntity> {
+class SettingsRepository extends AppStorageRepository<SettingsModel> {
+  final SettingsService _service = Get.put(SettingsService());
+
   @override
-  Future<void> delete(String key) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> delete(String key) async {
+    return _service.delete(key);
   }
 
   @override
-  Future<SettingsEntity?> get(String key) {
-    // TODO: implement get
-    throw UnimplementedError();
+  Future<SettingsModel?> get(String key) async {
+    return _service
+        .read(key)
+        .then((value) => value != null ? SettingsModel.toModel(value) : null);
   }
 
   @override
-  Future<List<SettingsEntity>?> gets() {
-    // TODO: implement gets
-    throw UnimplementedError();
+  Future<List<SettingsModel>?> gets() async {
+    return _service.reads().then(
+      (value) => value?.map((e) => SettingsModel.toModel(e)).toList(),
+    );
   }
 
   @override
-  Future<void> save(SettingsEntity value) {
-    // TODO: implement save
-    throw UnimplementedError();
+  Future<void> save(SettingsModel value) async {
+    return _service.create(SettingsEntity.toEntity(value));
   }
 
   @override
-  Future<void> update(SettingsEntity value) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<void> update(SettingsModel value) async {
+    return _service.update(SettingsEntity.toEntity(value));
   }
 }

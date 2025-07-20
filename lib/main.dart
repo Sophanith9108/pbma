@@ -29,6 +29,8 @@ Future<void> initializeStorage() async {
   Hive.registerAdapter(TransactionTypeEnumsAdapter());
   Hive.registerAdapter(TransactionStatusEnumsAdapter());
   Hive.registerAdapter(UserStatusEnumsAdapter());
+  Hive.registerAdapter(LanguagesEnumAdapter());
+  Hive.registerAdapter(SettingsEntityAdapter());
 
   final userBox =
       kDebugMode
@@ -65,36 +67,49 @@ Future<void> initializeStorage() async {
           ? 'profile_${AppStorageBox.transactionBox}'
           : AppStorageBox.transactionBox;
 
+  final settingsBox =
+      kDebugMode
+          ? 'debug_${AppStorageBox.settingsBox}'
+          : kProfileMode
+          ? 'profile_${AppStorageBox.settingsBox}'
+          : AppStorageBox.settingsBox;
+
   await Hive.openBox<UserEntity>(userBox);
   await Hive.openBox<UserEntity>(memberBox);
   await Hive.openBox<TargetEntity>(targetBox);
   await Hive.openBox<BudgetEntity>(budgetBox);
   await Hive.openBox<TransactionEntity>(transactionBox);
+  await Hive.openBox<SettingsEntity>(settingsBox);
 }
 
 void setControllers() {
-  Get.put(MainController());
-  Get.put(HomeController());
-  Get.put(LoginController());
-  Get.put(ProfileController());
-  Get.put(HistoryController());
-  Get.put(SettingController());
-  Get.put(AccountController());
-  Get.put(RegisterController());
-  Get.put(CategoryController());
-  Get.put(NotificationController());
-  Get.put(CreateTransactionController());
+  BindingsBuilder.put(() => MainController());
+  BindingsBuilder.put(() => HomeController());
+  BindingsBuilder.put(() => LoginController());
+  BindingsBuilder.put(() => ProfileController());
+  BindingsBuilder.put(() => HistoryController());
+  BindingsBuilder.put(() => SettingController());
+  BindingsBuilder.put(() => AccountController());
+  BindingsBuilder.put(() => RegisterController());
+  BindingsBuilder.put(() => CategoryController());
+  BindingsBuilder.put(() => NotificationController());
+  BindingsBuilder.put(() => CreateTransactionController());
 }
 
-void setApplicationConfigs() {
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+Future<void> setApplicationConfigs() async {
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  await SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.manual,
+    overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+  );
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.black,
       systemNavigationBarColor: Colors.black,
       systemNavigationBarIconBrightness: Brightness.dark,
       statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarDividerColor: Colors.transparent,
+      systemNavigationBarContrastEnforced: true,
     ),
   );
 }
@@ -110,7 +125,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppThemes.light,
       darkTheme: AppThemes.dark,
-      themeMode: ThemeMode.system,
+      themeMode: controller.themeMode,
       routes: AppRoutes.routes,
       transitionDuration: Duration(milliseconds: 300),
       translations: AppTranslations(),

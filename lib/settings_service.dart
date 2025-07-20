@@ -1,33 +1,40 @@
+import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:pbma/core.dart';
 
 class SettingsService extends AppStorageService<SettingsEntity> {
-  @override
-  Future<void> create(SettingsEntity value) {
-    // TODO: implement create
-    throw UnimplementedError();
+  Box<SettingsEntity> get settingsBox {
+    final boxName =
+        kDebugMode
+            ? 'debug_${AppStorageBox.settingsBox}'
+            : kProfileMode
+            ? 'profile_${AppStorageBox.settingsBox}'
+            : AppStorageBox.settingsBox;
+    return Hive.box<SettingsEntity>(boxName);
   }
 
   @override
-  Future<void> delete(String key) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<void> create(SettingsEntity value) async {
+    return settingsBox.put(value.id, value);
   }
 
   @override
-  Future<SettingsEntity?> read(String key) {
-    // TODO: implement read
-    throw UnimplementedError();
+  Future<void> delete(String key) async {
+    return settingsBox.delete(key);
   }
 
   @override
-  Future<List<SettingsEntity>?> reads() {
-    // TODO: implement reads
-    throw UnimplementedError();
+  Future<SettingsEntity?> read(String key) async {
+    return settingsBox.get(key);
   }
 
   @override
-  Future<void> update(SettingsEntity value) {
-    // TODO: implement update
-    throw UnimplementedError();
+  Future<List<SettingsEntity>?> reads() async {
+    return settingsBox.values.toList();
+  }
+
+  @override
+  Future<void> update(SettingsEntity value) async {
+    return settingsBox.put(value.id, value);
   }
 }

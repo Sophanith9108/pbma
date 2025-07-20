@@ -41,6 +41,8 @@ class SettingController extends MainController {
     await _handleCurrentVersion();
     await _handleEnableBiometric();
     await _handleEnableNotification();
+    await handleSetupTheme();
+    await handleSetupLanguage();
   }
 
   Future<void> _handleCurrentVersion() async {
@@ -112,6 +114,8 @@ class SettingController extends MainController {
     }
     locale = _locale;
     await Get.updateLocale(_locale);
+
+    await _handleSaveLanguage(element);
   }
 
   Future<void> onThemeChanged() async {
@@ -142,6 +146,7 @@ class SettingController extends MainController {
                     await Future.delayed(const Duration(milliseconds: 300));
                     Get.back();
                     Get.changeThemeMode(element);
+                    await _handleSaveTheme(element);
                   },
                   leading: Icon(icon),
                   title: Text(
@@ -478,5 +483,29 @@ class SettingController extends MainController {
         );
       },
     );
+  }
+
+  Future<void> _handleSaveLanguage(LanguagesEnum element) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    settings.language = element;
+
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3));
+    await settingsRepository.save(settings).then((value) {
+      AppUtils.hideLoading();
+    });
+  }
+
+  Future<void> _handleSaveTheme(ThemeMode element) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    settings.theme = element.name;
+
+    AppUtils.showLoading();
+    await Future.delayed(const Duration(seconds: 3));
+    await settingsRepository.save(settings).then((value) {
+      AppUtils.hideLoading();
+    });
   }
 }
