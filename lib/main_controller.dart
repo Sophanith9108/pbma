@@ -106,8 +106,8 @@ class MainController extends GetxController {
   void onReady() async {
     super.onReady();
 
-    await setupConfigs();
     await setData();
+    await setupConfigs();
   }
 
   @override
@@ -334,10 +334,9 @@ class MainController extends GetxController {
       }
     });
 
-    await userFirebaseRepository.read(user.id).then((value) {
-      user = value;
-    });
-    print("tMain: ${user.isLogin}, ${user.id}, ${user.name}");
+    // await userFirebaseRepository.read(user.id).then((value) {
+    //   user = value;
+    // });
   }
 
   Future<void> gotoLogin() async {

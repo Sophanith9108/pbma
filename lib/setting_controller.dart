@@ -29,8 +29,10 @@ class SettingController extends MainController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+
+    await _setData();
   }
 
   @override
@@ -509,6 +511,7 @@ class SettingController extends MainController {
     await settingsRepository.save(settings).then((value) {
       AppUtils.hideLoading();
     });
+    print("tSetting: ${settings.language}");
   }
 
   Future<void> _handleSaveTheme(ThemeMode element) async {
@@ -526,12 +529,15 @@ class SettingController extends MainController {
   Future<void> _handleSetupLanguage() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    await settingsRepository.gets().then((value) {
+    await checkedUser();
+
+    await settingsRepository.gets().then((value) async {
       if (value != null && value.isNotEmpty) {
-        var settings = value.firstWhere(
+        var setting = value.firstWhere(
           (element) => element.createdBy.id == user.id,
         );
-        locale = Locale(settings.language.name);
+        locale = Locale(setting.language.name);
+        await setupConfigs();
       }
     });
   }
@@ -539,14 +545,16 @@ class SettingController extends MainController {
   Future<void> _handleSetupTheme() async {
     await Future.delayed(const Duration(milliseconds: 300));
 
-    await settingsRepository.gets().then((value) {
+    await settingsRepository.gets().then((value) async {
       if (value != null && value.isNotEmpty) {
-        var settings = value.firstWhere(
+        var setting = value.firstWhere(
           (element) => element.createdBy.id == user.id,
         );
         themeMode = ThemeMode.values.firstWhere(
-          (element) => element.name == settings.theme,
+          (element) => element.name == setting.theme,
         );
+        settings.theme = themeMode.name;
+        await setupConfigs();
       }
     });
   }
