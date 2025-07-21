@@ -24,6 +24,7 @@ class SettingController extends MainController {
   @override
   void onInit() async {
     await _setData();
+
     super.onInit();
   }
 
@@ -38,6 +39,8 @@ class SettingController extends MainController {
   }
 
   Future<void> _setData() async {
+    await _handleSetupLanguage();
+    await _handleSetupTheme();
     await _handleCurrentVersion();
     await _handleEnableBiometric();
     await _handleEnableNotification();
@@ -64,7 +67,18 @@ class SettingController extends MainController {
     });
   }
 
-  Future<void> _handleEnableNotification() async {}
+  Future<void> _handleEnableNotification() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    enableNotification = await settingsRepository.get(settings.id).then((
+      value,
+    ) {
+      if (value != null) {
+        return value.enableNotification;
+      }
+      return false;
+    });
+  }
 
   Future<void> onLanguageChanged() async {
     await Future.delayed(const Duration(milliseconds: 300));
@@ -209,6 +223,8 @@ class SettingController extends MainController {
       await memberController.onRefreshing();
       await budgetController.onRefreshing();
       await accountController.onRefreshing();
+
+      await checkedUser();
 
       AppUtils.hideLoading();
 
@@ -504,6 +520,34 @@ class SettingController extends MainController {
     await Future.delayed(const Duration(seconds: 3));
     await settingsRepository.save(settings).then((value) {
       AppUtils.hideLoading();
+    });
+  }
+
+  Future<void> _handleSetupLanguage() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    await settingsRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        var settings = value.firstWhere(
+          (element) => element.createdBy.id == user.id,
+        );
+        locale = Locale(settings.language.name);
+      }
+    });
+  }
+
+  Future<void> _handleSetupTheme() async {
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    await settingsRepository.gets().then((value) {
+      if (value != null && value.isNotEmpty) {
+        var settings = value.firstWhere(
+          (element) => element.createdBy.id == user.id,
+        );
+        themeMode = ThemeMode.values.firstWhere(
+          (element) => element.name == settings.theme,
+        );
+      }
     });
   }
 }

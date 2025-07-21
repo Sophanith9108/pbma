@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pbma/core.dart';
 
 class AppNavigation extends StatelessWidget {
-  const AppNavigation({
+  AppNavigation({
     super.key,
     this.title,
     this.subtitle,

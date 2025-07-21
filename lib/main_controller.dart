@@ -334,10 +334,10 @@ class MainController extends GetxController {
       }
     });
 
-    // await userFirebaseRepository.read(user.id).then((value) {
-    //   user = value;
-    // });
-    print("tMain: $user");
+    await userFirebaseRepository.read(user.id).then((value) {
+      user = value;
+    });
+    print("tMain: ${user.isLogin}, ${user.id}, ${user.name}");
   }
 
   Future<void> gotoLogin() async {
@@ -532,9 +532,9 @@ class MainController extends GetxController {
         ),
         actions: [
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Get.back();
-              Get.offAllNamed(AppRoutes.main);
+              await _handleNotEnableBiometric();
             },
             child: Text('Cancel'.tr, style: AppTextStyles.button),
           ),
@@ -550,15 +550,21 @@ class MainController extends GetxController {
     );
   }
 
-  Future<void> _handleEnableBiometric() async {
+  Future<void> _handleNotEnableBiometric() async {
     await checkedUser();
 
+    Get.offAllNamed(AppRoutes.main);
+  }
+
+  Future<void> _handleEnableBiometric() async {
     user.enableBiometric = true;
 
     AppUtils.showLoading();
     await userRepository.update(user);
     await userFirebaseRepository.update(user).then((_) async {
       AppUtils.hideLoading();
+
+      await setData();
 
       Get.offAllNamed(AppRoutes.main);
     });

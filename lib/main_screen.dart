@@ -9,8 +9,6 @@ class MainScreen extends StatelessWidget {
   MainScreen({super.key});
 
   final MainController mainController = Get.put(MainController());
-  final HomeController homeController = Get.put(HomeController());
-  final HistoryController historyController = Get.put(HistoryController());
 
   @override
   Widget build(BuildContext context) {

@@ -4,12 +4,6 @@ import 'package:local_auth/local_auth.dart';
 import 'package:pbma/core.dart';
 
 class LoginController extends MainController {
-  final HomeController homeController = Get.find<HomeController>();
-  final HistoryController transactionController = Get.find<HistoryController>();
-  final MemberController memberController = Get.find<MemberController>();
-  final BudgetController budgetController = Get.find<BudgetController>();
-  final AccountController accountController = Get.find<AccountController>();
-
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;
@@ -40,6 +34,7 @@ class LoginController extends MainController {
   void onInit() async {
     await checkedUser();
     await checkedBiometric();
+    
     super.onInit();
   }
 
