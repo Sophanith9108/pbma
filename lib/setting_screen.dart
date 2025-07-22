@@ -22,7 +22,10 @@ class SettingScreen extends StatelessWidget {
                   ListTile(
                     onTap: () => controller.onLanguageChanged(),
                     leading: Icon(FontAwesomeIcons.language),
-                    title: Text("Languages".tr, style: AppTextStyles.title),
+                    title: Text(
+                      "${"Languages".tr} - ${controller.selectedLanguage}",
+                      style: AppTextStyles.title,
+                    ),
                     subtitle: Text(
                       "Change the language of the app".tr,
                       style: AppTextStyles.subtitle,
@@ -33,7 +36,10 @@ class SettingScreen extends StatelessWidget {
                   ListTile(
                     onTap: () => controller.onThemeChanged(),
                     leading: Icon(FontAwesomeIcons.circleHalfStroke),
-                    title: Text("Themes".tr, style: AppTextStyles.title),
+                    title: Text(
+                      "${"Themes".tr} - ${controller.selectedTheme.capitalizeFirst}",
+                      style: AppTextStyles.title,
+                    ),
                     subtitle: Text(
                       "Change the theme of the app".tr,
                       style: AppTextStyles.subtitle,
@@ -50,9 +56,7 @@ class SettingScreen extends StatelessWidget {
                     ),
                     trailing: Switch(
                       value: controller.enableBiometric,
-                      onChanged: (value) {
-                        controller.enableBiometric = value;
-                      },
+                      onChanged: (value) => controller.onBiometricChanged(value),
                     ),
                   ),
                   Divider(),
@@ -65,9 +69,7 @@ class SettingScreen extends StatelessWidget {
                     ),
                     trailing: Switch(
                       value: controller.enableNotification,
-                      onChanged: (value) {
-                        controller.enableNotification = value;
-                      },
+                      onChanged: (value) => controller.onNotificationChanged(value),
                     ),
                   ),
                   Divider(),
@@ -129,9 +131,9 @@ class SettingScreen extends StatelessWidget {
             ),
             Text(
               "Copyright © ${DateTime.now().year} PBMA. All rights reserved.",
-              style: AppTextStyles.subtitle,
+              style: AppTextStyles.ssubtitle,
             ),
-            SizedBox(height: Get.width * .15),
+            SizedBox(height: AppDimensions.padding),
           ],
         ),
       ),

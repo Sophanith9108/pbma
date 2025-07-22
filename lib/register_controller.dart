@@ -131,7 +131,7 @@ class RegisterController extends MainController {
 
           user = response;
 
-          await showEnableBiometric(user: user);
+          await showDialogEnableBiometric(user: user);
           await _onClear();
         })
         .catchError((error) {

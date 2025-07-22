@@ -8,7 +8,7 @@ import 'package:pbma/core.dart';
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
-  final ProfileController controller = Get.find<ProfileController>();
+  final ProfileController controller = Get.put(ProfileController());
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +98,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: AppDimensions.padding),
             TextFormField(
-              initialValue: controller.user.name,
+              controller: controller.nameController,
               readOnly: true,
               onTap: () {
                 controller.onNameMessage();
@@ -132,7 +132,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: AppDimensions.padding),
             TextFormField(
-              initialValue: controller.user.email,
+              controller: controller.emailController,
               readOnly: true,
               onTap: () => controller.onEmailMessage(),
               decoration: InputDecoration(
@@ -146,7 +146,7 @@ class ProfileScreen extends StatelessWidget {
             ),
             SizedBox(height: AppDimensions.padding),
             TextFormField(
-              initialValue: controller.user.phone,
+              controller: controller.phoneController,
               readOnly: true,
               onTap: () => controller.onPhoneMessage(),
               decoration: InputDecoration(

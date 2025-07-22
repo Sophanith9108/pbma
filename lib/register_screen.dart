@@ -10,7 +10,7 @@ import 'package:pbma/core.dart';
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
 
-  final RegisterController controller = Get.find<RegisterController>();
+  final RegisterController controller = Get.put(RegisterController());
 
   @override
   Widget build(BuildContext context) {

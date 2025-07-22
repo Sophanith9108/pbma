@@ -11,8 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:pbma/core.dart';
 
 class MainController extends GetxController {
-  static final String TAG = "tMain";
-
   final HomeController homeController = Get.put(HomeController());
   final HistoryController transactionController = Get.put(HistoryController());
   final MemberController memberController = Get.put(MemberController());
@@ -85,6 +83,14 @@ class MainController extends GetxController {
   SettingsModel get settings => _settings.value;
   set settings(SettingsModel value) => _settings.value = value;
 
+  final _selectedLanguage = "".obs;
+  String get selectedLanguage => _selectedLanguage.value;
+  set selectedLanguage(String value) => _selectedLanguage.value = value;
+
+  final _selectedTheme = "".obs;
+  String get selectedTheme => _selectedTheme.value;
+  set selectedTheme(String value) => _selectedTheme.value = value;
+
   late GoogleMapController mapController;
 
   final List<Widget> children = [
@@ -107,7 +113,7 @@ class MainController extends GetxController {
     super.onReady();
 
     await setData();
-    await setupConfigs();
+    await onSetupConfigs();
   }
 
   @override
@@ -322,7 +328,7 @@ class MainController extends GetxController {
           "${place.name}, ${place.locality}, ${place.administrativeArea}, ${place.country}";
       return formattedAddress;
     } catch (e) {
-      debugPrint("$TAG: Error getting address: $e");
+      AppUtils.logging("Error getting address: $e");
       return "";
     }
   }
@@ -340,12 +346,12 @@ class MainController extends GetxController {
   }
 
   Future<void> gotoLogin() async {
-    await Future.delayed(const Duration(milliseconds: 300), () {
-      Get.offAndToNamed(AppRoutes.login)?.then((value) async {
-        if (value != null && value) {
-          await setData();
-        }
-      });
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    Get.offAndToNamed(AppRoutes.login)?.then((value) async {
+      if (value != null && value) {
+        await setData();
+      }
     });
   }
 
@@ -477,7 +483,7 @@ class MainController extends GetxController {
     if (settings.id.isEmpty) settings = SettingsModel.create(createdBy: user);
   }
 
-  Future<void> setupConfigs() async {
+  Future<void> onSetupConfigs() async {
     await setupSettings();
     await handleSetupLanguage();
     await handleSetupTheme();
@@ -519,7 +525,7 @@ class MainController extends GetxController {
     }
   }
 
-  Future<void> showEnableBiometric({required UserModel user}) async {
+  Future<void> showDialogEnableBiometric({required UserModel user}) async {
     await Future.delayed(Duration(milliseconds: 300));
 
     await Get.dialog(
@@ -563,36 +569,41 @@ class MainController extends GetxController {
     await userFirebaseRepository.update(user).then((_) async {
       AppUtils.hideLoading();
 
-      await setData();
+      await onSetupConfigs();
 
       Get.offAllNamed(AppRoutes.main);
     });
   }
 
   Future<void> handleSetupLanguage() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     await settingsRepository.gets().then((value) {
       if (value != null && value.isNotEmpty) {
         var settings = value.firstWhere(
           (element) => element.createdBy.id == user.id,
         );
-        locale = Locale(settings.language.name);
+        locale = settings.language.locale;
+        Get.updateLocale(locale);
       }
     });
+    selectedLanguage = settings.language.name;
   }
 
   Future<void> handleSetupTheme() async {
     await settingsRepository.gets().then((value) {
       if (value != null && value.isNotEmpty) {
-        var settings = value.firstWhere(
-          (element) => element.createdBy.id == user.id,
-        );
-        themeMode = ThemeMode.values.firstWhere(
-          (element) => element.name == settings.theme,
-        );
+        var theme =
+            value
+                .firstWhere((element) => element.createdBy.id == user.id)
+                .theme;
+
+        themeMode = ThemeMode.values.firstWhere((value) {
+          return value.name == theme;
+        });
         Get.changeThemeMode(themeMode);
       }
     });
+    selectedTheme = themeMode.name;
   }
 }

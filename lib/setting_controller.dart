@@ -41,8 +41,6 @@ class SettingController extends MainController {
   }
 
   Future<void> _setData() async {
-    await _handleSetupLanguage();
-    await _handleSetupTheme();
     await _handleCurrentVersion();
     await _handleEnableBiometric();
     await _handleEnableNotification();
@@ -70,7 +68,7 @@ class SettingController extends MainController {
   }
 
   Future<void> _handleEnableNotification() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     enableNotification = await settingsRepository.get(settings.id).then((
       value,
@@ -83,7 +81,7 @@ class SettingController extends MainController {
   }
 
   Future<void> onLanguageChanged() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     await showModalBottomSheet(
       context: Get.context!,
@@ -103,33 +101,15 @@ class SettingController extends MainController {
                     style: AppTextStyles.subtitle,
                   ),
                   onTap: () async {
-                    await Future.delayed(const Duration(milliseconds: 300));
+                    await AppUtils.delay();
                     Get.back();
-                    await _handleLanguageChanged(element);
+                    await _handleSaveLanguage(element);
                   },
                 );
               }).toList(),
         );
       },
     );
-  }
-
-  Future<void> _handleLanguageChanged(LanguagesEnum element) async {
-    Locale _locale;
-    switch (element) {
-      case LanguagesEnum.English:
-        _locale = const Locale("en_US");
-      case LanguagesEnum.Khmer:
-        _locale = const Locale("km_KH");
-      case LanguagesEnum.Japanese:
-        _locale = const Locale("ja_JP");
-      case LanguagesEnum.Chinese:
-        _locale = const Locale("zh_CN");
-    }
-    locale = _locale;
-    await Get.updateLocale(_locale);
-
-    await _handleSaveLanguage(element);
   }
 
   Future<void> onThemeChanged() async {
@@ -215,18 +195,18 @@ class SettingController extends MainController {
 
     AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3));
+
+    await userRepository.update(user);
     await userFirebaseRepository.update(user).then((value) async {
       user = value;
 
-      await userRepository.update(user);
+      await checkedUser();
 
       await homeController.onRefreshing();
       await transactionController.onRefreshing();
       await memberController.onRefreshing();
       await budgetController.onRefreshing();
       await accountController.onRefreshing();
-
-      await checkedUser();
 
       AppUtils.hideLoading();
 
@@ -502,60 +482,64 @@ class SettingController extends MainController {
   }
 
   Future<void> _handleSaveLanguage(LanguagesEnum element) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     settings.language = element;
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3));
-    await settingsRepository.save(settings).then((value) {
+    await AppUtils.delay(milliseconds: 1000);
+    await settingsRepository.save(settings).then((value) async {
       AppUtils.hideLoading();
+
+      await onSetupConfigs();
     });
-    print("tSetting: ${settings.language}");
   }
 
   Future<void> _handleSaveTheme(ThemeMode element) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     settings.theme = element.name;
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3));
-    await settingsRepository.save(settings).then((value) {
+    await AppUtils.delay(milliseconds: 1000);
+    await settingsRepository.save(settings).then((value) async {
+      AppUtils.hideLoading();
+
+      await onSetupConfigs();
+    });
+  }
+
+  Future<void> onBiometricChanged(bool value) async {
+    enableBiometric = value;
+
+    user.enableBiometric = value;
+
+    await _handleSavedBiometric();
+  }
+
+  Future<void> _handleSavedBiometric() async {
+    AppUtils.showLoading();
+    await AppUtils.delay(milliseconds: 1000);
+    await userRepository.update(user).then((value) async {
+      await _handleEnableBiometric();
+      await onSetupConfigs();
       AppUtils.hideLoading();
     });
   }
 
-  Future<void> _handleSetupLanguage() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-
-    await checkedUser();
-
-    await settingsRepository.gets().then((value) async {
-      if (value != null && value.isNotEmpty) {
-        var setting = value.firstWhere(
-          (element) => element.createdBy.id == user.id,
-        );
-        locale = Locale(setting.language.name);
-        await setupConfigs();
-      }
-    });
+  Future<void> onNotificationChanged(bool value) async {
+    enableNotification = value;
+    settings.enableNotification = enableBiometric;
+    await _handleSavedNotification();
   }
 
-  Future<void> _handleSetupTheme() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-
-    await settingsRepository.gets().then((value) async {
-      if (value != null && value.isNotEmpty) {
-        var setting = value.firstWhere(
-          (element) => element.createdBy.id == user.id,
-        );
-        themeMode = ThemeMode.values.firstWhere(
-          (element) => element.name == setting.theme,
-        );
-        settings.theme = themeMode.name;
-        await setupConfigs();
-      }
+  Future<void> _handleSavedNotification() async {
+    AppUtils.showLoading();
+    await AppUtils.delay(milliseconds: 1000);
+    await settingsRepository.update(settings).then((value) async {
+      await _handleEnableNotification();
+      await onSetupConfigs();
+      AppUtils.hideLoading();
     });
   }
 }

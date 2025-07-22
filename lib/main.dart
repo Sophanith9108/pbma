@@ -82,21 +82,6 @@ Future<void> initializeStorage() async {
   await Hive.openBox<SettingsEntity>(settingsBox);
 }
 
-void setControllers() {
-  Get.put(MainController());
-  Get.put(HomeController());
-  Get.put(LoginController());
-  Get.put(ProfileController());
-  Get.put(HistoryController());
-  Get.put(SettingController());
-  Get.put(AccountController());
-  Get.put(RegisterController());
-  Get.put(CategoryController());
-  Get.put(NotificationController());
-  Get.put(CreateTransactionController());
-  Get.put(CreateBudgetController());
-}
-
 Future<void> setApplicationConfigs() async {
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await SystemChrome.setEnabledSystemUIMode(
@@ -141,7 +126,6 @@ class MainApp extends StatelessWidget {
       ],
       initialBinding: BindingsBuilder(() {
         setApplicationConfigs();
-        setControllers();
       }),
       home: MainScreen(),
     );

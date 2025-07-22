@@ -12,6 +12,8 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    mainController.setData();
+
     return Obx(
       () => AppNavigation(
         leading: IconButton.outlined(

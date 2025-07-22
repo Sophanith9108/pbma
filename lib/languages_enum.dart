@@ -48,3 +48,18 @@ extension LanguagesEnumExtensionIcon on LanguagesEnum {
     }
   }
 }
+
+extension LanguagesEnumExtensionLocale on LanguagesEnum {
+  Locale get locale {
+    switch (this) {
+      case LanguagesEnum.English:
+        return Locale("en_US");
+      case LanguagesEnum.Khmer:
+        return Locale("km_KH");
+      case LanguagesEnum.Japanese:
+        return Locale("ja_JP");
+      case LanguagesEnum.Chinese:
+        return Locale("zh_CN");
+    }
+  }
+}

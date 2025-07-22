@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -159,5 +160,11 @@ class AppUtils {
 
   static Future<void> delay({int milliseconds = 300}) async {
     await Future.delayed(Duration(milliseconds: milliseconds));
+  }
+
+  static Future<void> logging(dynamic data) async {
+    if (kDebugMode || kProfileMode) {
+      debugPrint("tMain: $data");
+    }
   }
 }

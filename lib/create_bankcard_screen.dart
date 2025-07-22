@@ -5,6 +5,7 @@ import 'package:pbma/core.dart';
 
 class CreateBankCardScreen extends StatelessWidget {
   CreateBankCardScreen({super.key});
+
   final CreateBankCardController controller = Get.put(
     CreateBankCardController(),
   );

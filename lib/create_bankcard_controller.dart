@@ -8,8 +8,6 @@ import 'package:pbma/core.dart';
 import 'package:flutter/services.dart' show rootBundle;
 
 class CreateBankCardController extends MainController {
-  final AccountController accountController = Get.find<AccountController>();
-
   final _formKey = GlobalKey<FormState>().obs;
   GlobalKey<FormState> get formKey => _formKey.value;
   set formKey(GlobalKey<FormState> value) => _formKey.value = value;

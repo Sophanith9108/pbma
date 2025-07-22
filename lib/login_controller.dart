@@ -34,7 +34,7 @@ class LoginController extends MainController {
   void onInit() async {
     await checkedUser();
     await checkedBiometric();
-    
+
     super.onInit();
   }
 
@@ -51,10 +51,13 @@ class LoginController extends MainController {
   Future<void> onLogin() async {
     if (!formKey.currentState!.validate()) return;
 
-    await Future.delayed(const Duration(milliseconds: 500));
+    await AppUtils.delay();
     FocusScope.of(Get.context!).unfocus();
 
+    AppUtils.showLoading();
     await userFirebaseRepository.reads().then((users) async {
+      AppUtils.hideLoading();
+
       String phone = phoneController.text.trim();
       UserModel? foundUser = users.firstWhereOrNull(
         (user) => user.phone == phone,
@@ -106,6 +109,7 @@ class LoginController extends MainController {
     await userRepository.update(_user);
     await userFirebaseRepository.update(_user).then((value) async {
       user = value;
+      await setData();
 
       await homeController.onRefreshing();
       await accountController.onRefreshing();
@@ -116,9 +120,8 @@ class LoginController extends MainController {
       AppUtils.hideLoading();
 
       if (!user.enableBiometric) {
-        await showEnableBiometric(user: user);
+        await showDialogEnableBiometric(user: user);
       } else {
-        await setData();
         Get.offAllNamed(AppRoutes.main);
       }
 

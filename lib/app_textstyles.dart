@@ -24,6 +24,7 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
   );
   static final TextStyle subtitle = GoogleFonts.battambang(fontSize: 14);
+  static final TextStyle ssubtitle = GoogleFonts.ubuntuMono(fontSize: 12);
 
   static final TextStyle label = GoogleFonts.battambang(fontSize: 16);
   static final TextStyle value = GoogleFonts.battambang(

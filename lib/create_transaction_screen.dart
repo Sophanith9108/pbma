@@ -6,8 +6,9 @@ import 'package:pbma/core.dart';
 class CreateTransactionScreen extends StatelessWidget {
   CreateTransactionScreen({super.key});
 
-  final CreateTransactionController controller =
-      Get.find<CreateTransactionController>();
+  final CreateTransactionController controller = Get.put(
+    CreateTransactionController(),
+  );
 
   @override
   Widget build(BuildContext context) {
