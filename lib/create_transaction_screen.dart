@@ -479,25 +479,54 @@ class CreateTransactionScreen extends StatelessWidget {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   children:
-                      controller.attachments.map((e) {
-                        return Image.file(
-                          e,
-                          fit: BoxFit.cover,
-                          filterQuality: FilterQuality.high,
-                          frameBuilder: (
-                            context,
-                            child,
-                            frame,
-                            wasSynchronouslyLoaded,
-                          ) {
-                            if (!wasSynchronouslyLoaded) {
-                              return child;
-                            }
-                            return Center(child: CircularProgressIndicator());
-                          },
-                          errorBuilder:
-                              (context, error, stackTrace) =>
-                                  Icon(FontAwesomeIcons.image),
+                      controller.attachments.map((element) {
+                        return ClipRRect(
+                          borderRadius: BorderRadiusGeometry.circular(
+                            AppDimensions.borderRadius,
+                          ),
+                          child: Stack(
+                            children: [
+                              Positioned.fill(
+                                child: Image.file(
+                                  element,
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.high,
+                                  frameBuilder: (
+                                    context,
+                                    child,
+                                    frame,
+                                    wasSynchronouslyLoaded,
+                                  ) {
+                                    if (!wasSynchronouslyLoaded) {
+                                      return child;
+                                    }
+                                    return Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  },
+                                  errorBuilder:
+                                      (context, error, stackTrace) =>
+                                          Icon(FontAwesomeIcons.image),
+                                ),
+                              ),
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: IconButton.outlined(
+                                  style: ButtonStyle(
+                                    backgroundColor: WidgetStateProperty.all(
+                                      Colors.black.withValues(alpha: .5),
+                                    ),
+                                  ),
+                                  onPressed:
+                                      () => controller.onAttachmentRemoved(
+                                        element,
+                                      ),
+                                  icon: Icon(FontAwesomeIcons.xmark),
+                                ),
+                              ),
+                            ],
+                          ),
                         );
                       }).toList(),
                 ),

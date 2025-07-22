@@ -94,6 +94,10 @@ class TransactionModel extends Equatable {
   MaterialColor get transactionBg => _transactionBg.value;
   set transactionBg(MaterialColor value) => _transactionBg.value = value;
 
+  final _attachments = <String>[].obs;
+  List<String> get attachments => _attachments;
+  set attachments(List<String> value) => _attachments.value = value;
+
   TransactionModel();
 
   factory TransactionModel.create({
@@ -116,6 +120,7 @@ class TransactionModel extends Equatable {
     required TransactionTypeEnums transactionType,
     bool? isOthersInvolved,
     List<UserModel>? othersInvolved,
+    List<String>? attachments,
   }) {
     var transaction = TransactionModel();
     transaction.id = Uuid().v8();
@@ -139,6 +144,7 @@ class TransactionModel extends Equatable {
     transaction.isOthersInvolved = isOthersInvolved ?? false;
     transaction.othersInvolved = othersInvolved ?? [];
     transaction.transactionType = transactionType;
+    transaction.attachments = attachments ?? [];
 
     switch (transactionType) {
       case TransactionTypeEnums.expense:
@@ -182,6 +188,7 @@ class TransactionModel extends Equatable {
       "updatedBy": UserModel.toJson(model: model.updatedBy),
       "status": model.status.name.toString(),
       "transactionType": model.transactionType.name.toString(),
+      "attachments": model.attachments,
     };
   }
 
@@ -207,7 +214,6 @@ class TransactionModel extends Equatable {
       ..location = json['location'].toString()
       ..latitude = double.tryParse(json['latitude'].toString()) ?? 0.0
       ..longitude = double.tryParse(json['longitude'].toString()) ?? 0.0
-      ..othersInvolved = []
       ..createdAt =
           DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
       ..updatedAt =
@@ -219,7 +225,17 @@ class TransactionModel extends Equatable {
       )
       ..transactionType = TransactionTypeEnums.values.firstWhere(
         (e) => e.name == json['transactionType'].toString(),
-      );
+      )
+      ..othersInvolved =
+          json['othersInvolved'] != null
+              ? (json['othersInvolved'] as List)
+                  .map((e) => UserModel.fromJson(json: e))
+                  .toList()
+              : []
+      ..attachments =
+          json['attachments'] != null
+              ? (json['attachments'] as List).map((e) => e.toString()).toList()
+              : [];
   }
 
   static TransactionEntity toEntity(TransactionModel model) {
@@ -303,5 +319,6 @@ class TransactionModel extends Equatable {
     updatedBy,
     status,
     transactionType,
+    attachments,
   ];
 }

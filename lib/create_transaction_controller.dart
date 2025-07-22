@@ -488,4 +488,14 @@ class CreateTransactionController extends MainController {
           .join(', ');
     }
   }
+
+  Future<void> onAttachmentRemoved(File element) async {
+    await AppUtils.delay();
+    attachments.remove(element);
+    attachmentController.text = attachments
+        .map((e) {
+          return "Attachment ${attachments.indexOf(e) + 1}";
+        })
+        .join(', ');
+  }
 }
