@@ -1,6 +1,5 @@
 class AppConstants {
   static const String appName = 'PBMA';
-  static const String appVersion = '1.0.0';
   static const String appDescription =
       'PBMA is a mobile application that provides a platform for users to manage their tasks and projects efficiently.';
   static const String appAuthor = 'Sophanit KONG';
@@ -16,6 +15,7 @@ class AppConstants {
   static const String timeFormat = 'hh:mm a';
   static const String budgetDateTimeFormat = 'dd.MM.yy hh:mm a';
   static const double zoomLevel = 12.0;
+  static const int maxAttachments = 4;
 }
 
 class AppStorageBox {

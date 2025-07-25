@@ -31,6 +31,8 @@ Future<void> initializeStorage() async {
   Hive.registerAdapter(UserStatusEnumsAdapter());
   Hive.registerAdapter(LanguagesEnumAdapter());
   Hive.registerAdapter(SettingsEntityAdapter());
+  Hive.registerAdapter(MemberEntityAdapter());
+  Hive.registerAdapter(AttachmentEntityAdapter());
 
   final userBox =
       kDebugMode

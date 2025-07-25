@@ -66,6 +66,9 @@ class TransactionEntity extends HiveObject {
   @HiveField(19)
   TransactionTypeEnums? transactionType;
 
+  @HiveField(20)
+  List<AttachmentEntity>? attachments;
+
   TransactionEntity();
 
   factory TransactionEntity.create({
@@ -87,6 +90,7 @@ class TransactionEntity extends HiveObject {
     UserEntity? updatedBy,
     TransactionStatusEnums? status,
     TransactionTypeEnums? transactionType,
+    List<AttachmentEntity>? attachments,
   }) {
     var transaction = TransactionEntity();
     transaction.id = Uuid().v8();
@@ -102,13 +106,14 @@ class TransactionEntity extends HiveObject {
     transaction.location = location;
     transaction.latitude = latitude;
     transaction.longitude = longitude;
-    transaction.othersInvolved = othersInvolved;
     transaction.createdAt = DateTime.now();
     transaction.createdBy = createdBy;
     transaction.updatedAt = updatedAt;
     transaction.updatedBy = updatedBy;
     transaction.status = status;
     transaction.transactionType = transactionType;
+    transaction.othersInvolved = othersInvolved;
+    transaction.attachments = attachments;
     return transaction;
   }
 
@@ -134,22 +139,12 @@ class TransactionEntity extends HiveObject {
     model.transactionType = entity.transactionType!;
     model.isOthersInvolved = entity.isOthersInvolved ?? false;
     model.othersInvolved =
-        entity.othersInvolved
-            ?.map(
-              (entity) => UserModel.create(
-                name: '',
-                email: '',
-                phone: '',
-                password: '',
-                address: '',
-                deviceId: '',
-                deviceToken: '',
-                deviceInfo: '',
-                profilePicture: '',
-              ),
-            )
-            .toList() ??
+        entity.othersInvolved?.map((e) => MemberEntity.toModel(e)).toList() ??
         [];
+    model.attachments =
+        entity.attachments?.map((e) => AttachmentEntity.toModel(e)).toList() ??
+        [];
+
     return model;
   }
 }

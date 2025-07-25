@@ -46,6 +46,9 @@ class MainController extends GetxController {
     ForgetPasswordRepository(),
   );
   final SettingsRepository settingsRepository = Get.put(SettingsRepository());
+  final ProfileUploadRepository profileUploadRepository = Get.put(
+    ProfileUploadRepository(),
+  );
 
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -234,7 +237,7 @@ class MainController extends GetxController {
                     ),
 
                     Positioned(
-                      bottom: Get.width * .2,
+                      bottom: 32,
                       left: 32,
                       right: 32,
                       child: FloatingActionButton(

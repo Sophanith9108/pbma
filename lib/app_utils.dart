@@ -167,4 +167,8 @@ class AppUtils {
       debugPrint("tMain: $data");
     }
   }
+
+  static Future<String> getSizeFromBase64(String base64) async {
+    return "${(base64.length / 1024).toStringAsFixed(2)} KB";
+  }
 }

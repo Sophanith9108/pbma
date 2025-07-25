@@ -68,7 +68,7 @@ class ProfileController extends MainController {
   }
 
   Future<void> onProfileUploaded() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
     await showImagePicker((value) {
       profile = File(value?.path ?? "");
       user.profilePicture = base64Encode(profile.readAsBytesSync());
@@ -77,7 +77,7 @@ class ProfileController extends MainController {
 
   Future<void> onUserInfoUpdated() async {
     AppUtils.showLoading();
-    await Future.delayed(Duration(seconds: 3), () async {
+    await Future.delayed(Duration(seconds: 1), () async {
       AppUtils.hideLoading();
 
       user.profilePicture = base64Encode(profile.readAsBytesSync());

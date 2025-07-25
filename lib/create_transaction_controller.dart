@@ -130,9 +130,9 @@ class CreateTransactionController extends MainController {
   set selectedOthersInvolved(List<MemberModel> value) =>
       _selectedOthersInvolved.value = value;
 
-  final _attachments = <File>[].obs;
-  List<File> get attachments => _attachments;
-  set attachments(List<File> value) => _attachments.value = value;
+  final _attachments = <AttachmentModel>[].obs;
+  List<AttachmentModel> get attachments => _attachments;
+  set attachments(List<AttachmentModel> value) => _attachments.value = value;
 
   late GoogleMapController mapController;
 
@@ -141,8 +141,8 @@ class CreateTransactionController extends MainController {
   @override
   void onInit() async {
     await checkedUser();
-    await onRetrievedBanks();
-    await onRetrievedMembers();
+    await _handleRetrievedBanks();
+    await _handleRetrievedMembers();
     super.onInit();
   }
 
@@ -151,13 +151,17 @@ class CreateTransactionController extends MainController {
     super.onReady();
   }
 
-  Future<void> onRetrievedBanks() async {
+  Future<void> _handleRetrievedBanks() async {
     await bankCardFirebaseRepository.reads().then((value) {
       bankCards = value;
     });
   }
 
-  Future<void> onRetrievedMembers() async {
+  Future<void> _handleRetrievedMembers() async {
+    await AppUtils.delay();
+
+    othersInvolved.clear();
+
     await memberFirebaseRepository.reads().then((value) {
       othersInvolved =
           value.where((element) {
@@ -169,7 +173,7 @@ class CreateTransactionController extends MainController {
   }
 
   Future<void> onCreateTransaction() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     if (!formKey.currentState!.validate()) return;
     FocusScope.of(Get.context!).unfocus();
@@ -190,18 +194,21 @@ class CreateTransactionController extends MainController {
       location: address.trim(),
       latitude: currentLocation.latitude,
       longitude: currentLocation.longitude,
-      othersInvolved: isOthersInvolved ? selectedOthersInvolved : [],
       createdBy: user,
       updatedBy: user,
       updatedAt: DateTime.now(),
       status: TransactionStatusEnums.success,
       transactionType: TransactionTypeEnums.expense,
+      othersInvolved: isOthersInvolved ? selectedOthersInvolved : [],
+      attachments: attachments,
     );
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       await transactionRepository.save(transaction);
       await transactionFirebaseRepository.create(transaction);
+
+      await _onClear();
 
       await homeController.onRefreshing();
       await transactionController.onRefreshing();
@@ -210,7 +217,6 @@ class CreateTransactionController extends MainController {
 
       AppUtils.hideLoading();
 
-      _onClear();
       Get.back(result: true);
     });
   }
@@ -255,6 +261,8 @@ class CreateTransactionController extends MainController {
     isOthersInvolved = false;
     attachments.clear();
     attachmentController.clear();
+    selectedBankCard = BankCardModel();
+    bankCardController.clear();
   }
 
   void onDropLocation() {
@@ -273,14 +281,14 @@ class CreateTransactionController extends MainController {
     await Future.delayed(const Duration(milliseconds: 300));
     Get.toNamed(AppRoutes.createBankCard)?.then((value) async {
       if (value != null && value) {
-        await onRetrievedBanks();
+        await _handleRetrievedBanks();
       }
     });
   }
 
   Future<void> onBankCardsSelected() async {
-    await Future.delayed(const Duration(milliseconds: 300));
-    await onRetrievedBanks();
+    await AppUtils.delay();
+    await _handleRetrievedBanks();
 
     if (bankCards.isEmpty) {
       await gotoCreateBankCard();
@@ -306,10 +314,9 @@ class CreateTransactionController extends MainController {
                     style: AppTextStyles.subtitle,
                   ),
                   onTap: () async {
-                    await Future.delayed(const Duration(milliseconds: 300));
-                    selectedBankCard = element;
-                    bankCardController.text = element.bankName;
                     Get.back();
+
+                    await _handleSelectedBankCard(element);
                   },
                 );
               }).toList(),
@@ -318,13 +325,21 @@ class CreateTransactionController extends MainController {
     );
   }
 
+  Future<void> _handleSelectedBankCard(BankCardModel element) async {
+    await AppUtils.delay();
+    selectedBankCard = element;
+    bankCardController.text = element.bankName;
+  }
+
   Future<void> onOthersInvolvedSelected() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
+
+    await _handleRetrievedMembers();
 
     if (othersInvolved.isEmpty) {
       Get.toNamed(AppRoutes.createMember)?.then((value) async {
         if (value != null && value) {
-          await onRetrievedMembers();
+          await _handleRetrievedMembers();
         }
       });
       return;
@@ -334,111 +349,80 @@ class CreateTransactionController extends MainController {
       context: Get.context!,
       useSafeArea: true,
       isDismissible: true,
+      showDragHandle: true,
       builder: (_) {
-        return Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: ListTile(
-                    title: Text(
-                      "Choose whome involved!".tr,
-                      style: AppTextStyles.title,
-                    ),
-                    subtitle: Text(
-                      "Select the members you want to involve in the transaction."
-                          .tr,
-                      style: AppTextStyles.subtitle,
-                    ),
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton.outlined(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: Icon(FontAwesomeIcons.xmark),
-                  ),
-                ),
-                SizedBox(width: AppDimensions.padding),
-              ],
-            ),
-            const Divider(),
-            ListView.separated(
-              shrinkWrap: true,
-              itemCount: othersInvolved.length,
-              separatorBuilder: (context, index) => const Divider(),
-              itemBuilder: (context, index) {
-                final member = othersInvolved[index];
+        return ListView.separated(
+          shrinkWrap: true,
+          itemCount: othersInvolved.length,
+          separatorBuilder: (context, index) => const Divider(),
+          itemBuilder: (context, index) {
+            final member = othersInvolved[index];
 
-                return ListTile(
-                  onTap: () async {
-                    await Future.delayed(const Duration(milliseconds: 300));
+            return ListTile(
+              onTap: () async {
+                await AppUtils.delay();
 
-                    member.isSelected = !member.isSelected;
+                Get.back();
 
-                    if (member.isSelected) {
-                      selectedOthersInvolved.add(member);
-                    } else {
-                      selectedOthersInvolved.remove(member);
-                    }
+                member.isSelected = !member.isSelected;
 
-                    othersInvolvedController.text = selectedOthersInvolved
-                        .map((e) {
-                          return e.name;
-                        })
-                        .join(', ');
-                    Get.back();
-                  },
-                  leading: CircleAvatar(
-                    backgroundColor: AppColors.primary,
-                    backgroundImage: MemoryImage(
-                      base64Decode(member.profilePicture),
-                    ),
-                  ),
-                  title: Text(member.name, style: AppTextStyles.title),
-                  subtitle: Text(member.phone, style: AppTextStyles.subtitle),
-                  trailing: Checkbox(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.xsborderRadius,
-                      ),
-                    ),
-                    activeColor: AppColors.primary,
-                    value: member.isSelected,
-                    onChanged: (value) async {
-                      await Future.delayed(const Duration(milliseconds: 300));
-
-                      member.isSelected = value!;
-
-                      if (value) {
-                        selectedOthersInvolved.add(member);
-                      } else {
-                        selectedOthersInvolved.remove(member);
-                      }
-
-                      othersInvolvedController.text = selectedOthersInvolved
-                          .map((e) {
-                            return e.name;
-                          })
-                          .join(', ');
-                      Get.back();
-                    },
-                  ),
-                );
+                await _handleSelectedWhomeInvolved(member);
               },
-            ),
-          ],
+              leading: CircleAvatar(
+                backgroundColor: AppColors.primary,
+                backgroundImage: MemoryImage(
+                  base64Decode(member.profilePicture),
+                ),
+              ),
+              title: Text(member.name, style: AppTextStyles.title),
+              subtitle: Text(member.phone, style: AppTextStyles.subtitle),
+              trailing: Checkbox(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                    AppDimensions.xsborderRadius,
+                  ),
+                ),
+                activeColor: AppColors.primary,
+                value: member.isSelected,
+                onChanged: (value) async {
+                  await AppUtils.delay();
+
+                  Get.back();
+
+                  member.isSelected = value!;
+
+                  await _handleSelectedWhomeInvolved(member);
+                },
+              ),
+            );
+          },
         );
       },
     );
   }
 
+  Future<void> _handleSelectedWhomeInvolved(MemberModel member) async {
+    if (member.isSelected) {
+      selectedOthersInvolved.add(member);
+    } else {
+      selectedOthersInvolved.remove(member);
+    }
+    othersInvolvedController.text = selectedOthersInvolved
+        .map((e) {
+          return e.name;
+        })
+        .join(', ');
+  }
+
   Future<void> onAttachmentSelected() async {
     await Future.delayed(const Duration(milliseconds: 300));
+
+    if (attachments.length >= AppConstants.maxAttachments) {
+      AppUtils.showError(
+        "You can only attach up to ${AppConstants.maxAttachments} photos".tr,
+      );
+      return;
+    }
 
     await showModalBottomSheet(
       context: Get.context!,
@@ -477,10 +461,22 @@ class CreateTransactionController extends MainController {
   }
 
   Future<void> _handleAttachments(ImageSource element) async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
     final image = await ImagePicker().pickImage(source: element);
     if (image != null) {
-      attachments.add(File(image.path));
+      var imageBase64 = base64Encode(File(image.path).readAsBytesSync());
+      var size = await AppUtils.getSizeFromBase64(imageBase64);
+
+      var attachment = AttachmentModel.create(
+        name: image.path,
+        image: imageBase64,
+        createdBy: user,
+        type: image.mimeType,
+        size: size,
+      );
+
+      attachments.add(attachment);
+
       attachmentController.text = attachments
           .map((e) {
             return "Attachment ${attachments.indexOf(e) + 1}";
@@ -489,7 +485,7 @@ class CreateTransactionController extends MainController {
     }
   }
 
-  Future<void> onAttachmentRemoved(File element) async {
+  Future<void> onAttachmentRemoved(AttachmentModel element) async {
     await AppUtils.delay();
     attachments.remove(element);
     attachmentController.text = attachments

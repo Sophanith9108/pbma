@@ -57,9 +57,9 @@ class TransactionModel extends Equatable {
   double get longitude => _longitude.value;
   set longitude(double value) => _longitude.value = value;
 
-  final _othersInvolved = <UserModel>[].obs;
-  List<UserModel> get othersInvolved => _othersInvolved;
-  set othersInvolved(List<UserModel> value) => _othersInvolved.value = value;
+  final _othersInvolved = <MemberModel>[].obs;
+  List<MemberModel> get othersInvolved => _othersInvolved;
+  set othersInvolved(List<MemberModel> value) => _othersInvolved.value = value;
 
   final _createdAt = DateTime.now().obs;
   DateTime get createdAt => _createdAt.value;
@@ -94,9 +94,9 @@ class TransactionModel extends Equatable {
   MaterialColor get transactionBg => _transactionBg.value;
   set transactionBg(MaterialColor value) => _transactionBg.value = value;
 
-  final _attachments = <String>[].obs;
-  List<String> get attachments => _attachments;
-  set attachments(List<String> value) => _attachments.value = value;
+  final _attachments = <AttachmentModel>[].obs;
+  List<AttachmentModel> get attachments => _attachments;
+  set attachments(List<AttachmentModel> value) => _attachments.value = value;
 
   TransactionModel();
 
@@ -119,8 +119,8 @@ class TransactionModel extends Equatable {
     required TransactionStatusEnums status,
     required TransactionTypeEnums transactionType,
     bool? isOthersInvolved,
-    List<UserModel>? othersInvolved,
-    List<String>? attachments,
+    List<MemberModel>? othersInvolved,
+    List<AttachmentModel>? attachments,
   }) {
     var transaction = TransactionModel();
     transaction.id = Uuid().v8();
@@ -142,8 +142,8 @@ class TransactionModel extends Equatable {
     transaction.updatedBy = updatedBy;
     transaction.status = status;
     transaction.isOthersInvolved = isOthersInvolved ?? false;
-    transaction.othersInvolved = othersInvolved ?? [];
     transaction.transactionType = transactionType;
+    transaction.othersInvolved = othersInvolved ?? [];
     transaction.attachments = attachments ?? [];
 
     switch (transactionType) {
@@ -181,14 +181,23 @@ class TransactionModel extends Equatable {
       "latitude": model.latitude.toString(),
       "longitude": model.longitude.toString(),
       "othersInvolved":
-          model.othersInvolved.isNotEmpty ? model.othersInvolved : "",
+          model.othersInvolved.isNotEmpty
+              ? model.othersInvolved
+                  .map((e) => MemberModel.toJson(member: e))
+                  .toList()
+              : "",
       "createdAt": model.createdAt.millisecondsSinceEpoch.toString(),
       "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
       "createdBy": UserModel.toJson(model: model.createdBy),
       "updatedBy": UserModel.toJson(model: model.updatedBy),
       "status": model.status.name.toString(),
       "transactionType": model.transactionType.name.toString(),
-      "attachments": model.attachments,
+      "attachments":
+          model.attachments.isNotEmpty
+              ? model.attachments
+                  .map((e) => AttachmentModel.toJson(model: e))
+                  .toList()
+              : "",
     };
   }
 
@@ -229,18 +238,19 @@ class TransactionModel extends Equatable {
       ..othersInvolved =
           json['othersInvolved'] != null
               ? (json['othersInvolved'] as List)
-                  .map((e) => UserModel.fromJson(json: e))
+                  .map((e) => MemberModel.fromJson(json: e))
                   .toList()
               : []
       ..attachments =
           json['attachments'] != null
-              ? (json['attachments'] as List).map((e) => e.toString()).toList()
+              ? (json['attachments'] as List)
+                  .map((e) => AttachmentModel.fromJson(json: e))
+                  .toList()
               : [];
   }
 
   static TransactionEntity toEntity(TransactionModel model) {
     var entity = TransactionEntity();
-
     entity.id = model.id;
     entity.purpose = model.purpose;
     entity.amount = model.amount;
@@ -254,30 +264,16 @@ class TransactionModel extends Equatable {
     entity.location = model.location;
     entity.latitude = model.latitude;
     entity.longitude = model.longitude;
-    entity.othersInvolved =
-        model.othersInvolved
-            .map(
-              (element) => UserEntity.create(
-                id: element.id,
-                name: element.name,
-                email: element.email,
-                phone: element.phone,
-                password: element.phone,
-                address: element.address,
-                profilePicture: element.profilePicture,
-                gender: element.gender,
-                createdAt: element.createdAt,
-                updatedAt: element.updatedAt,
-                role: element.role,
-              ),
-            )
-            .toList();
     entity.createdBy = UserModel.toEntity(model.createdBy);
     entity.updatedBy = UserModel.toEntity(model.updatedBy);
     entity.createdAt = model.createdAt;
     entity.updatedAt = model.updatedAt;
     entity.status = model.status;
     entity.transactionType = model.transactionType;
+    entity.othersInvolved =
+        model.othersInvolved.map((e) => UserModel.toEntity(e)).toList();
+    entity.attachments =
+        model.attachments.map((e) => AttachmentEntity.toEntity(e)).toList();
 
     switch (model.transactionType) {
       case TransactionTypeEnums.expense:

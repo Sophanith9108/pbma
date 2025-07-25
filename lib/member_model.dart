@@ -44,24 +44,25 @@ class MemberModel extends UserModel {
       ..user = user;
   }
 
-  MemberModel.fromJson({required Map<dynamic, dynamic> json}) {
-    id = json['id'];
-    name = json['name'];
-    email = json['email'];
-    phone = json['phone'];
-    password = json['password'];
-    profilePicture = json['profilePicture'];
-    address = json['address'];
-    dateOfBirth = json['dateOfBirth'];
-    gender = GenderEnums.values.byName(json['gender']);
-    createdAt = DateTime.tryParse(json['createdAt']) ?? DateTime.now();
-    updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now();
-    role = UserRoleEnums.values.byName(json['role']);
-    deviceId = json['deviceId'];
-    deviceToken = json['deviceToken'];
-    deviceInfo = json['deviceInfo'];
-    isLogin = json['isLogin'] == 'true';
-    user = UserModel.fromJson(json: json['user'] as Map<dynamic, dynamic>);
+  static MemberModel fromJson({required Map<dynamic, dynamic> json}) {
+    return MemberModel()
+      ..id = json['id']
+      ..name = json['name']
+      ..email = json['email']
+      ..phone = json['phone']
+      ..password = json['password']
+      ..profilePicture = json['profilePicture']
+      ..address = json['address']
+      ..dateOfBirth = json['dateOfBirth']
+      ..gender = GenderEnums.values.byName(json['gender'])
+      ..createdAt = DateTime.tryParse(json['createdAt']) ?? DateTime.now()
+      ..updatedAt = DateTime.tryParse(json['updatedAt']) ?? DateTime.now()
+      ..role = UserRoleEnums.values.byName(json['role'])
+      ..isLogin = json['isLogin'] == 'true'
+      ..deviceId = json['deviceId']
+      ..deviceToken = json['deviceToken']
+      ..deviceInfo = json['deviceInfo']
+      ..user = UserModel.fromJson(json: json['user'] as Map<dynamic, dynamic>);
   }
 
   static Map<String, dynamic> toJson({required MemberModel member}) => {

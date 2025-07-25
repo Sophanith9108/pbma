@@ -26,6 +26,7 @@ class HistoryController extends GetxController {
   @override
   void onInit() async {
     await setData();
+
     super.onInit();
   }
 
@@ -107,7 +108,7 @@ class HistoryController extends GetxController {
   }
 
   Future<void> gotoCreateTransaction() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     await checkedUser();
 
