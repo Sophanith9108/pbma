@@ -147,8 +147,11 @@ class CreateTransactionController extends MainController {
   }
 
   @override
-  void onReady() {
+  void onReady() async {
     super.onReady();
+
+    await _handleRetrievedBanks();
+    await _handleRetrievedMembers();
   }
 
   Future<void> _handleRetrievedBanks() async {
@@ -159,8 +162,6 @@ class CreateTransactionController extends MainController {
 
   Future<void> _handleRetrievedMembers() async {
     await AppUtils.delay();
-
-    othersInvolved.clear();
 
     await memberFirebaseRepository.reads().then((value) {
       othersInvolved =
@@ -263,6 +264,7 @@ class CreateTransactionController extends MainController {
     attachmentController.clear();
     selectedBankCard = BankCardModel();
     bankCardController.clear();
+    othersInvolved.clear();
   }
 
   void onDropLocation() {
@@ -333,8 +335,6 @@ class CreateTransactionController extends MainController {
 
   Future<void> onOthersInvolvedSelected() async {
     await AppUtils.delay();
-
-    await _handleRetrievedMembers();
 
     if (othersInvolved.isEmpty) {
       Get.toNamed(AppRoutes.createMember)?.then((value) async {

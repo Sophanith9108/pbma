@@ -41,7 +41,7 @@ class MemberFirebaseRepository
     return await _service.reads().then(
       (value) => value,
       onError: (error) {
-        debugPrint("Failed to read members: $error");
+        AppUtils.logging(error);
         return <MemberModel>[];
       },
     );
@@ -53,7 +53,10 @@ class MemberFirebaseRepository
         .update(data)
         .then(
           (value) => value,
-          onError: (error) => throw Exception("Failed to update user: $error"),
+          onError: (error) {
+            AppUtils.logging(error);
+            throw Exception("Failed to update user: $error");
+          },
         );
   }
 }

@@ -52,6 +52,10 @@ class CreateTransactionScreen extends StatelessWidget {
                       width: 1.0,
                     ),
                   ),
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.purposeController.clear(),
+                    icon: Icon(FontAwesomeIcons.xmark),
+                  ),
                 ),
               ),
               SizedBox(height: AppDimensions.padding),
@@ -220,6 +224,10 @@ class CreateTransactionScreen extends StatelessWidget {
                       color: AppColors.primary,
                       width: 1.0,
                     ),
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.reasonController.clear(),
+                    icon: Icon(FontAwesomeIcons.xmark),
                   ),
                 ),
               ),
