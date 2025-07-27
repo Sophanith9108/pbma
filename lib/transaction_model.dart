@@ -185,7 +185,7 @@ class TransactionModel extends Equatable {
               ? model.othersInvolved
                   .map((e) => MemberModel.toJson(member: e))
                   .toList()
-              : "",
+              : "[]",
       "createdAt": model.createdAt.millisecondsSinceEpoch.toString(),
       "updatedAt": model.updatedAt.millisecondsSinceEpoch.toString(),
       "createdBy": UserModel.toJson(model: model.createdBy),
@@ -197,7 +197,7 @@ class TransactionModel extends Equatable {
               ? model.attachments
                   .map((e) => AttachmentModel.toJson(model: e))
                   .toList()
-              : "",
+              : "[]",
     };
   }
 

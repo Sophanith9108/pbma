@@ -155,7 +155,9 @@ class CreateTransactionController extends MainController {
   }
 
   Future<void> _handleRetrievedBanks() async {
+    AppUtils.showLoading();
     await bankCardFirebaseRepository.reads().then((value) {
+      AppUtils.hideLoading();
       bankCards = value;
     });
   }
