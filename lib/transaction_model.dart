@@ -236,13 +236,13 @@ class TransactionModel extends Equatable {
         (e) => e.name == json['transactionType'].toString(),
       )
       ..othersInvolved =
-          json['othersInvolved'] != null
+          json['othersInvolved'] != null && json['othersInvolved'] is List
               ? (json['othersInvolved'] as List)
                   .map((e) => MemberModel.fromJson(json: e))
                   .toList()
               : []
       ..attachments =
-          json['attachments'] != null
+          json['attachments'] != null && json['attachments'] is List
               ? (json['attachments'] as List)
                   .map((e) => AttachmentModel.fromJson(json: e))
                   .toList()
