@@ -50,6 +50,10 @@ class MainController extends GetxController {
     ProfileUploadRepository(),
   );
 
+  final _isDebug = false.obs;
+  bool get isDebug => _isDebug.value;
+  set isDebug(bool value) => _isDebug.value = value;
+
   final _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
   set currentIndex(int index) => _currentIndex.value = index;
@@ -94,6 +98,13 @@ class MainController extends GetxController {
   String get selectedTheme => _selectedTheme.value;
   set selectedTheme(String value) => _selectedTheme.value = value;
 
+  final List<Locale> supportedLocales = const [
+    Locale('en', 'US'),
+    Locale('km', 'KH'),
+    Locale('ja', 'JP'),
+    Locale('zh', 'CN'),
+  ];
+
   late GoogleMapController mapController;
 
   final List<Widget> children = [
@@ -125,21 +136,14 @@ class MainController extends GetxController {
   }
 
   Future<void> sayHi() async {
-    String env = "";
-    if (kDebugMode) {
-      env = "Debug";
-    } else if (kProfileMode) {
-      env = "Profile";
-    }
-
     var now = DateTime.now();
     var hour = now.hour;
     if (hour < 12) {
-      title = "${'Good Morning!'.tr} $env";
+      title = 'Good Morning!'.tr;
     } else if (hour < 17) {
-      title = "${'Good Afternoon!'.tr} $env";
+      title = 'Good Afternoon!'.tr;
     } else {
-      title = "${'Good Evening!'.tr} $env";
+      title = 'Good Evening!'.tr;
     }
   }
 
@@ -490,6 +494,15 @@ class MainController extends GetxController {
     await setupSettings();
     await handleSetupLanguage();
     await handleSetupTheme();
+    await _handleShowDebug();
+  }
+
+  Future<void> _handleShowDebug() async {
+    if (kDebugMode) {
+      isDebug = true;
+    } else {
+      isDebug = false;
+    }
   }
 
   Future<void> gotoCreateTransaction() async {

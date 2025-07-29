@@ -109,27 +109,24 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: AppThemes.light,
-      darkTheme: AppThemes.dark,
-      themeMode: controller.themeMode,
-      routes: AppRoutes.routes,
-      transitionDuration: Duration(milliseconds: 300),
-      translations: AppTranslations(),
-      defaultTransition: Transition.leftToRightWithFade,
-      locale: controller.locale,
-      fallbackLocale: controller.locale,
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('km', 'KH'),
-        Locale('ja', 'JP'),
-        Locale('zh', 'CN'),
-      ],
-      initialBinding: BindingsBuilder(() {
-        setApplicationConfigs();
-      }),
-      home: MainScreen(),
+    return Obx(
+      () => GetMaterialApp(
+        debugShowCheckedModeBanner: controller.isDebug,
+        theme: AppThemes.light,
+        darkTheme: AppThemes.dark,
+        themeMode: controller.themeMode,
+        routes: AppRoutes.routes,
+        transitionDuration: Duration(milliseconds: 300),
+        translations: AppTranslations(),
+        defaultTransition: Transition.leftToRightWithFade,
+        locale: controller.locale,
+        fallbackLocale: controller.locale,
+        supportedLocales: controller.supportedLocales,
+        initialBinding: BindingsBuilder(() {
+          setApplicationConfigs();
+        }),
+        home: MainScreen(),
+      ),
     );
   }
 }
