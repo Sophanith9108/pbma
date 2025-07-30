@@ -73,6 +73,8 @@ class SettingController extends MainController {
     enableNotification = await settingsRepository.get(settings.id).then((
       value,
     ) {
+      AppUtils.logging(settings.id);
+      AppUtils.logging(value?.enableNotification);
       if (value != null) {
         return value.enableNotification;
       }
@@ -538,7 +540,7 @@ class SettingController extends MainController {
     await AppUtils.delay(milliseconds: 1000);
     await settingsRepository.update(settings).then((value) async {
       await _handleEnableNotification();
-      await onSetupConfigs();
+      // await onSetupConfigs();
       AppUtils.hideLoading();
     });
   }
