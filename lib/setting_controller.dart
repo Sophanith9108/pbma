@@ -513,8 +513,7 @@ class SettingController extends MainController {
 
   Future<void> onBiometricChanged(bool value) async {
     enableBiometric = value;
-
-    user.enableBiometric = value;
+    user.enableBiometric = enableBiometric;
 
     await _handleSavedBiometric();
   }
@@ -531,7 +530,7 @@ class SettingController extends MainController {
 
   Future<void> onNotificationChanged(bool value) async {
     enableNotification = value;
-    settings.enableNotification = enableBiometric;
+    settings.enableNotification = enableNotification;
     await _handleSavedNotification();
   }
 
@@ -540,7 +539,6 @@ class SettingController extends MainController {
     await AppUtils.delay(milliseconds: 1000);
     await settingsRepository.update(settings).then((value) async {
       await _handleEnableNotification();
-      // await onSetupConfigs();
       AppUtils.hideLoading();
     });
   }
