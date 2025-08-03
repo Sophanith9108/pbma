@@ -115,7 +115,7 @@ class SettingController extends MainController {
   }
 
   Future<void> onThemeChanged() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     await showModalBottomSheet(
       context: Get.context!,
@@ -139,7 +139,7 @@ class SettingController extends MainController {
 
                 return ListTile(
                   onTap: () async {
-                    await Future.delayed(const Duration(milliseconds: 300));
+                    await AppUtils.delay();
                     Get.back();
                     Get.changeThemeMode(element);
                     await _handleSaveTheme(element);
@@ -161,7 +161,8 @@ class SettingController extends MainController {
   }
 
   Future<void> onLogout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
+
     await showDialog(
       context: Get.context!,
       builder: (_) {
@@ -191,12 +192,12 @@ class SettingController extends MainController {
   }
 
   Future<void> _handleLogout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     user.isLogin = false;
 
     AppUtils.showLoading();
-    await Future.delayed(const Duration(seconds: 3));
+    await AppUtils.delay(milliseconds: 3000);
 
     await userRepository.update(user);
     await userFirebaseRepository.update(user).then((value) async {
@@ -217,7 +218,7 @@ class SettingController extends MainController {
   }
 
   Future<void> onAbout() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     await showModalBottomSheet(
       context: Get.context!,
@@ -244,11 +245,12 @@ class SettingController extends MainController {
                 ),
                 IconButton.outlined(
                   onPressed: () async {
-                    await Future.delayed(const Duration(milliseconds: 300));
+                    await AppUtils.delay();
                     Get.back();
                   },
                   icon: Icon(FontAwesomeIcons.xmark),
                 ),
+                SizedBox(width: AppDimensions.spadding),
               ],
             ),
             Divider(),
@@ -304,7 +306,7 @@ class SettingController extends MainController {
   }
 
   Future<void> onTermsConditions() async {
-    await Future.delayed(const Duration(milliseconds: 300));
+    await AppUtils.delay();
 
     await showModalBottomSheet(
       context: Get.context!,
@@ -339,6 +341,7 @@ class SettingController extends MainController {
                   },
                   icon: Icon(FontAwesomeIcons.xmark),
                 ),
+                SizedBox(width: AppDimensions.spadding),
               ],
             ),
             Divider(),
@@ -424,11 +427,12 @@ class SettingController extends MainController {
                 ),
                 IconButton.outlined(
                   onPressed: () async {
-                    await Future.delayed(const Duration(milliseconds: 300));
+                    await AppUtils.delay();
                     Get.back();
                   },
                   icon: Icon(FontAwesomeIcons.xmark),
                 ),
+                SizedBox(width: AppDimensions.spadding),
               ],
             ),
             Divider(),
