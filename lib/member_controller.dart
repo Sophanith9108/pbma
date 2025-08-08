@@ -55,8 +55,14 @@ class MemberController extends GetxController {
   }
 
   Future<void> onRemoveMember(int index) async {
+    await AppUtils.showLoading();
+    await AppUtils.delay(milliseconds: 3000);
+    await AppUtils.hideLoading();
+
     var member = members[index];
+
     await memberRepository.delete(member.id);
+    await memberFirebaseRepository.delete(member.id);
     await setData();
   }
 
