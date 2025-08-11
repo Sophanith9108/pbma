@@ -134,9 +134,7 @@ class CreateTransactionController extends MainController {
   List<AttachmentModel> get attachments => _attachments;
   set attachments(List<AttachmentModel> value) => _attachments.value = value;
 
-  late GoogleMapController mapController;
-
-  static const double zoomLevel = 12;
+  late GoogleMapController _mapController;
 
   @override
   void onInit() async {
@@ -228,14 +226,14 @@ class CreateTransactionController extends MainController {
     AppUtils.showLoading();
     await Future.delayed(const Duration(seconds: 3), () async {
       AppUtils.hideLoading();
-      mapController = controller;
+      _mapController = controller;
 
       await getCurrentLocation().then((value) {
-        mapController.animateCamera(
+        _mapController.animateCamera(
           CameraUpdate.newCameraPosition(
             CameraPosition(
               target: LatLng(value.latitude, value.longitude),
-              zoom: zoomLevel,
+              zoom: AppConstants.zoomLevel,
             ),
           ),
         );
