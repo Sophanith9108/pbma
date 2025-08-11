@@ -24,6 +24,7 @@ class MainController extends GetxController {
   );
   final MemberRepository memberRepository = Get.put(MemberRepository());
   final BudgetRepository budgetRepository = Get.put(BudgetRepository());
+  
   final TransactionFirebaseRepository transactionFirebaseRepository = Get.put(
     TransactionFirebaseRepository(),
   );
@@ -46,9 +47,6 @@ class MainController extends GetxController {
     ForgetPasswordRepository(),
   );
   final SettingsRepository settingsRepository = Get.put(SettingsRepository());
-  final ProfileUploadRepository profileUploadRepository = Get.put(
-    ProfileUploadRepository(),
-  );
 
   final _isDebug = false.obs;
   bool get isDebug => _isDebug.value;
@@ -97,6 +95,14 @@ class MainController extends GetxController {
   final _selectedTheme = "".obs;
   String get selectedTheme => _selectedTheme.value;
   set selectedTheme(String value) => _selectedTheme.value = value;
+
+  final _lastBackPressTime = DateTime.now().obs;
+  DateTime get lastBackPressTime => _lastBackPressTime.value;
+  set lastBackPressTime(DateTime value) => _lastBackPressTime.value = value;
+
+  final _exitSnackBarShown = false.obs;
+  bool get exitSnackBarShown => _exitSnackBarShown.value;
+  set exitSnackBarShown(bool value) => _exitSnackBarShown.value = value;
 
   final List<Locale> supportedLocales = const [
     Locale('en', 'US'),
